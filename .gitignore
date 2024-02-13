@@ -1,0 +1,17 @@
+# Altium
+Altium/History/
+Altium/Project Logs for DRC/
+
+# LaTeX
+LaTeX/svg-inkscape/
+*.aux
+*.bbl
+*.bbl-SAVE-ERROR
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.run.xml
+*.synctex.gz
+*.synctex(busy)

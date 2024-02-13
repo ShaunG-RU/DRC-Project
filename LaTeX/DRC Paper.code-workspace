@@ -1,0 +1,144 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "monokai-charcoal (orange)",
+		"gitlens.currentLine.enabled": true,
+		"gitlens.codeLens.authors.enabled": false,
+		"gitlens.codeLens.recentChange.enabled": false,
+		"workbench.colorCustomizations": {
+			"gitlens.trailingLineForegroundColor": "#7ce38b"
+		},
+		"editor.tokenColorCustomizations": {
+			"[monokai-charcoal (orange)]": {
+				"comments": "#33ff00"
+			}
+		},
+		
+		"cSpell.language": "en,en-US",
+		"editor.minimap.enabled": false,
+		"files.autoSave": "onFocusChange",
+		"files.autoSaveDelay": 15000,
+		"editor.wordWrap": "on",
+		"editor.fontSize": 16,
+		"editor.insertSpaces": true,
+		"editor.mouseWheelScrollSensitivity": 1.5,
+
+		"latex-workshop.latex.tools": [
+			{
+				"name": "latexmk",
+				"command": "latexmk",
+				"args": [
+					"-shell-escape",
+					"-synctex=1",
+					"-interaction=nonstopmode",
+					"-file-line-error",
+					"-pdf",
+					"-outdir=%OUTDIR%",
+					"%DOC%"
+				],
+				"env": {}
+			},
+			{
+				"name": "xelatex",
+				"command": "xelatex",
+				"args": [
+					"-shell-escape",
+					"-synctex=1",
+					"-interaction=nonstopmode",
+					"-file-line-error",
+					"%DOC%"
+				],
+				"env": {}
+			},
+			{
+				"name": "pdflatex",
+				"command": "pdflatex",
+				"args": [
+					"-shell-escape",
+					"-synctex=1",
+					"-interaction=nonstopmode",
+					"-file-line-error",
+					"%DOC%"
+				],
+				"env": {}
+			},
+			{
+				"name": "bibtex",
+				"command": "bibtex",
+				"args": [
+					"-shell-escape",
+					"%DOCFILE%"
+				],
+				"env": {}
+			},
+			{
+				"name": "biber",
+				"command": "biber",
+				"args": [
+					"%DOCFILE%"
+				]
+			}
+		],
+		"latex-workshop.latex.recipes": [
+			{
+				"name": "xelatex ➞ biber ➞ xelatex`×2",
+				"tools": [
+					"xelatex",
+					"biber",
+					"xelatex",
+					"xelatex"
+				]
+			},
+			{
+				"name": "pdfLaTeX",
+				"tools": [
+					"pdflatex"
+				]
+			},
+			{
+				"name": "latexmk 🔃",
+				"tools": [
+					"latexmk"
+				]
+			},
+			{
+				"name": "xelatex",
+				"tools": [
+					"xelatex"
+				]
+			},
+			{
+				"name": "pdflatex ➞ bibtex ➞ pdflatex`×2",
+				"tools": [
+					"pdflatex",
+					"bibtex",
+					"pdflatex",
+					"pdflatex"
+				]
+			},
+			{
+				"name": "xelatex ➞ bibtex ➞ xelatex`×2",
+				"tools": [
+					"xelatex",
+					"bibtex",
+					"xelatex",
+					"xelatex"
+				]
+			}
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"james-yu.latex-workshop",
+			"alefragnani.bookmarks",
+			"74th.monokai-charcoal-high-contrast",
+			"geoffkaile.latex-count",
+			"streetsidesoftware.code-spell-checker",
+			"eamodio.gitlens"
+		]
+	}
+}
