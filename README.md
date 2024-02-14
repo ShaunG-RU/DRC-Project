@@ -17,6 +17,12 @@ _**The latest compiled paper is available [here](./LaTeX/main.pdf).**_
 LaTeX _(.tex files)_
 * Local installation of [TeX Live](https://www.tug.org/texlive/).
 * Local installation of [Inkscape](https://inkscape.org/).
+* Local installation of [Visual Studio Code](https://code.visualstudio.com/).
+  * Required Extensions
+    * [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop).
+  * Recommended Extensions
+    * [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens).
+    * [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker).
   
 Altium _(.PrjPcb files)_
 * Local installation of [Altium Designer](https://www.altium.com). (_NOTE: You can view .SchDoc and .PcbDoc online at [Altium 365 Viewer](https://www.altium.com/viewer/)._)
