@@ -411,13 +411,33 @@
                 \textcolor{blue}{Explain the difference in exponential decay vs linear decay and its significance. I plan to implement the circuit shown in \cite{ti-log-conv}}
                 \textcolor{blue}{This circuit reverts the signal that has converted to dB scale back into the linear domain signal.}
             
+            \subsection{Precision Peak Detector}
+                \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}  
+
             \subsection{True RMS Detector}
                 A traditional approach to reading the average of an input signal was to implement a 
                 
-                For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.
-                
-            \subsection{Peak Detector}
-                \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}                
+                For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                          
+            
+            \subsection{Knee Control}
+                The following equation describes the continuous function of a gain of the output with knee control being implemented.
+
+
+                \begin{equation}
+                    y=
+                    \begin{cases}
+                        x, & \text{for $2(x-T)<-W$}\\
+                        x+\frac{(\frac{1}{R}-1)(x-T+\frac{W}{2})^2}{2W}, & \text{for $2\left\lvert x-T\right\rvert\leq W$}\\
+                        T+\frac{x-T}{R}, & \text{for $2(x-T)>W$}
+                    \end{cases}
+                \end{equation}
+
+
+                \subsubsection{Hyperbolic Tangent Function Cell}
+                \subsubsection{Differential Equalizalizer}
+                \subsubsection{Gain Reduction Normalizer}
+            
+            \subsection{Voltage Controlled Amplifier}
 
             \subsection{Miscellaneous Circuitry}
                 \subsubsection{Power Delivery}
@@ -458,8 +478,9 @@
                     \end{minipage}
 
                 \subsubsection{Pre-Detection Filtering}
-                
                 \subsubsection{Input Buffer}
+                \subsubsection{Gain Reduction Meter}
+                \subsubsection{Hardware Components}
             
 
         \section{Hardware Design}
@@ -478,11 +499,12 @@
         \section{Conclusion}
             \textcolor{blue}{The conclusion goes here.}
 
+        \section*{Acknowledgments}
+            \textcolor{blue}{Put acknowledgments here. }
+
         \section*{Project Resources}
             All resources developed upon the completion of this project, including the full schematic and CAD files are available for download at the following \textbf{\textcolor{blue}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
         
-        \section*{Acknowledgments}
-            \textcolor{blue}{Put acknowledgments here. }
 
     \end{multicols}
 

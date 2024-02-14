@@ -1,8 +1,8 @@
 # Technical Paper on Dynamic Range Compressor (DRC) Design
-This repo contains all required files to compile a LaTeX file in VS Code.
+This folder contains all LaTeX related files that has been used to create the paper.
 
-Make sure to install "recommended extensions" upon initial launch of the workspace.
+The directory is set up to work in a VS Code LaTeX editing environment. Make sure to install "recommended extensions" upon initial launch of the workspace.
 
-Other required dependencies include...
+Other required dependencies may include...
 * Local installation of [TeX Live](https://www.tug.org/texlive/).
-* Local installation of [Inkscape](https://inkscape.org/) if working with newly added .svg files.
+* Local installation of [Inkscape](https://inkscape.org/).
