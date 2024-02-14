@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository hosts the development files for a Dynamic Range Compressor (DRC) aimed at audio signals. The project is currently under development, focusing on the design and simulation stages. It involves a comprehensive approach to understanding and implementing DRC in the audio frequency range.
+This repository hosts the development files associated with the technical paper I am working on relating a Dynamic Range Compressor (DRC) aimed at audio domain applications. The project and the paper is currently under development, focusing on the design and simulation stages.
 
 The latest compiled paper is available [here](./LaTeX/main.pdf).
 
