@@ -3,6 +3,11 @@ Altium/History/
 Altium/Project Logs for DRC/
 Altium/__Previews/
 
+# LTSpice
+*.op.raw
+*.raw
+*.log
+
 # LaTeX
 LaTeX/svg-inkscape/
 *.aux
