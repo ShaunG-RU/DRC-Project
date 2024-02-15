@@ -1,34 +1,31 @@
 \documentclass[10pt]{article}
 
-\usepackage{blindtext}
+\usepackage[margin=0.75in]{geometry}
 \usepackage{multicol}
+\usepackage{titlesec}
 \usepackage{xcolor}
 \usepackage{svg}
-\usepackage{graphicx}
-\usepackage{geometry}
-\usepackage{tikz}
 \usepackage{tabularx}
+\usepackage{graphicx}
 \usepackage{float}
 \usepackage{amsmath}
-\usepackage{titlesec}
 \usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{fancyhdr}
 \usepackage[american,siunitx]{circuitikz}
-\usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex}
+\usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
 %\usepackage{indentfirst}
 %\usepackage{mathptmx}
 
 \addbibresource{references.bib}
-\setsvg{inkscapeexe={"C:/Program Files/Inkscape/bin/inkscape.exe"}}
+\renewcommand*{\bibfont}{\normalfont\small}
 \graphicspath{{images/}}
-\geometry{letterpaper, margin=1in, top=0.5in}
+\setsvg{inkscapeexe={"C:/Program Files/Inkscape/bin/inkscape.exe"}} % POINT TO /inkscape.exe AS NEEDED
 \newcolumntype{C}{>{\centering\arraybackslash}X} % from array package
 \usetikzlibrary{positioning, shapes.geometric}
-
 \titlespacing*{\section}{0pt}{5pt}{5pt}
 \titlespacing*{\subsection}{0pt}{8pt}{3pt}
-
-\nocite{*}
 
 \tikzset{
     block/.style={
@@ -41,43 +38,60 @@
     line/.style = {-latex}
 }
 
-\title{
-    \textbf{\huge Dynamic Range Compressor Design}\\
-    Technical Report in Analog Signal Processing and Discrete Circuit Design for Applications in Audible Frequency Domain
-}
-
-\author{
-    \textbf{\Large Shaun Goda}\\
-    \textit{\normalsize Department of Electrical and Computer Engineering, Rutgers University - New Brunswick}
-}
-
-% DOCUMENT STARTS HERE
-
 \begin{document}
 
-    \maketitle   
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[LH]{\footnotesize{Dynamic Range Compressor Design | Goda, Shaun}}
+    \fancyhead[RH]{\footnotesize{Technical Paper | \today}}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyfoot[C]{\footnotesize{Page \thepage\ of \pageref{LastPage}}}
+    \fancypagestyle{firstpage}{
+        \fancyhf{}
+        \fancyfoot[C]{\footnotesize Page \thepage\ of \pageref{LastPage}}
+        \renewcommand{\headrulewidth}{0pt}
+    }
+
+    \title{
+        \vspace{-5ex}
+        \textbf{\huge Dynamic Range Compressor Design}\\
+        \textit{Technical Paper in Analog Signal Processing and Discrete Circuit Design for Applications in Audible Frequency Domain}
+    }
+
+    \author{
+        \textbf{\Large Shaun Goda}\\
+        \textit{\normalsize Department of Electrical and Computer Engineering, Rutgers University - New Brunswick}
+    }
+
+    \date{\vspace{-5ex}} % This command effectively gets rid of the date section from \maketitle
+
+    \maketitle
+
+    \thispagestyle{firstpage}
 
     \begin{abstract}
-        This paper examines dynamic range compression techniques within the audible frequency range. We approach this problem through the scope of signal processing theory and its realization through its implementation in discrete component circuits. The focus is on understanding how to effectively compress audio signals while maintaining quality. Through tests and evaluations, we present methods for achieving efficient and high-performance compression techniques using hands-on circuit designs. This technical report offers a pathway for those looking to understand the fundamentals of dynamic range compression technique while balancing theoretical approaches with real-world circuit implementations in the audio domain.
+        This technical paper examines the theory and implementation of dynamic range compressors in the realm of analog signal processing. Through tests and evaluations, we present methods for achieving efficient and high-performance compressors, where we will start with an overview of the basic building block of the compressor, its representation as a mathematical function, and various methods of implementing this through analog circuits. This technical report offers an entry point for those looking to understand the fundamentals of dynamic range compression techniques while balancing the nuances of the practical methods and challenges associated with developing an electronic hardware device.
     \end{abstract}
-
-    %{\bf Keyword:} Dynamic Range Compression, Analog Circuitry, Signal Processing, VCA, RMS/Peak Detection, PCB Design, Signal Integrity.\\
-
-    %\smallskip
-    %    \textbf{Keywords:} Dynamic Range Compression, Signal Processing, Discrete Circuit Design
-    %\smallskip
     
-    \begin{multicols}{2}
+    \begin{multicols*}{2}
 
-        %\textcolor{blue}{NOTE: This paper is incomplete. For empty sections, I have included changes I intend to make in the future. (in blue)}
+        \textbf{
+            Keywords: 
+            \textit{Dynamic Range Compression, Analog Signal Processing, Circuit Design, Printed Circuit Board Design, Signal Integrity.}
+        }
 
         \section{Introduction}
-            A dynamic range compressor (DRC) is an audio processing tool that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. This process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness.             
+            A dynamic range compressor (DRC) is an audio processing tool that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. This process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness.\par
+            With the emergence of high-performance computational platforms and advancement in digital signal processing technologies, virtualized signal compression algorithms has been a de-facto standard in applications such as music production, live performances, broadcasting, and hearing aids. However, compressors that are implemented in analog circuits still remains a popular choice among audio engineers due to several technical advantages and its uniqueness in perceived audio characteristics.\par
+            Compared to a digital compressor, analog compressors introduces no digital latency caused by AD/DA conversion or digital processing delay. Furthermore, it is advantageous in avoiding issues such as unwanted sampling artifacts and the added complexity due to its digital nature. Some engineers prefer the analog compressor as it often adds a characteristic warmth and musicality to the sound that is difficult to replicate with digital algorithms. This is partly due to the harmonic distortions, subtle non-linearities, and saturation effects inherent in analog circuitry.
 
-        \section{Control Parameters}
+        \section{Compressor Control Parameters}
         
             \subsection{Threshold}
                 The threshold parameter sets the level at which the compressor starts to act. Measured in decibels (dB), it defines the point above which the input signal will be compressed. When the signal level exceeds this threshold, compression is applied.
+
+            \subsection{Ratio}
+                The ratio determines the degree of compression applied to the signal once it surpasses the threshold. It is expressed as a ratio (e.g., 4:1, 10:1). A 4:1 ratio means that for every 4 dB, the input signal exceeds the threshold, the output signal level will be increased by only 1 dB. Higher ratios result in more aggressive compression.
 
             \subsection{Attack}
                 The attack time is the time it takes for the compressor to start acting after the signal exceeds the threshold. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
@@ -87,55 +101,36 @@
                     
             \subsection{Knee}
                 The knee parameter adjusts how the compressor transitions from the non-compressed to the compressed state. A 'hard knee' setting means the compression ratio is applied abruptly as soon as the signal crosses the threshold. In contrast, a 'soft knee' setting introduces compression gradually as the signal approaches and then exceeds the threshold. This results in a more natural, less noticeable compression effect.
-
-            \subsection{Ratio}
-                The ratio determines the degree of compression applied to the signal once it surpasses the threshold. It is expressed as a ratio (e.g., 4:1, 10:1). A 4:1 ratio means that for every 4 dB, the input signal exceeds the threshold, the output signal level will be increased by only 1 dB. Higher ratios result in more aggressive compression.
         
             % Compression ratio and transient response diagrams
-            \begin{figure*}[!t]
+            \begin{figure*}[ht]
                 \centering
                 \begin{minipage}{0.5\linewidth}
                     \centering
                     \includesvg[inkscapelatex=false,width=2in]{Compression_ratio.svg}
-                    \caption{Typical Compression Ratio Characteristics}
+                    \caption{Typical compression ratio characteristics.}
                     \label{fig:comp-ratio}
                 \end{minipage}\hfill
                 \begin{minipage}{0.5\linewidth}
                     \centering
                     \includesvg[inkscapelatex=false,width=2.5in]{attack-release-trans.svg}
-                    \caption{Transient Response of a Typical DRC}
+                    \caption{Transient response of a signal through a typical DRC.}
                     \label{fig:comp-trans}
                 \end{minipage}\hfill
             \end{figure*}
 
-            % RMS and peak comparison table
-            \begin{table*}[!t]
-                \centering
-                \begin{tabularx}{\textwidth}{|l*{4}{|C}|}
-                    \hline
-                    Type of Waveform (1V Peak Amplitude) & Crest Factor $(V_{Peak}/V_{RMS})$ & RMS value & Average Reading Circuit & Error (\%) \\ \hline
-                    Undistorted Sine Wave & 1.414 & 0.707 & 0.707 & 0 \\    \hline
-                    Gaussian Noise & 3 & 0.333 & 0.295 & -11.4 \\   \hline
-                    Undistorted Triangle Wave & 1.73 & 0.577 & 0.555 & -3.8 \\   \hline
-                    Gaussian Noise (98\% of Peaks<1V) & 3 & 0.333 & 0.295 & -11.4 \\    \hline
-                    Rectangular & 2 & 0.5 & 0.278 & -44 \\    \hline
-                    Pulse Train & 10 & 0.1 & 0.011 & -89 \\    \hline
-                    SCR Waveform (50\% Duty) & 2 & 0.354 & 0.354 & -28 \\    \hline
-                    SCR Waveform (25\% Duty) & 4.7 & 0.212 & 0.150 & -30 \\    \hline
-                \end{tabularx}
-                \caption{Error Introduced by an Average Responding Circuit When Measuring Common Waveforms}
-                \label{table:ave-err}
-            \end{table*}
+            \subsection{Side-chain}
+                \textcolor{blue}{Discuss other functionalities seen in DRCs such as side-chain and multi-spectral DRCs. I do not plan to implement these as part of the project, however, it might be a good idea to still discuss it.}
 
-        \section{Components of DRC}
+        \section{Functional Building Blocks of a Compressor}
 
             \subsection{Threshold Detector}
                 The threshold detector is responsible for producing the control voltage, which dictates the gain reduction level applied to the signal. This stage encompasses parameters like Threshold (T), Ratio (R), and Knee Width (W), which collectively establish the static input-output relationship for compression. When the signal level surpasses the threshold, it undergoes attenuation following the specified ratio.
             
-            \subsection{Input Level Detection}
+            \subsection{Input Level Detector}
                 The volume detector is responsible for providing a representation of the loudness of the input signal. There are a two main ways including the peak detector and the RMS detector to generate the control voltage based on the input.
 
-                \subsubsection{Peak Detection}
+                \subsubsection{Average Reading Level Detector}
                 
                     A simple peak detection circuit can be implemented using a diode, a capacitor, and a resistor.
                     
@@ -156,11 +151,11 @@
                             (7.5,0) node[right]{Output}
                             ;
                         \end{circuitikz}
-                        \captionof{figure}{Circuit Diagram of a Lossy Peak Detector.}
-                        \label{fig:simple-peak-det}
+                        \captionof{figure}{Circuit diagram of a lossy peak detector.}
+                        \label{fig:lossy-peak-det}
                     \end{minipage}
                     
-                \subsubsection{RMS Detection}
+                \subsubsection{RMS Level Detector}
                     Referencing the Root Mean Squared (RMS) value of the input signal may be useful when we would like to set the compression reference based on the smoothed average of the input signal. Unlike peak detection, 
                     
                     The RMS value in its continuous form expression is defined by the following function. \cite{aes-that-rms}
@@ -170,44 +165,42 @@
                     \end{equation}
                     
                     Utilizing the RMS value of the input signal is particularly helpful when you would like to utilize a reference that is more aligned with how our ears perceive loudness. RMS detection ensures more consistent levels throughout the audio material, as it's less influenced by short transient peaks, and is suited for providing a more musical and natural-sounding compression.
+
+                    % RMS and peak comparison table
+                    \begin{table*}[!th]
+                        \centering
+                        \begin{tabularx}{\textwidth}{|l*{4}{|C}|}
+                            \hline
+                            Type of Waveform (1V Peak Amplitude) & Crest Factor $(V_{Peak}/V_{RMS})$ & RMS value & Average Reading Circuit & Error (\%) \\ \hline
+                            Undistorted Sine Wave & 1.414 & 0.707 & 0.707 & 0 \\    \hline
+                            Gaussian Noise & 3 & 0.333 & 0.295 & -11.4 \\   \hline
+                            Undistorted Triangle Wave & 1.73 & 0.577 & 0.555 & -3.8 \\   \hline
+                            Gaussian Noise (98\% of Peaks<1V) & 3 & 0.333 & 0.295 & -11.4 \\    \hline
+                            Rectangular & 2 & 0.5 & 0.278 & -44 \\    \hline
+                            Pulse Train & 10 & 0.1 & 0.011 & -89 \\    \hline
+                            SCR Waveform (50\% Duty) & 2 & 0.354 & 0.354 & -28 \\    \hline
+                            SCR Waveform (25\% Duty) & 4.7 & 0.212 & 0.150 & -30 \\    \hline
+                        \end{tabularx}
+                        \caption{Error introduced by an average responding circuit when measuring common waveforms.}
+                        \label{table:ave-err}
+                    \end{table*}
                     
                 \subsubsection{Crest Factor}
                     The crest factor, representing the ratio of a signal's peak amplitude to its root mean square (RMS) value, plays a important role in the control of dynamic range compression. By quantifying the extent of peakiness in audio signals, it offers a valuable metric for adjusting the gain in dynamic range compressors, aligning more closely with the intricacies of human auditory perception. This parameter is particularly crucial in scenarios where maintaining audio fidelity is paramount, as it helps in tailoring the compression process to preserve the natural dynamics of the source material while preventing auditory fatigue in listeners.\par
                     In practical terms, the crest factor informs the design of gain control circuitry by facilitating a more discerning response to varying signal characteristics. It enables the compression algorithm to dynamically adjust its parameters, such as threshold and ratio, based on the signal's momentary peakiness rather than its average level or instantaneous peaks alone. This approach ensures a more balanced and transparent output, minimizing the risk of overcompression, which can lead to a loss of dynamic range and a 'flattened' audio experience.
 
-            \subsection{Gain Control}
+                \subsubsection{Pre-Detection Filtering}
+                    Broadband compressors works on the dynamics of an input signal across the entire frequency range. When a set threshold is exceeded, the entire signal is affected, regardless of which frequencies the energy of the signal is composed of.\par
+                    In a multiband compressor, the entire frequency spectrum is split up into multiple bands that can be parametrized independently from each other. Hence, you are able to compress a single track or instrumental group much more flexible and heavier, without having to fear that bigger changes end up being audible too much.\par
+                    With a spectral compressor, the spectral distribution of energy of a signal is analyzed continuously and compared with target values that have been calculated by intelligent algorithms. When the system recognizes that certain frequency areas are currently being overemphasized and therefore affect the compression disproportionately, these areas are automatically compressed more.
+
+            \subsection{Gain Level Controller}
                 The gain control in a dynamic range compressor can be achieved by using a voltage controlled amplifier (VCA) where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release).
-            
-            \subsection{dB/Linear Domain Conversion}
-                \textcolor{blue}{A log domain amplifier can be implemented so that we can operate mathematical operations such as multiplication and division on analog signals. This can be done as summation and subtraction in the log domain directly translate to multiplication and division once converted back to its linear representation.}
-
-                The discharge of a capacitor is expressed by the following equation.              
-                
-                \begin{equation}
-                    V(t) = V_0 e^{-\frac{t}{RC}}
-                \end{equation}    
-                
-                This equation shows that the decay in the voltage of a capacitor is represented as an exponential function.
-                When we take the natural logarithm of the function on both sides, we will get the expression shown below.
-                
-                \begin{equation}
-                    \ln(V(t)) = \ln(V_0) - \frac{t}{RC}
-                \end{equation}
-                
-                Since we are relying on discrete circuitry to implement the compressor, we would have to take the discharge characteristic of capacitive elements into our calculation.
-
-            \subsection{Broadband, Multiband, and Spectral Compressors}
-                Broadband compressors works on the dynamics of an input signal across the entire frequency range. When a set threshold is exceeded, the entire signal is affected, regardless of which frequencies the energy of the signal is composed of.\par
-                In a multiband compressor, the entire frequency spectrum is split up into multiple bands that can be parametrized independently from each other. Hence, you are able to compress a single track or instrumental group much more flexible and heavier, without having to fear that bigger changes end up being audible too much.\par
-                With a spectral compressor, the spectral distribution of energy of a signal is analyzed continuously and compared with target values that have been calculated by intelligent algorithms. When the system recognizes that certain frequency areas are currently being overemphasized and therefore affect the compression disproportionately, these areas are automatically compressed more.
-            \subsection{Side-Chain}
-                \textcolor{blue}{Discuss other functionalities seen in DRCs such as side-chain and multi-spectral DRCs. I do not plan to implement these as part of the project, however, it might be a good idea to still discuss it.}
             
         \section{Compressor Topology}
             In the context of DRC design, the topology plays a crucial role in determining the efficiency and effectiveness of signal processing.
 
-            \subsection{Feedback}  
-
+            \subsection{Feedback Compression}  
                 In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure ?. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. \textcolor{red}{Feedback topology is often praised for its musicality, as it tends to produce a more natural compression effect.} The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. This topology excels in applications where preserving the natural dynamics and timbre of the audio is important.
                 
                 % Feedback diagram
@@ -254,15 +247,15 @@
                         
                     \end{tikzpicture}
                         
-                    \captionof{figure}{Control Diagram of a Feedback DRC Topology}
+                    \captionof{figure}{Control diagram of a feedback compressor topology.}
                     \label{fig:feedback}
                 
                 \end{minipage}
                 
-            \subsection{Feedforward}
-                As opposed to the feedback topology, feedforward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (\ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal. \textcolor{red}{Feedforward compressors are known for their accuracy and fast response, making them ideal for applications requiring precise dynamic control, such as in limiting scenarios where preventing signal peaks is crucial.}\par
+            \subsection{Feed-forward Compression}
+                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (\ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal. \textcolor{red}{Feed-forward compressors are known for their accuracy and fast response, making them ideal for applications requiring precise dynamic control, such as in limiting scenarios where preventing signal peaks is crucial.}\par
 
-                % Feedforward diagram
+                % Feed-forward diagram
                 \noindent
                 \begin{minipage}{\linewidth}
 
@@ -305,14 +298,36 @@
                         
                     \end{tikzpicture}
                     
-                    \captionof{figure}{Control Diagram of a Feed-Forward DRC Topology}
+                    \captionof{figure}{Control diagram of a feed-forward compressor topology.}
                     \label{fig:feedforward}
                 
                 \end{minipage}
+        
+        \section{Optimization of the Compressor Architecture}
+            
+            \subsection{Logarithmic Domain Signal Processing}
+                \textcolor{blue}{A log domain amplifier can be implemented so that we can operate mathematical operations such as multiplication and division on analog signals. This can be done as summation and subtraction in the log domain directly translate to multiplication and division once converted back to its linear representation.}
 
-            \subsection{Optimal Topology}
+                The discharge of a capacitor is expressed by the following equation.              
+                
+                \begin{equation}
+                    V(t) = V_0 e^{-\frac{t}{RC}}
+                \end{equation}    
+                
+                This equation shows that the decay in the voltage of a capacitor is represented as an exponential function.
+                When we take the natural logarithm of the function on both sides, we will get the expression shown below.
+                
+                \begin{equation}
+                    \ln(V(t)) = \ln(V_0) - \frac{t}{RC}
+                \end{equation}
+                
+                Since we are relying on discrete circuitry to implement the compressor, we would have to take the discharge characteristic of capacitive elements into our calculation.
 
-                % Control diagram of the compressor
+            \subsection{Mixed Use of Peak Level and RMS Level as an Input Level Reference}
+
+            \subsection{Compressor Topology Selection}
+
+                % Control diagram of compressor to be implemented
                 \begin{figure*}[!th]
 
                     \centering
@@ -404,25 +419,32 @@
                 \end{eqnarray}
                         
         \section{Circuit Implementation}
-            \subsection{Precision Full Wave Rectifier}
+
+            \subsection{Precision Full-Wave Rectifier}
                 A precision full-wave rectifier has been implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
                 
             \subsection{Log/Anti-Log Amplifier}
                 \textcolor{blue}{Explain the difference in exponential decay vs linear decay and its significance. I plan to implement the circuit shown in \cite{ti-log-conv}}
                 \textcolor{blue}{This circuit reverts the signal that has converted to dB scale back into the linear domain signal.}
             
-            \subsection{Precision Peak Detector}
-                \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}  
+            \subsection{Input Level Detector}
 
-            \subsection{True RMS Detector}
-                A traditional approach to reading the average of an input signal was to implement a 
-                
-                For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                          
+                \subsubsection{Precision Peak Detector}
+                    \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}  
+
+                \subsubsection{True RMS Detector}
+                    A traditional approach to reading the average of an input signal was to implement a 
+                    
+                    For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                          
             
-            \subsection{Knee Control}
+                \subsubsection{Detection Level Mixing}
+
+                \subsubsection{Pre-Detection Filter}
+
+            \subsection{Knee Level Management}
                 The following equation describes the continuous function of a gain of the output with knee control being implemented.
 
-
+                % Expression of knee control in terms of 
                 \begin{equation}
                     y=
                     \begin{cases}
@@ -432,14 +454,17 @@
                     \end{cases}
                 \end{equation}
 
-
                 \subsubsection{Hyperbolic Tangent Function Cell}
                 \subsubsection{Differential Equalizalizer}
                 \subsubsection{Gain Reduction Normalizer}
-            
+
             \subsection{Voltage Controlled Amplifier}
 
+        \section{Hardware Design}
+            \textcolor{blue}{I plan to use Altium Designer for designing the PCB. Describe steps taken during the PCB design process and any important points noticed.}
+
             \subsection{Miscellaneous Circuitry}
+
                 \subsubsection{Power Delivery}
                     Audio domain applications gain advantages from utilizing a bipolar bias power supply. Such a supply enhances the effective utilization of IC's full dynamic range, facilitates rail-to-rail amplification, shields the analog signal from ground noise, and delivers numerous additional benefits. \cite{ti-3-v-rails}\par
                     To receive the benefits of a split rail power supply while reducing unwanted noise and ripples seen in common topologies such as a simple switching mode power supply, a topology where a inverting charge pump is combined with an linear \& low-dropout (LDO) regulator. (shown in figure)\par
@@ -477,37 +502,40 @@
 
                     \end{minipage}
 
-                \subsubsection{Pre-Detection Filtering}
-                \subsubsection{Input Buffer}
-                \subsubsection{Gain Reduction Meter}
-                \subsubsection{Hardware Components}
-            
+                \subsubsection{Balance Line Input/Output}
 
-        \section{Hardware Design}
+            \subsection{Printed Circuit Board Design}
+
+                \subsubsection{Layer Stackup}
+                    \textcolor{blue}{Talk about the stackup of a PCB and how it could affect signal integrity.}
+
+                \subsubsection{Component Placement}
+
+                \subsubsection{Design Rules and Consraints}
+
+                \subsubsection{Signal Integrity and EMI Precausions}
+
             \subsection{Component Selection}
                 \textcolor{blue}{Go over components used in the circuit and why that specific part was picked. Discuss how component selection could affect thermal characteristics, linearity, bandwidth etc.}
-                
-            \subsection{PCB Layer Stackup}
-                \textcolor{blue}{Talk about the stackup of PCB and how it could affect signal integrity.}
-                
-            \subsection{CAD Software}
-                \textcolor{blue}{I plan to use Altium Designer for designing the PCB. Describe steps taken during the PCB design process and any important points noticed.}
+        
+        \section{Performance Evaluation}
 
             \subsection{Simulation}
                 \textcolor{blue}{Discuss about simulation methodology and results here. Note if changes are made to the circuit retroactively at this stage of the design process.}
+
+            \subsection{Measurements}
         
-        \section{Conclusion}
-            \textcolor{blue}{The conclusion goes here.}
+        \section{Discussion}
+            \textcolor{blue}{The discussion goes here.}
 
         \section*{Acknowledgments}
             \textcolor{blue}{Put acknowledgments here. }
 
-        \section*{Project Resources}
+        \section*{Resources}
             All resources developed upon the completion of this project, including the full schematic and CAD files are available for download at the following \textbf{\textcolor{blue}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
-        
 
-    \end{multicols}
+        \printbibliography
 
-    \printbibliography
+    \end{multicols*}
 
 \end{document}
