@@ -70,7 +70,7 @@
     \thispagestyle{firstpage}
 
     \begin{abstract}
-        This technical paper examines the theory and implementation of dynamic range compressors in the realm of analog signal processing. Through tests and evaluations, we present methods for achieving efficient and high-performance compressors, where we will start with an overview of the basic building block of the compressor, its representation as a mathematical function, and various methods of implementing this through analog circuits. This technical report offers an entry point for those looking to understand the fundamentals of dynamic range compression techniques while balancing the nuances of the practical methods and challenges associated with developing an electronic hardware device.
+        This technical paper examines the theory and implementation of dynamic range compressors in the realm of analog signal processing. Through tests and evaluations, we present methods for achieving efficient and high-performance compressors, where we will start with an overview of the basic building block of the compressor, its representation as a mathematical function, and various methods of implementing this through analog circuits. This paper offers an entry point for those looking to understand the fundamentals of dynamic range compression techniques while balancing the nuances of the practical methods and challenges associated with developing an electronic hardware device.
     \end{abstract}
     
     \begin{multicols*}{2}
@@ -323,7 +323,7 @@
                 
                 Since we are relying on discrete circuitry to implement the compressor, we would have to take the discharge characteristic of capacitive elements into our calculation.
 
-            \subsection{Mixed Use of Peak Level and RMS Level as an Input Level Reference}
+            \subsection{Mixed Use of Averaging and RMS Level as an Input Level Reference}
 
             \subsection{Compressor Topology Selection}
 
@@ -423,7 +423,7 @@
             \subsection{Precision Full-Wave Rectifier}
                 A precision full-wave rectifier has been implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
                 
-            \subsection{Log/Anti-Log Amplifier}
+            \subsection{Logarithmic and Exponential Amplifiers}
                 \textcolor{blue}{Explain the difference in exponential decay vs linear decay and its significance. I plan to implement the circuit shown in \cite{ti-log-conv}}
                 \textcolor{blue}{This circuit reverts the signal that has converted to dB scale back into the linear domain signal.}
             
@@ -439,7 +439,7 @@
             
                 \subsubsection{Detection Level Mixing}
 
-                \subsubsection{Pre-Detection Filter}
+                \subsubsection{Pre-Detection Filtering}
 
             \subsection{Knee Level Management}
                 The following equation describes the continuous function of a gain of the output with knee control being implemented.
@@ -532,10 +532,15 @@
             \textcolor{blue}{Put acknowledgments here. }
 
         \section*{Resources}
-            All resources developed upon the completion of this project, including the full schematic and CAD files are available for download at the following \textbf{\textcolor{blue}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
+            All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{blue}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
 
         \printbibliography
 
     \end{multicols*}
+
+    \newpage
+
+    \section*{Addendum}
+        \textcolor{blue}{Put pictures of completed project, PCB layout, etc. over here.}
 
 \end{document}
