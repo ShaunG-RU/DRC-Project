@@ -4,3 +4,9 @@ LINE Normal 0 48 0 24
 LINE Normal 0 -48 0 -24
 LINE Normal -32 0 -8 0
 RECTANGLE Normal 8 24 -8 -24
+PIN 0 -48 NONE 8
+PINATTR SpiceOrder 1
+PIN 0 48 NONE 8
+PINATTR SpiceOrder 2
+PIN -32 0 NONE 8
+PINATTR SpiceOrder 3

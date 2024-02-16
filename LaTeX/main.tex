@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{fancyhdr}
+\usepackage{lastpage}
 \usepackage[american,siunitx]{circuitikz}
 \usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
@@ -113,8 +114,8 @@
                 \end{minipage}\hfill
                 \begin{minipage}{0.5\linewidth}
                     \centering
-                    \includesvg[inkscapelatex=false,width=2.5in]{attack-release-trans.svg}
-                    \caption{Transient response of a signal through a typical DRC.}
+                    \includesvg[inkscapelatex=false,width=0.935\linewidth]{attack-release-trans.svg}
+                    \caption{Transient response of a signal through a compressor.}
                     \label{fig:comp-trans}
                 \end{minipage}\hfill
             \end{figure*}
