@@ -69,6 +69,23 @@ GenerateClassCluster=0
 DocumentUniqueId=XQHQXUBJ
 
 [Document2]
+DocumentPath=Balanced Line Connectors.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=HXFIYSBK
+
+[Document3]
 DocumentPath=Precision Full-Bridge Rectifier.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -85,7 +102,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YSUMLLEL
 
-[Document3]
+[Document4]
 DocumentPath=Log and Anti-Log Converters.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -102,7 +119,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AZHTZDXP
 
-[Document4]
+[Document5]
 DocumentPath=Threshold and Makeup.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -119,7 +136,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FONJZNCU
 
-[Document5]
+[Document6]
 DocumentPath=Knee Control.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -135,23 +152,6 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YWUKULZL
-
-[Document6]
-DocumentPath=VCA.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=5
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=HADLSIVX
 
 [Document7]
 DocumentPath=DRC.PcbLib
@@ -188,7 +188,7 @@ GenerateClassCluster=0
 DocumentUniqueId=BYLNZXCD
 
 [Document9]
-DocumentPath=Balanced Line Connectors.SchDoc
+DocumentPath=tanh function cell.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -202,7 +202,24 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=HXFIYSBK
+DocumentUniqueId=NWJTFKAW
+
+[Document10]
+DocumentPath=VCA.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=5
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=HADLSIVX
 
 [Configuration1]
 Name=Sources

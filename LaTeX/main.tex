@@ -343,7 +343,7 @@
                         % Blocks
                         \node[block, right = of input] (inBuf) {Input Buffer};
                         \node[block, below right = 0.3 and 0.1 of inBuf] (abs) {Full Wave \\ Rectifier};
-                        \node[block, right = of abs] (log) {Log \\ Amp};
+                        \node[block, right = of abs] (log) {Log. \\ Amp};
                         \node[block, right = of log] (th) {Threshold \\ Detector};
 
                         % Sum1 shape
@@ -369,7 +369,7 @@
                         \node[left=-1pt] at (sum2.center){\tiny $-$};
 
                         % Additional blocks
-                        \node[block, right = of sum2] (antilog) {Anti-Log \\ Amp};
+                        \node[block, right = of sum2] (antilog) {Exp. \\ Amp};
                         \node[block, above right = 0.3 and 0.1 of antilog] (vca) {VCA};
                         \node[right = of vca] (output) {$y(t)$};
 
