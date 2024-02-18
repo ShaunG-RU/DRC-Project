@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{fancyhdr}
+\usepackage{pgfplots}
 \usepackage{lastpage}
 \usepackage[american,siunitx]{circuitikz}
 \usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
@@ -303,6 +304,8 @@
                     \label{fig:feedforward}
                 
                 \end{minipage}
+
+                \noindent
         
         \section{Optimization of the Compressor Architecture}
             
@@ -456,8 +459,39 @@
                 \end{equation}
 
                 \subsubsection{Hyperbolic Tangent Function Cell}
+
+                    \begin{minipage}{\linewidth}
+
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                xmin=-2.5, xmax=2.5,
+                                ymin=-1.5, ymax=1.5,
+                                axis lines=center,
+                                axis on top=true,
+                                domain=-2.5:2.5,
+                                ylabel=$y$,
+                                xlabel=$x$,
+                                ]
+                            
+                                \addplot [mark=none,draw=black,ultra thick] {tanh(\x)};
+                                \node [right, black] at (axis cs: 1,0.7) {$y = \tanh x$};
+                                
+                                %% Add the asymptotes
+                                \draw [blue, dotted, thick] (axis cs:-2.5,-1) -- (axis cs:-0.6,-1);
+                                \draw [blue, dotted, thick] (axis cs:+2.5,+1) -- (axis cs:0,+1);
+                            \end{axis}
+                        \end{tikzpicture}
+                            
+                        \captionof{figure}{Function plot of $y=tanh(x)$.}
+                        \label{plot:tanh_function}
+                    
+                    \end{minipage}
+
+                    A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair.
                 \subsubsection{Differential Equalizalizer}
                 \subsubsection{Gain Reduction Normalizer}
+                \subsubsection{Precision Current Sink Source}
 
             \subsection{Voltage Controlled Amplifier}
 
