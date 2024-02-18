@@ -13,6 +13,7 @@
 \usepackage{tikz}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
+\usepackage{pgfplots}
 \usepackage[american,siunitx]{circuitikz}
 \usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
@@ -449,15 +450,78 @@
                 \begin{equation}
                     y=
                     \begin{cases}
-                        x, & \text{for $2(x-T)<-W$}\\
+                        T+\frac{x-T}{R}, & \text{for $2(x-T)>W$}\\
                         x+\frac{(\frac{1}{R}-1)(x-T+\frac{W}{2})^2}{2W}, & \text{for $2\left\lvert x-T\right\rvert\leq W$}\\
-                        T+\frac{x-T}{R}, & \text{for $2(x-T)>W$}
+                        x, & \text{for $2(x-T)<-W$}
                     \end{cases}
                 \end{equation}
 
+                \subsubsection{Precision Clipper}
+
+                    % Feed-forward diagram
+                    \noindent
+                    \begin{minipage}{\linewidth}
+
+                        \centering
+
+                        \begin{tikzpicture}[scale = 0.8, transform shape]
+
+                            \node (input) at (0,0) {$x(t)$};
+                            \node[block, right = of input] (clip+-) {$2|x-T|\leq W$\\Clipper};
+                            \node[block, above = of input] (offset) {$-W/2$\\Offset};
+                            \node[block, above = of clip+-] (clip-) {$2(x-T)>W$\\Clipper};
+                            \node[block, right = of clip+-] (peak1) {Peak\\Detector};
+                            \node[block, above = of peak1] (peak2) {Peak\\Detector};
+                            \node[block, right = of peak1] (tanh) {$tanh$ \\Cell};
+                            \node[block, right = of tanh] (vca1) {VCA};
+                            \node[block, above right = of vca1] (vca2) {VCA};
+                            
+
+                            \draw[densely dotted] (peak1.north) -- (peak2.south);
+                            
+                        \end{tikzpicture}
+
+                        \captionof{figure}{Knee control scheme}
+                        \label{fig:knee-control}
+
+                    \end{minipage}
+
                 \subsubsection{Hyperbolic Tangent Function Cell}
+                    A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair.
+
+                    \noindent
+                    \begin{minipage}{\linewidth}
+
+                        \centering
+                        \begin{tikzpicture}
+                            \begin{axis}[
+                                xmin=-2.5, xmax=2.5,
+                                ymin=-1.5, ymax=1.5,
+                                axis lines=center,
+                                axis on top=true,
+                                domain=-2.5:2.5,
+                                ylabel=$y$,
+                                xlabel=$x$,
+                                ]
+                            
+                                \addplot [mark=none,draw=black,ultra thick] {tanh(\x)};
+                                \node [right, black] at (axis cs: 1,0.7) {$y = \tanh x$};
+                                
+                                %% Add the asymptotes
+                                \draw [blue, dotted, thick] (axis cs:-2.5,-1) -- (axis cs:-0.6,-1);
+                                \draw [blue, dotted, thick] (axis cs:+2.5,+1) -- (axis cs:0,+1);
+                            \end{axis}
+                        \end{tikzpicture}
+                            
+                        \captionof{figure}{Function plot of $y=tanh(x)$.}
+                        \label{plot:tanh_function}
+                    
+                    \end{minipage}
+
                 \subsubsection{Differential Equalizalizer}
                 \subsubsection{Gain Reduction Normalizer}
+                \subsubsection{Precision Current Sink Source}
+                    \cite{ti-sink-source}
 
             \subsection{Voltage Controlled Amplifier}
 
