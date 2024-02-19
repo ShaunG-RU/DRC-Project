@@ -422,7 +422,7 @@
 
                     \centering
                     
-                    \begin{tikzpicture}[trim left=0.1cm]
+                    \begin{tikzpicture}
                             
                         \node (input) at (0,0) {$x(t)$};
                                                 
@@ -430,7 +430,7 @@
                         \node[block, right = of input] (inBuf) {Input Buffer};
                         \node[block, below right = 0.3 and 0.1 of inBuf] (abs) {Full Wave \\ Rectifier};
                         \node[block, right = of abs] (log) {Log. \\ Amp};
-                        \node[block, right = of log] (th) {Threshold \\ Detector};
+                        \node[block, right = of log] (th) {Attenuation \\ Calculator};
 
                         % Sum1 shape
                         \node[draw,
@@ -443,7 +443,7 @@
                         \node[above] at (sum1.center){\tiny $+$}; 
 
                         %\node[block, below = of peak] (rms) {RMS Detector};
-                        \node[block, right = of sum1] (peak) {Peak \\ Detector};
+                        \node[block, right = of sum1] (peak) {Level \\ Detector};
                         
                         % Sum2 shape
                         \node[draw,
@@ -880,6 +880,230 @@
             All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
 
         \printbibliography
+
+
+        \begin{figure*}[!th]
+
+            \centering
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=100,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-1.25, ymax=1.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=black,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt
+                    ] {sin(deg(x))};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=sin(x)$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=100,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-0.25, ymax=2.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=black,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt
+                    ] {abs(sin(deg(x)))};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=\left\lvert x \right\rvert$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=1000,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-0.25, ymax=2.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=red,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))};
+                    \addplot[
+                        color=blue,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=0:1.5,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))};
+                    \addplot[
+                        color=black!50,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=0:0.5,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=-\log _{10}(x)$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=1000,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-1.25, ymax=1.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=red,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1.5};
+                    \addplot[
+                        color=black!50,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=-2:0.05,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1.5};
+                    \addplot[
+                        color=blue,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=-1:0.05,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1.5};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=x-T-\frac{W}{2}$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=5000,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-0.25, ymax=2.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=red,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt,
+                        restrict y to domain=-0.05:2.25,
+                    ] {-log10(abs(sin(deg(x))))-1.5};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=\geq 0$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=1000,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-1.25, ymax=1.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=red,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1};
+                    \addplot[
+                        color=blue,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=-1:0.5,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1};
+                    \addplot[
+                        color=black!50,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=-1:-0.5,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=x-T$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=1000,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-1.25, ymax=1.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=blue,
+                        domain=-0.5*pi:4*pi,
+                        restrict y to domain=-0.5:0.5,
+                        line width=5pt
+                    ] {-log10(abs(sin(deg(x))))-1};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$-\frac{W}{2}\leq y \leq\frac{W}{2}$}
+            \end{minipage}\hfill
+
+            \begin{minipage}[b]{0.2\linewidth}
+                \centering
+                \begin{tikzpicture}[scale=0.2]
+                    \begin{axis}[
+                        axis lines*=middle,
+                        ticks=none,
+                        samples=100,
+                        xmin=-0.5*pi, xmax=4*pi,
+                        ymin=-1.25, ymax=1.25,
+                        axis line style={line width=2pt}
+                    ]
+                    \addplot[
+                        color=blue,
+                        domain=-0.5*pi:4*pi,
+                        line width=5pt
+                    ] {tanh(-log10(abs(sin(deg(x))))-1)};
+                    \end{axis}    
+                \end{tikzpicture}
+                \\
+                \footnotesize{$y=tanh(x)$}
+            \end{minipage}\hfill
+
+            \caption{Transient signal throughout the attenuation calculator.}
+            \label{fig:drc-diagram}
+
+        \end{figure*}
 
     \end{multicols*}
 
