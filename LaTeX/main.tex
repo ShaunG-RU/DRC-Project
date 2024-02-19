@@ -28,6 +28,7 @@
 \usetikzlibrary{positioning, shapes.geometric}
 \titlespacing*{\section}{0pt}{5pt}{5pt}
 \titlespacing*{\subsection}{0pt}{8pt}{3pt}
+\definecolor{copper}{rgb}{0.72, 0.45, 0.2}
 
 \tikzset{
     block/.style={
@@ -83,9 +84,11 @@
         }
 
         \section{Introduction}
-            A dynamic range compressor (DRC) is an audio processing tool that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. This process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness.\par
-            With the emergence of high-performance computational platforms and advancement in digital signal processing technologies, virtualized signal compression algorithms has been a de-facto standard in applications such as music production, live performances, broadcasting, and hearing aids. However, compressors that are implemented in analog circuits still remains a popular choice among audio engineers due to several technical advantages and its uniqueness in perceived audio characteristics.\par
-            Compared to a digital compressor, analog compressors introduces no digital latency caused by AD/DA conversion or digital processing delay. Furthermore, it is advantageous in avoiding issues such as unwanted sampling artifacts and the added complexity due to its digital nature. Some engineers prefer the analog compressor as it often adds a characteristic warmth and musicality to the sound that is difficult to replicate with digital algorithms. This is partly due to the harmonic distortions, subtle non-linearities, and saturation effects inherent in analog circuitry.
+            A dynamic range compressor (DRC) is an essential tool in audio processing that normalizes the loudness of a signal that has been put through. This is done by using a mechanism that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. The process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness. This technology is widely used in various areas such as music production, live performances, and even in devices like hearing aids to improve sound quality.\par
+            With the emergence of high-performance computational platforms and advancement in signal processing technologies, digital signal compression algorithms has been a de-facto standard in the industry. Digital compressors are popular in many applications, from creating music to broadcasting and beyond, as they allow for detailed manipulation of sound. The digital approach to compressors and various other signal processing tools`' has revolutionized the way we work with audio, making it easier to achieve high-quality production on your personal laptop without having access to a professional recording studios.\par
+            However, despite the dominance of digital signal processing technologies, hardware compressors, where the signal is processed entirely in the analog domain, remain in use. Many audio professionals continue to prefer them for certain tasks as it has the advantage of being straightforward, avoiding some of the issues that digital formats can introduce, such as digital latency caused by AD/DA conversion or digital processing delay. Furthermore, it is advantageous in avoiding issues such as unwanted sampling artifacts and the added complexity due to its digital nature.\par
+            Analog compressors are also valued for the unique qualities they can add to sound. They are known for introducing a warmth and musicality to audio that is often described as difficult to achieve with digital methods. This effect is due to the slight alterations they make to the sound, including adding minor distortions and saturation, which can make the audio feel richer and more engaging. Thus, despite the convenience and precision of digital compressors, analog compressors still hold its own place in audio production for their ability to enhance sound in a distinctive way.\par
+            This paper will delve deeper into the technical nuances and design considerations that underpins an effective analog compressor. By examining the control parameters, exploring the functional building blocks, and discussing various control mechanisms, we aim to investigate the intricate balance between theory and practical application that lies in designing an analog compressor. The following sections will offer a comprehensive analysis of the compressor topology, discussing various optimization strategies in designing an ideal compressor. Through this exploration, the paper aims to highlight the critical decisions and engineering challenges involved in creating an analog compressors that not only meet the technical specifications, but also stands out as an appealing alternative to the widely used digital compressor.
 
         \section{Compressor Control Parameters}
         
@@ -573,6 +576,52 @@
 
                 \subsubsection{Layer Stackup}
                     \textcolor{blue}{Talk about the stackup of a PCB and how it could affect signal integrity.}
+
+                    % PCB stackup layers
+                    \noindent
+                    \begin{minipage}{\linewidth}
+
+                        \centering
+
+                        \begin{tikzpicture}
+                            
+                            % S1
+                            \fill[copper] (0,-0.4) rectangle ++(5,0.2);
+                            
+                            % V2
+                            \fill[green!50] (0,-0.6) rectangle ++(5,0.2);
+
+                            % S3
+                            \fill[copper] (0,-0.8) rectangle ++(2,0.2);
+                            \fill[green!50] (2,-0.8) rectangle ++(1,0.2);
+                            \fill[copper] (3,-0.8) rectangle ++(2,0.2);
+
+                            % V4
+                            \fill[green!50] (0,-1.0) rectangle ++(5,0.2);
+                            
+                            % S5
+                            \fill[copper] (0,-1.2) rectangle ++(2,0.2);
+                            \fill[green!50] (2,-1.2) rectangle ++(1,0.2);
+                            \fill[copper] (3,-1.2) rectangle ++(2,0.2);
+
+                            % V6
+                            \fill[green!50] (0,-1.4) rectangle ++(5,0.2);
+                            
+                            % S7
+                            \fill[copper] (0,-1.6) rectangle ++(5,0.2);
+
+                            % Labels
+                            \node at (2.5,-0.3) {Sig. + PWR};
+                            \node at (2.5,-0.7) {GND};
+                            \node at (2.5,-1.1) {GND};
+                            \node at (2.5,-1.5) {Sig. + PWR};
+
+                        \end{tikzpicture}
+
+                        \captionof{figure}{Various PCB stackup options.}
+                        \label{fig:pcb-stackup}
+
+                    \end{minipage}
 
                 \subsubsection{Component Placement}
 
