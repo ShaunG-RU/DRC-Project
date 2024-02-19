@@ -25,10 +25,12 @@
 \graphicspath{{images/}}
 \setsvg{inkscapeexe={"C:/Program Files/Inkscape/bin/inkscape.exe"}} % POINT TO /inkscape.exe AS NEEDED
 \newcolumntype{C}{>{\centering\arraybackslash}X} % from array package
-\usetikzlibrary{positioning, shapes.geometric}
+\usetikzlibrary{positioning, shapes.geometric, patterns}
 \titlespacing*{\section}{0pt}{5pt}{5pt}
 \titlespacing*{\subsection}{0pt}{8pt}{3pt}
 \definecolor{copper}{rgb}{0.72, 0.45, 0.2}
+\definecolor{forestgreen(traditional)}{rgb}{0.0, 0.27, 0.13}
+\definecolor{forestgreen(web)}{rgb}{0.13, 0.55, 0.13}
 
 \tikzset{
     block/.style={
@@ -39,6 +41,14 @@
     }, 
     every node/.style = {node distance=0.5cm},
     line/.style = {-latex}
+}
+
+% Custom pattern definition
+\pgfdeclarepatternformonly{thick north east lines}{\pgfpointorigin}{\pgfqpoint{10pt}{10pt}}{\pgfqpoint{10pt}{10pt}} {
+    \pgfsetlinewidth{3pt} % Set the line width for the pattern
+    \pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+    \pgfpathlineto{\pgfqpoint{10pt}{10pt}}
+    \pgfusepath{stroke}
 }
 
 \begin{document}
@@ -585,36 +595,40 @@
 
                         \begin{tikzpicture}
                             
+                            % Light green background
+                            \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                            % Top soldermask
+                            \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
                             % S1
-                            \fill[copper] (0,-0.4) rectangle ++(5,0.2);
-                            
-                            % V2
-                            \fill[green!50] (0,-0.6) rectangle ++(5,0.2);
+                            \fill[copper] (0,-0.4) rectangle ++(3,0.2);
+                            \path[pattern=thick north east lines, pattern color=red] (0,-0.4) rectangle ++(3,0.2);
 
                             % S3
-                            \fill[copper] (0,-0.8) rectangle ++(2,0.2);
-                            \fill[green!50] (2,-0.8) rectangle ++(1,0.2);
-                            \fill[copper] (3,-0.8) rectangle ++(2,0.2);
-
-                            % V4
-                            \fill[green!50] (0,-1.0) rectangle ++(5,0.2);
+                            \fill[copper] (0,-0.8) rectangle ++(1,0.2);
+                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-0.8) rectangle ++(1,0.2);
+                            \fill[copper] (2,-0.8) rectangle ++(1,0.2);
+                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-0.8) rectangle ++(1,0.2);
                             
                             % S5
-                            \fill[copper] (0,-1.2) rectangle ++(2,0.2);
-                            \fill[green!50] (2,-1.2) rectangle ++(1,0.2);
-                            \fill[copper] (3,-1.2) rectangle ++(2,0.2);
-
-                            % V6
-                            \fill[green!50] (0,-1.4) rectangle ++(5,0.2);
+                            \fill[copper] (0,-1.2) rectangle ++(1,0.2);
+                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-1.2) rectangle ++(1,0.2);
+                            \fill[copper] (2,-1.2) rectangle ++(1,0.2);
+                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-1.2) rectangle ++(1,0.2);
                             
                             % S7
-                            \fill[copper] (0,-1.6) rectangle ++(5,0.2);
+                            \fill[copper] (0,-1.6) rectangle ++(3,0.2);
+                            \path[pattern=thick north east lines, pattern color=blue] (0,-1.6) rectangle ++(3,0.2);
+
+                            % Bottom soldermask
+                            \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
 
                             % Labels
-                            \node at (2.5,-0.3) {Sig. + PWR};
-                            \node at (2.5,-0.7) {GND};
-                            \node at (2.5,-1.1) {GND};
-                            \node at (2.5,-1.5) {Sig. + PWR};
+                            \node at (-1.5,-0.3) {Sig. \& PWR};
+                            \node at (-1.5,-0.7) {GND};
+                            \node at (-1.5,-1.1) {GND};
+                            \node at (-1.5,-1.5) {Sig. \& PWR};
 
                         \end{tikzpicture}
 
@@ -622,6 +636,96 @@
                         \label{fig:pcb-stackup}
 
                     \end{minipage}
+
+                    \begin{figure*}[ht]
+                        \centering
+                        \begin{minipage}{0.5\linewidth}
+                            \centering
+                            \begin{tikzpicture}
+                                
+                                % Light green background
+                                \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                                % Top soldermask
+                                \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
+                                % S1
+                                \fill[copper] (0,-0.4) rectangle ++(3,0.2);
+                                \path[pattern=thick north east lines, pattern color=red] (0,-0.4) rectangle ++(3,0.2);
+
+                                % S3
+                                \fill[copper] (0,-0.8) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-0.8) rectangle ++(1,0.2);
+                                \fill[copper] (2,-0.8) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-0.8) rectangle ++(1,0.2);
+                                
+                                % S5
+                                \fill[copper] (0,-1.2) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-1.2) rectangle ++(1,0.2);
+                                \fill[copper] (2,-1.2) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-1.2) rectangle ++(1,0.2);
+                                
+                                % S7
+                                \fill[copper] (0,-1.6) rectangle ++(3,0.2);
+                                \path[pattern=thick north east lines, pattern color=blue] (0,-1.6) rectangle ++(3,0.2);
+
+                                % Bottom soldermask
+                                \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
+
+                                % Labels
+                                \node at (-1.5,-0.3) {Sig. \& PWR};
+                                \node at (-1.5,-0.7) {GND};
+                                \node at (-1.5,-1.1) {GND};
+                                \node at (-1.5,-1.5) {Sig. \& PWR};
+
+                            \end{tikzpicture}
+                            \captionof{figure}{Inner GND stackup.}
+                            \label{fig:inner-gnd-stackup}
+                        \end{minipage}\hfill
+                        \begin{minipage}{0.5\linewidth}
+                            \centering
+                            \begin{tikzpicture}
+                                
+                                % Light green background
+                                \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                                % Top soldermask
+                                \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
+                                % S1
+                                \fill[copper] (0,-0.4) rectangle ++(3,0.2);
+                                \path[pattern=thick north east lines, pattern color=red] (0,-0.4) rectangle ++(3,0.2);
+
+                                % S3
+                                \fill[copper] (0,-0.8) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-0.8) rectangle ++(1,0.2);
+                                \fill[copper] (2,-0.8) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-0.8) rectangle ++(1,0.2);
+                                
+                                % S5
+                                \fill[copper] (0,-1.2) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-1.2) rectangle ++(1,0.2);
+                                \fill[copper] (2,-1.2) rectangle ++(1,0.2);
+                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-1.2) rectangle ++(1,0.2);
+                                
+                                % S7
+                                \fill[copper] (0,-1.6) rectangle ++(3,0.2);
+                                \path[pattern=thick north east lines, pattern color=blue] (0,-1.6) rectangle ++(3,0.2);
+
+                                % Bottom soldermask
+                                \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
+
+                                % Labels
+                                \node at (-1.5,-0.3) {GND};
+                                \node at (-1.5,-0.7) {Sig. \& PWR};
+                                \node at (-1.5,-1.1) {Sig. \& PWR};
+                                \node at (-1.5,-1.5) {GND};
+
+                            \end{tikzpicture}
+                            \captionof{figure}{Outer GND stackup.}
+                            \label{fig:outer-gnd-stackup}
+                        \end{minipage}\hfill
+                    \end{figure*}
 
                 \subsubsection{Component Placement}
 
