@@ -14,6 +14,7 @@
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{pgfplots}
+\usepackage{subcaption}
 \usepackage[american,siunitx]{circuitikz}
 \usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
@@ -25,12 +26,14 @@
 \graphicspath{{images/}}
 \setsvg{inkscapeexe={"C:/Program Files/Inkscape/bin/inkscape.exe"}} % POINT TO /inkscape.exe AS NEEDED
 \newcolumntype{C}{>{\centering\arraybackslash}X} % from array package
-\usetikzlibrary{positioning, shapes.geometric, patterns}
+\usetikzlibrary{positioning, shapes.geometric, patterns, patterns.meta}
 \titlespacing*{\section}{0pt}{5pt}{5pt}
 \titlespacing*{\subsection}{0pt}{8pt}{3pt}
 \definecolor{copper}{rgb}{0.72, 0.45, 0.2}
 \definecolor{forestgreen(traditional)}{rgb}{0.0, 0.27, 0.13}
 \definecolor{forestgreen(web)}{rgb}{0.13, 0.55, 0.13}
+\definecolor{github-indigo}{RGB}{64, 120, 192}
+\definecolor{github-butterfly-bush}{RGB}{110, 84, 148}
 
 \tikzset{
     block/.style={
@@ -41,14 +44,6 @@
     }, 
     every node/.style = {node distance=0.5cm},
     line/.style = {-latex}
-}
-
-% Custom pattern definition
-\pgfdeclarepatternformonly{thick north east lines}{\pgfpointorigin}{\pgfqpoint{10pt}{10pt}}{\pgfqpoint{10pt}{10pt}} {
-    \pgfsetlinewidth{3pt} % Set the line width for the pattern
-    \pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
-    \pgfpathlineto{\pgfqpoint{10pt}{10pt}}
-    \pgfusepath{stroke}
 }
 
 \begin{document}
@@ -101,7 +96,92 @@
             This paper will delve deeper into the technical nuances and design considerations that underpins an effective analog compressor. By examining the control parameters, exploring the functional building blocks, and discussing various control mechanisms, we aim to investigate the intricate balance between theory and practical application that lies in designing an analog compressor. The following sections will offer a comprehensive analysis of the compressor topology, discussing various optimization strategies in designing an ideal compressor. Through this exploration, the paper aims to highlight the critical decisions and engineering challenges involved in creating an analog compressors that not only meet the technical specifications, but also stands out as an appealing alternative to the widely used digital compressor.
 
         \section{Compressor Control Parameters}
+            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and Side-chain, each defining a specific aspect of the compressor's behavior and its impact on the audio signal.
+
+            % Compression ratio plot
+            \noindent
+            \begin{minipage}{\linewidth}
+                \centering
+                \begin{tikzpicture}
+                    \begin{axis}[
+                        ticklabel style = {font=\footnotesize},
+                        xtick distance=5,
+                        ytick distance=5,
+                        xlabel={Input Level (dB)},
+                        ylabel={Output Level (dB)},
+                        xmin=-45, xmax=0,
+                        ymin=-45, ymax=0,
+                        legend pos=north west,
+                        %xmajorgrids=true,
+                        %ymajorgrids=true,
+                        grid style=dashed,
+                    ]
+                    
+                    % No compression line
+                    \addplot[
+                        color=blue,
+                        domain=-45:0,
+                    ] {x};
+                    
+                    % 5:1 Compression, hard knee
+                    \addplot[
+                        color=black,
+                        solid,
+                        domain=-45:-20,
+                    ] {x + 10};
+                    \addplot[
+                        color=black,
+                        solid,
+                        domain=-20:0,
+                    ] {0.2*x-6};
         
+                    % 5:1 Compression, soft knee
+                    \addplot[
+                        color=red,
+                        very thick,
+                        densely dotted,
+                        domain=-45:-30,
+                    ] {x + 10};
+                    \addplot[
+                        color=red,
+                        very thick,
+                        densely dotted,
+                        domain=-30:-10,
+                    ] {-0.02*x^2-0.2*x-8};
+                    \addplot[
+                        color=red,
+                        very thick,
+                        densely dotted,
+                        domain=-10:0,
+                    ] {0.2*x-6};
+                    
+        
+                    % Make-up gain
+                    \draw [<->] (axis cs:-35,-34) -- (axis cs:-35,-26);
+        
+                    % Threshold line
+                    \draw [color=black!80, loosely dashdotted] (axis cs:-20,-45) -- (axis cs:-20,0);
+        
+                    % Knee boundary line
+                    \draw [color=red!80, loosely dashdotted] (axis cs:-30,-45) -- (axis cs:-30,0);
+                    \draw [color=red!80, loosely dashdotted] (axis cs:-10,-45) -- (axis cs:-10,0);
+                    \draw [<->] (axis cs:-29,-5) -- (axis cs:-11,-5);
+        
+                    %\legend{No compression, 5:1 compression, hard knee, 5:1 compression, soft knee}
+                                
+                    % Knee Width
+                    %\draw [<->] (axis cs:-25,2) -- (axis cs:-15,2);
+                    
+                    %\node at (axis cs:-30,-27) [anchor=east] {Make-up Gain};
+                    %\node at (axis cs:-20,-46) [anchor=north] {Threshold};
+                    %\node at (axis cs:-20,3) [anchor=south] {Knee Width};
+                    
+                    \end{axis}
+                \end{tikzpicture}
+                \captionof{figure}{Typical compression ratio characteristics.}
+                \label{fig:comp-ratio}
+            \end{minipage}
+
             \subsection{Threshold}
                 The threshold parameter sets the level at which the compressor starts to act. Measured in decibels (dB), it defines the point above which the input signal will be compressed. When the signal level exceeds this threshold, compression is applied.
 
@@ -113,29 +193,24 @@
 
             \subsection{Release}
                 Release time is the time it takes for the compressor to stop acting after the signal falls below the threshold. Also measured in milliseconds, a shorter release time stops the compression effect more quickly, which can help maintain natural dynamics but might result in a 'pumping' sound. A longer release time provides a smoother, more gradual return to the uncompressed state.
-                    
-            \subsection{Knee}
-                The knee parameter adjusts how the compressor transitions from the non-compressed to the compressed state. A 'hard knee' setting means the compression ratio is applied abruptly as soon as the signal crosses the threshold. In contrast, a 'soft knee' setting introduces compression gradually as the signal approaches and then exceeds the threshold. This results in a more natural, less noticeable compression effect.
-        
-            % Compression ratio and transient response diagrams
-            \begin{figure*}[ht]
-                \centering
-                \begin{minipage}{0.5\linewidth}
-                    \centering
-                    \includesvg[inkscapelatex=false,width=2in]{Compression_ratio.svg}
-                    \caption{Typical compression ratio characteristics.}
-                    \label{fig:comp-ratio}
-                \end{minipage}\hfill
-                \begin{minipage}{0.5\linewidth}
+            
+                % Transient response diagram
+                \noindent
+                \begin{minipage}{\linewidth}
                     \centering
                     \includesvg[inkscapelatex=false,width=0.935\linewidth]{attack-release-trans.svg}
-                    \caption{Transient response of a signal through a compressor.}
+                    \captionof{figure}{Transient response of a signal through a compressor.}
                     \label{fig:comp-trans}
-                \end{minipage}\hfill
-            \end{figure*}
+                \end{minipage}
+
+            \subsection{Knee}
+                The knee parameter adjusts how the compressor transitions from the non-compressed to the compressed state. A 'hard knee' setting means the compression ratio is applied abruptly as soon as the signal crosses the threshold. In contrast, a 'soft knee' setting introduces compression gradually as the signal approaches and then exceeds the threshold. This results in a more natural, less noticeable compression effect.
+            
+            \subsection{Make-Up Gain}
+                \textcolor{blue}{Talk about make-up gain here.}
 
             \subsection{Side-chain}
-                \textcolor{blue}{Discuss other functionalities seen in DRCs such as side-chain and multi-spectral DRCs. I do not plan to implement these as part of the project, however, it might be a good idea to still discuss it.}
+                Side-chain is a compressor control that enables external audio signals to trigger compression on another audio track. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
         \section{Functional Building Blocks of a Compressor}
 
@@ -587,59 +662,12 @@
                 \subsubsection{Layer Stackup}
                     \textcolor{blue}{Talk about the stackup of a PCB and how it could affect signal integrity.}
 
-                    % PCB stackup layers
-                    \noindent
-                    \begin{minipage}{\linewidth}
-
-                        \centering
-
-                        \begin{tikzpicture}
-                            
-                            % Light green background
-                            \fill[green!50] (0,-1.4) rectangle ++(3,1);
-
-                            % Top soldermask
-                            \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
-
-                            % S1
-                            \fill[copper] (0,-0.4) rectangle ++(3,0.2);
-                            \path[pattern=thick north east lines, pattern color=red] (0,-0.4) rectangle ++(3,0.2);
-
-                            % S3
-                            \fill[copper] (0,-0.8) rectangle ++(1,0.2);
-                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-0.8) rectangle ++(1,0.2);
-                            \fill[copper] (2,-0.8) rectangle ++(1,0.2);
-                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-0.8) rectangle ++(1,0.2);
-                            
-                            % S5
-                            \fill[copper] (0,-1.2) rectangle ++(1,0.2);
-                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-1.2) rectangle ++(1,0.2);
-                            \fill[copper] (2,-1.2) rectangle ++(1,0.2);
-                            \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-1.2) rectangle ++(1,0.2);
-                            
-                            % S7
-                            \fill[copper] (0,-1.6) rectangle ++(3,0.2);
-                            \path[pattern=thick north east lines, pattern color=blue] (0,-1.6) rectangle ++(3,0.2);
-
-                            % Bottom soldermask
-                            \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
-
-                            % Labels
-                            \node at (-1.5,-0.3) {Sig. \& PWR};
-                            \node at (-1.5,-0.7) {GND};
-                            \node at (-1.5,-1.1) {GND};
-                            \node at (-1.5,-1.5) {Sig. \& PWR};
-
-                        \end{tikzpicture}
-
-                        \captionof{figure}{Various PCB stackup options.}
-                        \label{fig:pcb-stackup}
-
-                    \end{minipage}
-
+                    % PCB stackup layer comparison
                     \begin{figure*}[ht]
+
                         \centering
-                        \begin{minipage}{0.5\linewidth}
+
+                        \begin{subfigure}[b]{0.3333\linewidth}
                             \centering
                             \begin{tikzpicture}
                                 
@@ -650,39 +678,57 @@
                                 \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
 
                                 % S1
-                                \fill[copper] (0,-0.4) rectangle ++(3,0.2);
-                                \path[pattern=thick north east lines, pattern color=red] (0,-0.4) rectangle ++(3,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-0.4) rectangle ++(3,0.2);
 
                                 % S3
-                                \fill[copper] (0,-0.8) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-0.8) rectangle ++(1,0.2);
-                                \fill[copper] (2,-0.8) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-0.8) rectangle ++(1,0.2);
+                                \path[fill = red,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-0.8) rectangle ++(1,0.2);
+                                \path[fill = red,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (2,-0.8) rectangle ++(1,0.2);
                                 
                                 % S5
-                                \fill[copper] (0,-1.2) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-1.2) rectangle ++(1,0.2);
-                                \fill[copper] (2,-1.2) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-1.2) rectangle ++(1,0.2);
+                                \path[fill = blue,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-1.2) rectangle ++(1,0.2);
+                                \path[fill = blue,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (2,-1.2) rectangle ++(1,0.2);
                                 
                                 % S7
-                                \fill[copper] (0,-1.6) rectangle ++(3,0.2);
-                                \path[pattern=thick north east lines, pattern color=blue] (0,-1.6) rectangle ++(3,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-1.6) rectangle ++(3,0.2);
 
                                 % Bottom soldermask
                                 \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
 
+                                % Outline
+                                \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
+
+                                % Component
+                                \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
+                                \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
+
                                 % Labels
-                                \node at (-1.5,-0.3) {Sig. \& PWR};
-                                \node at (-1.5,-0.7) {GND};
-                                \node at (-1.5,-1.1) {GND};
-                                \node at (-1.5,-1.5) {Sig. \& PWR};
+                                \node at (-1.25,-0.325) {\footnotesize\bf GND};
+                                \node at (-1.25,-0.725) {\footnotesize\bf SIG \& $+$PWR};
+                                \node at (-1.25,-1.125) {\footnotesize\bf SIG \& $-$PWR};
+                                \node at (-1.25,-1.525) {\footnotesize\bf GND};
 
                             \end{tikzpicture}
-                            \captionof{figure}{Inner GND stackup.}
-                            \label{fig:inner-gnd-stackup}
-                        \end{minipage}\hfill
-                        \begin{minipage}{0.5\linewidth}
+                            \caption{{Outer GND stackup.}}
+                        \end{subfigure}\hfill
+                        \begin{subfigure}[b]{0.3333\linewidth}
                             \centering
                             \begin{tikzpicture}
                                 
@@ -693,38 +739,119 @@
                                 \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
 
                                 % S1
-                                \fill[copper] (0,-0.4) rectangle ++(3,0.2);
-                                \path[pattern=thick north east lines, pattern color=red] (0,-0.4) rectangle ++(3,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-0.4) rectangle ++(3,0.2);
 
                                 % S3
-                                \fill[copper] (0,-0.8) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-0.8) rectangle ++(1,0.2);
-                                \fill[copper] (2,-0.8) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-0.8) rectangle ++(1,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-0.8) rectangle ++(1,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (2,-0.8) rectangle ++(1,0.2);
                                 
                                 % S5
-                                \fill[copper] (0,-1.2) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (0,-1.2) rectangle ++(1,0.2);
-                                \fill[copper] (2,-1.2) rectangle ++(1,0.2);
-                                \path[pattern=thick north east lines, pattern color=forestgreen(traditional)] (2,-1.2) rectangle ++(1,0.2);
+                                \path[fill = blue,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=red},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-1.2) rectangle ++(1,0.2);
+                                \path[fill = blue,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=red},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (2,-1.2) rectangle ++(1,0.2);
                                 
                                 % S7
-                                \fill[copper] (0,-1.6) rectangle ++(3,0.2);
-                                \path[pattern=thick north east lines, pattern color=blue] (0,-1.6) rectangle ++(3,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-1.6) rectangle ++(3,0.2);
 
                                 % Bottom soldermask
                                 \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
 
+                                % Outline
+                                \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
+
+                                % Component
+                                \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
+                                \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
+
                                 % Labels
-                                \node at (-1.5,-0.3) {GND};
-                                \node at (-1.5,-0.7) {Sig. \& PWR};
-                                \node at (-1.5,-1.1) {Sig. \& PWR};
-                                \node at (-1.5,-1.5) {GND};
+                                \node at (-0.75,-0.325) {\footnotesize\bf SIG};
+                                \node at (-0.75,-0.725) {\footnotesize\bf GND};
+                                \node at (-0.75,-1.125) {\footnotesize\bf $\pm$PWR};
+                                \node at (-0.75,-1.525) {\footnotesize\bf SIG};
 
                             \end{tikzpicture}
-                            \captionof{figure}{Outer GND stackup.}
-                            \label{fig:outer-gnd-stackup}
-                        \end{minipage}\hfill
+                            \caption{{One-sided hybrid stackup.}}
+                        \end{subfigure}\hfill
+                        \begin{subfigure}[b]{0.3333\linewidth}
+                            \centering
+                            \begin{tikzpicture}
+                                
+                                % Light green background
+                                \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                                % Top soldermask
+                                \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
+                                % S1
+                                \path[fill = red,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-0.4) rectangle ++(3,0.2);
+
+                                % S3
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-0.8) rectangle ++(1,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (2,-0.8) rectangle ++(1,0.2);
+                                
+                                % S5
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-1.2) rectangle ++(1,0.2);
+                                \path[fill = copper,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (2,-1.2) rectangle ++(1,0.2);
+                                
+                                % S7
+                                \path[fill = blue,
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                                ] (0,-1.6) rectangle ++(3,0.2);
+
+                                % Bottom soldermask
+                                \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
+
+                                % Outline
+                                \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
+
+                                % Component
+                                \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
+                                \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
+
+                                % Labels
+                                \node at (-1.25,-0.325) {\footnotesize\bf SIG \& $+$PWR};
+                                \node at (-1.25,-0.725) {\footnotesize\bf GND};
+                                \node at (-1.25,-1.125) {\footnotesize\bf GND};
+                                \node at (-1.25,-1.525) {\footnotesize\bf SIG \& $-$PWR};
+
+                            \end{tikzpicture}
+                            \caption{{Inner GND stackup.}}
+                        \end{subfigure}\hfill
+                        \captionof{figure}{Various PCB stackup configurations.}
+                        \label{fig:pcb-stackup}
                     \end{figure*}
 
                 \subsubsection{Component Placement}
@@ -750,7 +877,7 @@
             \textcolor{blue}{Put acknowledgments here. }
 
         \section*{Resources}
-            All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{blue}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
+            All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
 
         \printbibliography
 
