@@ -67,6 +67,12 @@
     ],
     "latex-workshop.latex.recipes": [
         {
+            "name": "xelatex",
+            "tools": [
+                "xelatex"
+            ]
+        },
+        {
             "name": "xelatex ➞ biber ➞ xelatex`×2",
             "tools": [
                 "xelatex",
@@ -85,12 +91,6 @@
             "name": "latexmk 🔃",
             "tools": [
                 "latexmk"
-            ]
-        },
-        {
-            "name": "xelatex",
-            "tools": [
-                "xelatex"
             ]
         },
         {

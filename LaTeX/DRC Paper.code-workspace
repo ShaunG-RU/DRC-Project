@@ -5,6 +5,16 @@
 		}
 	],
 	"settings": {
+		
+		"files.autoSave": "onFocusChange",
+		"editor.minimap.enabled": false,
+		"files.autoSaveDelay": 15000,
+		"editor.wordWrap": "on",
+		"editor.fontSize": 16,
+		"editor.insertSpaces": true,
+		"editor.mouseWheelScrollSensitivity": 1.5,
+		"cSpell.language": "en,en-US",
+		
 		"workbench.colorTheme": "monokai-charcoal (orange)",
 		"gitlens.currentLine.enabled": true,
 		"gitlens.codeLens.authors.enabled": false,
@@ -17,15 +27,6 @@
 				"comments": "#33ff00"
 			}
 		},
-		
-		"cSpell.language": "en,en-US",
-		"editor.minimap.enabled": false,
-		"files.autoSave": "onFocusChange",
-		"files.autoSaveDelay": 15000,
-		"editor.wordWrap": "on",
-		"editor.fontSize": 16,
-		"editor.insertSpaces": true,
-		"editor.mouseWheelScrollSensitivity": 1.5,
 
 		"latex-workshop.latex.tools": [
 			{
