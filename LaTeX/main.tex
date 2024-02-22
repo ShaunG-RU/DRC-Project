@@ -1,4 +1,6 @@
 \documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{tgadventor}
 
 \usepackage[margin=0.75in]{geometry}
 \usepackage{multicol}
@@ -22,7 +24,7 @@
 %\usepackage{mathptmx}
 
 \addbibresource{references.bib}
-\renewcommand*{\bibfont}{\normalfont\small}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
 \graphicspath{{images/}}
 \setsvg{inkscapeexe={"C:/Program Files/Inkscape/bin/inkscape.exe"}} % POINT TO /inkscape.exe AS NEEDED
 \newcolumntype{C}{>{\centering\arraybackslash}X} % from array package
@@ -34,7 +36,6 @@
 \definecolor{forestgreen(web)}{rgb}{0.13, 0.55, 0.13}
 \definecolor{github-indigo}{RGB}{64, 120, 192}
 \definecolor{github-butterfly-bush}{RGB}{110, 84, 148}
-
 \tikzset{
     block/.style={
         draw, minimum width = 1cm, 
@@ -51,7 +52,7 @@
     \pagestyle{fancy}
     \fancyhf{}
     \fancyhead[LH]{\footnotesize{Dynamic Range Compressor Design | Goda, Shaun}}
-    \fancyhead[RH]{\footnotesize{Technical Paper | \today}}
+    \fancyhead[RH]{\footnotesize{Technical Report | \today}}
     \renewcommand{\headrulewidth}{0pt}
     \fancyfoot[C]{\footnotesize{Page \thepage\ of \pageref{LastPage}}}
     \fancypagestyle{firstpage}{
@@ -63,7 +64,7 @@
     \title{
         \vspace{-5ex}
         \textbf{\huge Dynamic Range Compressor Design}\\
-        \textit{Technical Paper in Analog Signal Processing and Discrete Circuit Design for Applications in Audible Frequency Domain}
+        \textit{Technical Report in Analog Signal Processing and Discrete Circuit Design for Applications in Audible Frequency Domain}
     }
 
     \author{
@@ -909,7 +910,7 @@
 
         \printbibliography
 
-        %\iffalse
+        \iffalse
         % Diagram showing signal through the gain calculator.Takes time to compile due to increased accuracy of the plot.
         \begin{figure*}[!th]
 
@@ -1133,7 +1134,7 @@
             \label{fig:drc-diagram}
 
         \end{figure*}
-        %\fi
+        \fi
 
     \end{multicols*}
 
