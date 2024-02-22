@@ -222,7 +222,24 @@ GenerateClassCluster=0
 DocumentUniqueId=NWJTFKAW
 
 [Document11]
-DocumentPath=VCA.SchDoc
+DocumentPath=Knee Ratio.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=PYLMTLYQ
+
+[Document12]
+DocumentPath=Gain Control Stage.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -238,7 +255,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HADLSIVX
 
-[Document12]
+[Document13]
 DocumentPath=Misc. Connections.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
