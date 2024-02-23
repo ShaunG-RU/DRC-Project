@@ -103,24 +103,7 @@ GenerateClassCluster=0
 DocumentUniqueId=YSUMLLEL
 
 [Document4]
-DocumentPath=Log and Anti-Log Converters.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=AZHTZDXP
-
-[Document5]
-DocumentPath=Precision Positive & Negative Clipper.SchDoc
+DocumentPath=dB Converter.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -136,7 +119,75 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OLNEZPVM
 
+[Document5]
+DocumentPath=Knee Comp Clipper.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=WKACDIAJ
+
 [Document6]
+DocumentPath=Comp Clipper.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=UNZGVVXP
+
+[Document7]
+DocumentPath=Log and Anti-Log Converters 1.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=AZHTZDXP
+
+[Document8]
+DocumentPath=Log and Anti-Log Converters 2.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=EVZTXJFX
+
+[Document9]
 DocumentPath=Gain Computer.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -153,7 +204,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=FONJZNCU
 
-[Document7]
+[Document10]
 DocumentPath=DRC.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -170,7 +221,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QQWFOPFT
 
-[Document8]
+[Document11]
 DocumentPath=DRC.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -187,24 +238,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BYLNZXCD
 
-[Document9]
-DocumentPath=tanh function cell.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=NWJTFKAW
-
-[Document10]
+[Document12]
 DocumentPath=Knee Ratio.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -221,7 +255,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=PYLMTLYQ
 
-[Document11]
+[Document13]
 DocumentPath=Level Detector.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -238,7 +272,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KLHXWUBC
 
-[Document12]
+[Document14]
 DocumentPath=Gain Control.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -255,7 +289,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HADLSIVX
 
-[Document13]
+[Document15]
 DocumentPath=Misc. Connections.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -272,7 +306,24 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GNHFDEAR
 
-[Document14]
+[Document16]
+DocumentPath=tanh function cell.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=NWJTFKAW
+
+[Document17]
 DocumentPath=DRC.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
