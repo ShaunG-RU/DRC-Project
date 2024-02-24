@@ -1,7 +1,14 @@
-Record=TopLevelDocument|FileName=Balanced Line Connectors.SchDoc|SheetNumber=7
-Record=NoMainPathDocument|SourceDocument=Balanced Line Connectors.SchDoc|FileName=Knee Control.SchDoc|SheetNumber=5
-Record=NoMainPathDocument|SourceDocument=Balanced Line Connectors.SchDoc|FileName=Log and Anti-Log Converters.SchDoc|SheetNumber=3
-Record=NoMainPathDocument|SourceDocument=Balanced Line Connectors.SchDoc|FileName=Power Supply.SchDoc|SheetNumber=1
-Record=NoMainPathDocument|SourceDocument=Balanced Line Connectors.SchDoc|FileName=Precision Full-Bridge Rectifier.SchDoc|SheetNumber=2
-Record=NoMainPathDocument|SourceDocument=Balanced Line Connectors.SchDoc|FileName=Threshold and Makeup.SchDoc|SheetNumber=4
-Record=NoMainPathDocument|SourceDocument=Balanced Line Connectors.SchDoc|FileName=VCA.SchDoc|SheetNumber=6
+Record=TopLevelDocument|FileName=Balanced Line Receiver.SchDoc|SheetNumber=2
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Comp Clipper.SchDoc|SheetNumber=5
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Gain Control.SchDoc|SheetNumber=12
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Knee Comp Clipper.SchDoc|SheetNumber=6
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Level Detector.SchDoc|SheetNumber=11
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Log and Anti-Log Converters 1.SchDoc|SheetNumber=8
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Log and Anti-Log Converters 2.SchDoc|SheetNumber=9
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Log and Anti-Log.SchDoc|SheetNumber=7
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Misc. Connections.SchDoc|SheetNumber=13
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Offset Compensator.SchDoc|SheetNumber=4
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Power Supply.SchDoc|SheetNumber=1
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=Precision FBR & dB Converter.SchDoc|SheetNumber=3
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=tanh function cell.SchDoc|SheetNumber=14
+Record=NoMainPathDocument|SourceDocument=Balanced Line Receiver.SchDoc|FileName=VCA.SchDoc|SheetNumber=10
