@@ -4,8 +4,7 @@
 
 This repository hosts the development files associated with the technical paper I am working on relating a Dynamic Range Compressor (DRC) aimed at audio domain applications. The project and the paper is currently under development, focusing on the design and simulation stages.
 
-_**The latest compiled paper is available [here](./LaTeX/main.pdf).**_
-_**The latest implementation of the compressor schematic is available [here](./Altium/DRC.pdf).**_
+_**The latest compiled paper is available [here](./LaTeX/main.pdf), and the latest implementation of the compressor schematic is available [here](./Altium/DRC.pdf).**_
 
 ## Repository Contents
 
