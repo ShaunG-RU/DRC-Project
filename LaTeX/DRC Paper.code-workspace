@@ -130,6 +130,9 @@
 					"xelatex"
 				]
 			}
+		],
+		"cSpell.words": [
+			"transimpedance"
 		]
 	},
 	"extensions": {

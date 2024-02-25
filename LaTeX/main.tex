@@ -23,6 +23,7 @@
 %\usepackage{indentfirst}
 %\usepackage{mathptmx}
 
+% Environmental Settings
 \addbibresource{references.bib}
 \renewcommand*{\bibfont}{\normalfont\footnotesize}
 \graphicspath{{images/}}
@@ -36,6 +37,9 @@
 \definecolor{forestgreen(web)}{rgb}{0.13, 0.55, 0.13}
 \definecolor{github-indigo}{RGB}{64, 120, 192}
 \definecolor{github-butterfly-bush}{RGB}{110, 84, 148}
+\ctikzset{bipoles/buffer/height/.initial=0.8}
+\ctikzset{amplifiers/op amp/height/.initial=0.8}
+\ctikzset{amplifiers/op amp/length/.initial=0.8}
 \tikzset{
     block/.style={
         draw, minimum width = 1cm, 
@@ -79,7 +83,7 @@
     \thispagestyle{firstpage}
 
     \begin{abstract}
-        This technical paper examines the theory and implementation of dynamic range compressors in the realm of analog signal processing. Through tests and evaluations, we present methods for achieving efficient and high-performance compressors, where we will start with an overview of the basic building block of the compressor, its representation as a mathematical function, and various methods of implementing this through analog circuits. This paper offers an entry point for those looking to understand the fundamentals of dynamic range compression techniques while balancing the nuances of the practical methods and challenges associated with developing an electronic hardware device.
+        This technical report examines the fundamental theory and implementation of dynamic range compressors in the realm of analog signal processing. Through tests and evaluations, we present methods for achieving efficient and high-performance compressors, where we will start with an overview of the basic building block of the compressor, its representation as a mathematical function, and various methods of implementing this through analog circuits. This paper offers an entry point for those looking to understand the fundamentals of dynamic range compression techniques while balancing the nuances of the practical methods and challenges associated with developing an electronic hardware device.
     \end{abstract}
     
     \begin{multicols*}{2}
@@ -91,7 +95,7 @@
 
         \section{Introduction}
             A dynamic range compressor (DRC) is an essential tool in audio processing that normalizes the loudness of a signal that has been put through. This is done by using a mechanism that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. The process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness. This technology is widely used in various areas such as music production, live performances, and even in devices like hearing aids to improve sound quality.\par
-            With the emergence of high-performance computational platforms and advancement in signal processing technologies, digital signal compression algorithms has been a de-facto standard in the industry. Digital compressors are popular in many applications, from creating music to broadcasting and beyond, as they allow for detailed manipulation of sound. The digital approach to compressors and various other signal processing tools`' has revolutionized the way we work with audio, making it easier to achieve high-quality production on your personal laptop without having access to a professional recording studios.\par
+            With the emergence of high-performance computational platforms and advancement in signal processing technologies, digital signal compression algorithms has been a de-facto standard in the industry. Digital compressors are popular in many applications, from creating music to broadcasting and beyond, as they allow for detailed and precise manipulation of sound. The digital approach to compressors and various other signal processing tools`' has revolutionized the way we work with audio, making it easier to achieve high-quality production on your personal laptop without having access to a professional recording studios.\par
             However, despite the dominance of digital signal processing technologies, hardware compressors, where the signal is processed entirely in the analog domain, remain in use. Many audio professionals continue to prefer them for certain tasks as it has the advantage of being straightforward, avoiding some of the issues that digital formats can introduce, such as digital latency caused by AD/DA conversion or digital processing delay. Furthermore, it is advantageous in avoiding issues such as unwanted sampling artifacts and the added complexity due to its digital nature.\par
             Analog compressors are also valued for the unique qualities they can add to sound. They are known for introducing a warmth and musicality to audio that is often described as difficult to achieve with digital methods. This effect is due to the slight alterations they make to the sound, including adding minor distortions and saturation, which can make the audio feel richer and more engaging. Thus, despite the convenience and precision of digital compressors, analog compressors still hold its own place in audio production for their ability to enhance sound in a distinctive way.\par
             This paper will delve deeper into the technical nuances and design considerations that underpins an effective analog compressor. By examining the control parameters, exploring the functional building blocks, and discussing various control mechanisms, we aim to investigate the intricate balance between theory and practical application that lies in designing an analog compressor. The following sections will offer a comprehensive analysis of the compressor topology, discussing various optimization strategies in designing an ideal compressor. Through this exploration, the paper aims to highlight the critical decisions and engineering challenges involved in creating an analog compressors that not only meet the technical specifications, but also stands out as an appealing alternative to the widely used digital compressor.
@@ -190,10 +194,10 @@
                 The threshold parameter sets the level at which the compressor starts to act. Measured in decibels (dB), it defines the point above which the input signal will be compressed. When the signal level exceeds this threshold, compression is applied.
 
             \subsection{Ratio}
-                The ratio determines the degree of compression applied to the signal once it surpasses the threshold. It is expressed as a ratio (e.g., 4:1, 10:1). A 4:1 ratio means that for every 4 dB, the input signal exceeds the threshold, the output signal level will be increased by only 1 dB. Higher ratios result in more aggressive compression.
+                The ratio determines the degree of compression applied to the signal once it surpasses the threshold. It is expressed as a ratio (e.g., 5:1, 10:1), and could scale up to $\infty$:1 where the compressor basically function as an limitter, where all signal levels above the set threshold level is limited to equal amplitude. In simple terms, a 5:1 ratio means that for every 5 dB, the input signal exceeds the threshold, the output signal level will be increased by only 1 dB. Higher ratios result in more aggressive compression.
 
             \subsection{Attack}
-                The attack time is the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the "attack phase" section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
+                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the "attack phase" section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
 
             \subsection{Release}
                 Release time is the time it takes for the compressor to stop acting after the signal falls below the threshold. Also measured in milliseconds, a shorter release time stops the compression effect more quickly, which can help maintain natural dynamics but might result in a 'pumping' sound. A longer release time provides a smoother, more gradual return to the uncompressed state.
@@ -216,12 +220,129 @@
             \subsection{Side-chain}
                 Side-chain is a compressor control that enables external audio signals to trigger compression on another audio track. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
-        \section{Functional Building Blocks of a Compressor}
+        \section{Compressor Topology}
+            The method of attenuation seen in a compressor could be generally categorized into two topologies including feedback and feed-forward compression. The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression, and how transparently it applies gain reduction.
+    
+            \subsection{Feedback Compression}  
+                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure ?. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. \textcolor{red}{Feedback topology is often praised for its musicality, as it tends to produce a more natural compression effect.} The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. This topology excels in applications where preserving the natural dynamics and timbre of the audio is important.
+                
+                % Feedback diagram
+                \noindent
+                \begin{minipage}{\linewidth}
 
-            \subsection{Threshold Detector}
-                The threshold detector is responsible for producing the control voltage, which dictates the gain reduction level applied to the signal. This stage encompasses parameters like Threshold (T), Ratio (R), and Knee Width (W), which collectively establish the static input-output relationship for compression. When the signal level surpasses the threshold, it undergoes attenuation following the specified ratio.
+                    \centering
+
+                    \begin{tikzpicture}
+
+                        \node (input) at (0,0) {$x(t)$};
+                        \node (output) at (6.5,0) {$y(t)$};
+
+                        % Sum1 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            right = of input,
+                        ] (sum1) {};
+                        \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
+                        \node[left=-1pt] at (sum1.center){\tiny $+$};
+                        \node[below] at (sum1.center){\tiny $+$};       
+                        
+                        % Sum2 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            below right = 0.7 and 0.25 of sum1,
+                        ] (sum2) {};
+                        \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
+                        \node[above] at (sum2.center){\tiny $-$};
+                        \node[right=-1pt] at (sum2.center){\tiny $+$};
             
-            \subsection{Input Level Detector}
+                        % Gain Computer
+                        \node[block, right = of sum2] (gain) {Gain\\Computer};
+
+                        % Lines
+                        \draw[-stealth] (input) -- (sum1.west);
+                        \draw[-stealth] (sum1.east) -- (output) node[left = of output](split1){};
+                        \draw[-stealth] (sum2.west) -| (sum1.south);
+                        \draw[-stealth] (gain.west) -- (sum2.east);
+                        \draw[-stealth] (split1.center) |- (gain.east) node[right = of gain](split2){};
+                        \draw[-stealth] (split2) -| +(0,0.8) -| (sum2.north);
+                        
+                    \end{tikzpicture}
+                        
+                    \captionof{figure}{Control diagram of a feedback compressor topology.}
+                    \label{fig:feedback}
+                
+                \end{minipage}
+                
+            \subsection{Feed-forward Compression}
+                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. \ref{fig:feedforward} This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal. \textcolor{red}{Feed-forward compressors are known for their accuracy and fast response, making them ideal for applications requiring precise dynamic control, such as in limiting scenarios where preventing signal peaks is crucial.}\par
+
+                % Feed-forward diagram
+                \noindent
+                \begin{minipage}{\linewidth}
+
+                    \centering
+
+                    \begin{tikzpicture}
+
+                        \node (input) at (0,0) {$x(t)$};
+
+                        % Gain Computer
+                        \node[block, below right = 0.5 and 2 of input] (gain) {Gain\\Computer};
+
+                        % Sum1 shape
+                        \node[draw,
+                            circle,
+                            minimum size =0.6cm,
+                            right = of gain,
+                        ] (sum1) {};
+                        \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
+                        \node[left=-1pt] at (sum1.center){\tiny $-$};
+                        \node[above] at (sum1.center){\tiny $+$};       
+                        
+                        % Sum2 shape
+                        \node[draw,
+                            circle,
+                            minimum size = 0.6cm,
+                            right = 4.6cm of input,
+                        ] (sum2) {};
+                        \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
+                        \node[left=-1pt] at (sum2.center){\tiny $+$};
+                        \node[below] at (sum2.center){\tiny $+$};
+            
+                        % Lines
+                        \draw[-stealth] (input) -- (sum2.west);
+                        \draw[-stealth] (1,0) |- (gain.west) node[near end](split){};
+                        \draw[-stealth] (gain.east) -- (sum1.west);
+                        \draw[-stealth] (split) -| +(0,0.8) -| (sum1.north);
+                        \draw[-stealth] (sum1.east) -| (sum2.south);
+                        \draw[-stealth] (sum2.east) -- +(0.5,0) node[right]{$y(t)$};
+                        
+                    \end{tikzpicture}
+                    
+                    \captionof{figure}{Control diagram of a feed-forward compressor topology.}
+                    \label{fig:feedforward}
+                
+                \end{minipage}
+
+        \section[Functional Building Blocks of a Compressor]{Functional Building Blocks\\of a Compressor}
+
+            \subsection{Gain Computer}
+                The gain computer is responsible for generating the control voltage, which dictates the gain reduction level applied to the signal. This stage encompasses parameters including Threshold (T), Ratio (R), and Knee Width (W), where its relation in regards to the output of the gain computer is described by a set of bounded equations shown in \ref{eq:gain-comp}.
+
+                % Expression of knee control in terms of 
+                \begin{equation}
+                    y=
+                    \begin{cases}
+                        \frac{x-T}{R}+T & \text{for $2(x-T)>W$}\\[5pt]
+                        \frac{(x-T+\frac{W}{2})^2(\frac{1}{R}-1)}{2W}+x & \text{for $2\left\lvert x-T\right\rvert\leq W$}\\[5pt]
+                        x & \text{for $2(x-T)<-W$}
+                    \end{cases}
+                    \label{eq:gain-comp}
+                \end{equation}
+            
+            \subsection{Input Level Detection}
                 The volume detector is responsible for providing a representation of the loudness of the input signal. There are a two main ways including the peak detector and the RMS detector to generate the control voltage based on the input.
 
                 \subsubsection{Average Reading Level Detector}
@@ -290,135 +411,9 @@
 
             \subsection{Gain Level Controller}
                 The gain control in a dynamic range compressor can be achieved by using a voltage controlled amplifier (VCA) where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release).
-            
-        \section{Compressor Topology}
-            Compressor topology fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression, and how transparently it applies gain reduction. In the following section, two topology including feedback and feed-forward is discussed.
-
-            \subsection{Feedback Compression}  
-                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure ?. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. \textcolor{red}{Feedback topology is often praised for its musicality, as it tends to produce a more natural compression effect.} The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. This topology excels in applications where preserving the natural dynamics and timbre of the audio is important.
-                
-                % Feedback diagram
-                \noindent
-                \begin{minipage}{\linewidth}
-
-                    \centering
-
-                    \begin{tikzpicture}
-
-                        \node (input) at (0,0) {$x(t)$};
-                        \node (output) at (6.5,0) {$y(t)$};
-
-                        % Sum1 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            right = of input,
-                        ] (sum1) {};
-                        \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
-                        \node[left=-1pt] at (sum1.center){\tiny $+$};
-                        \node[below] at (sum1.center){\tiny $+$};       
-                        
-                        % Sum2 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            below right = 0.7 and 0.25 of sum1,
-                        ] (sum2) {};
-                        \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
-                        \node[above] at (sum2.center){\tiny $-$};
-                        \node[right=-1pt] at (sum2.center){\tiny $+$};
-            
-                        % Gain Computer
-                        \node[block, right = of sum2] (gain) {Gain\\Computer};
-
-                        % Lines
-                        \draw[-stealth] (input) -- (sum1.west);
-                        \draw[-stealth] (sum1.east) -- (output) node[left = of output](split1){};
-                        \draw[-stealth] (sum2.west) -| (sum1.south);
-                        \draw[-stealth] (gain.west) -- (sum2.east);
-                        \draw[-stealth] (split1) |- (gain.east) node[right = of gain](split2){};
-                        \draw[-stealth] (split2) -| +(0,0.8) -| (sum2.north);
-                        
-                    \end{tikzpicture}
-                        
-                    \captionof{figure}{Control diagram of a feedback compressor topology.}
-                    \label{fig:feedback}
-                
-                \end{minipage}
-                
-            \subsection{Feed-forward Compression}
-                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. \ref{fig:feedforward} This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal. \textcolor{red}{Feed-forward compressors are known for their accuracy and fast response, making them ideal for applications requiring precise dynamic control, such as in limiting scenarios where preventing signal peaks is crucial.}\par
-
-                % Feed-forward diagram
-                \noindent
-                \begin{minipage}{\linewidth}
-
-                    \centering
-
-                    \begin{tikzpicture}
-
-                        \node (input) at (0,0) {$x(t)$};
-
-                        % Gain Computer
-                        \node[block, below right = 0.5 and 2 of input] (gain) {Gain\\Computer};
-
-                        % Sum1 shape
-                        \node[draw,
-                            circle,
-                            minimum size =0.6cm,
-                            right = of gain,
-                        ] (sum1) {};
-                        \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
-                        \node[left=-1pt] at (sum1.center){\tiny $-$};
-                        \node[above] at (sum1.center){\tiny $+$};       
-                        
-                        % Sum2 shape
-                        \node[draw,
-                            circle,
-                            minimum size = 0.6cm,
-                            right = 4.6cm of input,
-                        ] (sum2) {};
-                        \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
-                        \node[left=-1pt] at (sum2.center){\tiny $+$};
-                        \node[below] at (sum2.center){\tiny $+$};
-            
-                        % Lines
-                        \draw[-stealth] (input) -- (sum2.west);
-                        \draw[-stealth] (1,0) |- (gain.west) node[near end](split){};
-                        \draw[-stealth] (gain.east) -- (sum1.west);
-                        \draw[-stealth] (split) -| +(0,0.8) -| (sum1.north);
-                        \draw[-stealth] (sum1.east) -| (sum2.south);
-                        \draw[-stealth] (sum2.east) -- +(0.5,0) node[right]{$y(t)$};
-                        
-                    \end{tikzpicture}
-                    
-                    \captionof{figure}{Control diagram of a feed-forward compressor topology.}
-                    \label{fig:feedforward}
-                
-                \end{minipage}
         
-        \section{Optimization of the Compressor Architecture}
+        \section[Optimization of the Compressor Architecture]{Optimizing the Compressor\\ Architecture}
             
-            \subsection{Logarithmic Domain Signal Processing}
-                \textcolor{blue}{A log domain amplifier can be implemented so that we can operate mathematical operations such as multiplication and division on analog signals. This can be done as summation and subtraction in the log domain directly translate to multiplication and division once converted back to its linear representation.}
-
-                The discharge of a capacitor is expressed by the following equation.              
-                
-                \begin{equation}
-                    V(t) = V_0 e^{-\frac{t}{RC}}
-                \end{equation}    
-                
-                This equation shows that the decay in the voltage of a capacitor is represented as an exponential function.
-                When we take the natural logarithm of the function on both sides, we will get the expression shown below.
-                
-                \begin{equation}
-                    \ln(V(t)) = \ln(V_0) - \frac{t}{RC}
-                \end{equation}
-                
-                Since we are relying on discrete circuitry to implement the compressor, we would have to take the discharge characteristic of capacitive elements into our calculation.
-
-            \subsection{Mixed Use of Averaging and RMS Level as an Input Level Reference}
-
             \subsection{Compressor Topology Selection}
 
                 % Control diagram of compressor to be implemented
@@ -434,7 +429,7 @@
                         \node[block, right = of input] (inBuf) {Input Buffer};
                         \node[block, below right = 0.3 and 0.1 of inBuf] (abs) {Full Wave \\ Rectifier};
                         \node[block, right = of abs] (log) {Log. \\ Amp};
-                        \node[block, right = of log] (th) {Attenuation \\ Calculator};
+                        \node[block, right = of log] (th) {Gain\\Computer};
 
                         % Sum1 shape
                         \node[draw,
@@ -447,7 +442,7 @@
                         \node[above] at (sum1.center){\tiny $+$}; 
 
                         %\node[block, below = of peak] (rms) {RMS Detector};
-                        \node[block, right = of sum1] (peak) {Level \\ Detector};
+                        \node[block, right = of sum1] (peak) {Transient\\Shaping};
                         
                         % Sum2 shape
                         \node[draw,
@@ -498,7 +493,7 @@
                         
                     \end{tikzpicture}
 
-                    \caption{Control diagram of proposed DRC system.}
+                    \caption{System diagram of a proposed analog DRC system.}
                     \label{fig:drc-diagram}
 
                 \end{figure*}
@@ -511,45 +506,103 @@
                     x_L(t)&=&x_G(t)-y_G(t)\\
                     x_{dB}(t)&=&-y_L(t)
                 \end{eqnarray}
-                        
-        \section{Circuit Implementation}
+    
+            \subsection{Logarithmic Domain Signal Processing}
+                The intensity of loudness perceived by the human ear scales logarithmically. This means that as the volume of the sound increases, our ears become less sensitive to the change in that volume. By scaling the signal that gets fed into the compressor to a logarithmic domain signal, we can operate functions such as knee width compression based on the perceived loudness of the sound instead of the linear amplitude of the signal that the compressor sees. Additionally, processing the signal in the logarithmic domain can aid in achieving a better transient response when dealing with analog transient shaping circuits.\par
+                A typical transient shaping device.
+
+                The discharge of a capacitor is expressed by the following equation.              
+                
+                \begin{equation}
+                    V(t) = V_0 e^{-\frac{t}{RC}}
+                \end{equation}    
+                
+                This equation shows that the decay in the voltage of a capacitor is represented as an exponential function.
+                When we take the natural logarithm of the function on both sides, we will get the expression shown below.
+                
+                \begin{equation}
+                    \ln(V(t)) = \ln(V_0) - \frac{t}{RC}
+                \end{equation}
+                
+                Since we are relying on discrete circuitry to implement the compressor, we would have to take the discharge characteristic of capacitive elements into our calculation.
+
+            \subsection{Mixed Use of Averaging and RMS Level as an Input Level Reference}
+
+            \subsection{Detection Level Mixing}
+                Introducing a mixer that allows smooth adjustment between RMS level and peak detected level offers enhanced flexibility for dynamic control, enabling more tailored responses to different audio materials. This feature allows for better transient shaping, smoother gain reduction, and more consistent handling of varied material, from preserving the punch of percussive elements to ensuring vocal and instrumental lines are evenly balanced. Notable analog compressors like the Empirical Labs Distressor and the Manley Variable Mu leverage such capabilities, providing users with a powerful tool for both technical precision and creative expression in audio processing. This blending feature significantly expands the creative possibilities, making these compressors highly valued for their ability to adapt to and enhance a wide range of audio material.
+
+            \subsection{Pre-Detection Filtering}
+                Pre-detection filtering can be introduced to limit the range of frequency the compressor is responsible for running the detection. This is particularly useful in emphasizing or de-emphasizing certain frequencies, thereby making the compressor more sensitive or less sensitive to those frequencies. As an example, a high-pass filter might be applied to prevent low-frequency content from triggering the compression, which is particularly useful for avoiding unnecessary compression due to bass-heavy elements in a mix. Pre-detection filtering allows for more targeted and musically relevant compression by controlling which parts of the frequency spectrum most influence the compressor's action, leading to a more controlled dynamic response.
+            
+        \section{Implementation of Discrete Circuit Compressor Components}
 
             \subsection{Precision Full-Wave Rectifier}
                 A precision full-wave rectifier has been implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
                 
-            \subsection{Logarithmic and Exponential Amplifiers}
+            \subsection{Logarithmic Amplifiers}
+                Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications.             
+                Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 megahertz. This design is often utilized with sensors in control systems due to its frequency limitations.
+
+                \subsubsection{Pseudo-Logarithmic Approximation}
+
+                    % diagram of multi-stage log amplifier 
+                    \noindent
+                    \begin{minipage}{\linewidth}
+                        \centering
+                        \begin{circuitikz}[scale = 0.745, transform shape]
+
+                            \node (input) at (0,0) {Input};
+                            
+                            \node[buffer, right = of input] (gain1) {$A_1$};
+                            \node[buffer, right = of gain1] (gain2) {$A_2$};
+                            \node[buffer, right = of gain2] (gain3) {$A_3$};
+                            \node[buffer, right = of gain3] (gain4) {$A_4$};
+                            \node[draw, circle, below right = of gain4, minimum size=15pt] (sum) {$\sum$};
+                            \node[right = of sum] (output) {Output};
+
+                            \draw[line] (input.east) -- (gain1.west);
+                            \draw[line] (gain1.east) -- (gain2.west) node[midway](split1) {};
+                            \draw[line] (gain2.east) -- (gain3.west) node[midway](split2) {};
+                            \draw[line] (gain3.east) -- (gain4.west) node[midway](split3) {};
+
+                            \draw[line] (split1.center) |- (sum.225);
+                            \draw[line] (split2.center) |- (sum.west);
+                            \draw[line] (split3.center) |- (sum.135);
+                            \draw[line] (gain4.east) -| (sum.north);
+
+                            \draw[line] (sum.east) -- (output.west);
+                            
+                        \end{circuitikz}
+                        \captionof{figure}{Multistage log amplifier architecture}
+                        \label{fig:multi-stage-log-amp}
+                    \end{minipage}
+
+                \subsubsection{Transimpedance Log Amplifier}
+
+                    \noindent
+                    \begin{minipage}{\linewidth}
+                        \centering
+                        \begin{circuitikz} 
+
+                            \node (input) at (0,0) {};
+                            
+                            \node[op amp, right = of input] (opamp) {};
+                            \node[npn, above = of opamp, rotate = 90] (npn) {};
+                            \node[sground, below = of npn.B] (gnd) {};
+
+                        \end{circuitikz}
+                        \captionof{figure}{Multistage log amplifier architecture}
+                        \label{fig:trans-log-amp}
+                    \end{minipage}
+
+                    \begin{equation}
+                        V=\frac{kT}{q}ln(\frac{I_{in}}{I_{es}})
+                    \end{equation}
+
                 \textcolor{blue}{Explain the difference in exponential decay vs linear decay and its significance. I plan to implement the circuit that appears in an application report \cite{ti-log-conv} by Texas Instruments.}
                 \textcolor{blue}{This circuit reverts the signal that has converted to dB scale back into the linear domain signal.}
-            
-            \subsection{Input Level Detector}
 
-                \subsubsection{Precision Peak Detector}
-                    \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}  
-
-                \subsubsection{True RMS Detector}
-                    A traditional approach to reading the average of an input signal was to implement a 
-                    
-                    For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                          
-            
-                \subsubsection{Detection Level Mixing}
-                    Introducing a mixer that allows smooth adjustment between RMS level and peak detected level offers enhanced flexibility for dynamic control, enabling more tailored responses to different audio materials. This feature allows for better transient shaping, smoother gain reduction, and more consistent handling of varied material, from preserving the punch of percussive elements to ensuring vocal and instrumental lines are evenly balanced. Notable analog compressors like the Empirical Labs Distressor and the Manley Variable Mu leverage such capabilities, providing users with a powerful tool for both technical precision and creative expression in audio processing. This blending feature significantly expands the creative possibilities, making these compressors highly valued for their ability to adapt to and enhance a wide range of audio material.
-
-                \subsubsection{Pre-Detection Filtering}
-                    Pre-detection filtering can be introduced to limit the range of frequency the compressor is responsible for running the detection. This is particularly useful in emphasizing or de-emphasizing certain frequencies, thereby making the compressor more sensitive or less sensitive to those frequencies. As an example, a high-pass filter might be applied to prevent low-frequency content from triggering the compression, which is particularly useful for avoiding unnecessary compression due to bass-heavy elements in a mix. Pre-detection filtering allows for more targeted and musically relevant compression by controlling which parts of the frequency spectrum most influence the compressor's action, leading to a more controlled dynamic response.
-
-
-            \subsection{Knee Level Management}
-                The continuous output function of a compressor with knee control can be described by the following set of continuous functions.
-
-                % Expression of knee control in terms of 
-                \begin{equation}
-                    y=
-                    \begin{cases}
-                        \frac{x-T}{R}+T & \text{for $2(x-T)>W$}\\[5pt]
-                        \frac{(x-T+\frac{W}{2})^2(\frac{1}{R}-1)}{2W}+x & \text{for $2\left\lvert x-T\right\rvert\leq W$}\\[5pt]
-                        x & \text{for $2(x-T)<-W$}
-                    \end{cases}
-                \end{equation}
+            \subsection{Gain Computer}
 
                 \subsubsection{Precision Clipper}
 
@@ -581,61 +634,76 @@
 
                     \end{minipage}
 
-                \subsubsection{Hyperbolic Tangent Function Cell}
-                    A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair coupled with an input of an operational amplifier.
-                    As the input range of the function cell is determined by the voltage range of the active region given by the base input of the bipolar junction transistor, it is crucial to normalize the amplitude of the signal entering the cell beforehand. As seen in figure \ref{plot:tanh}, the gated nature of BJT input allows us to create unique characteristics in the definition of how the knee control is applied.
+                \subsubsection{Knee Level Management}
+                    The continuous output function of a compressor with knee control can be described by the following set of continuous functions.
 
-                    % tanh plot
-                    \noindent
-                    \begin{minipage}{\linewidth}
+                    \paragraph{Hyperbolic Tangent Function Cell}
+                        A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair coupled with an input of an operational amplifier.
+                        As the input range of the function cell is determined by the voltage range of the active region given by the base input of the bipolar junction transistor, it is crucial to normalize the amplitude of the signal entering the cell beforehand. As seen in figure \ref{plot:tanh}, the gated nature of BJT input allows us to create unique characteristics in the definition of how the knee control is applied.
 
-                        \centering
-                        \begin{tikzpicture}
-                            \begin{axis}[
-                                    xmin=-2.5, xmax=2.5,
-                                    ymin=-1.5, ymax=1.5,
-                                    axis lines=center,
-                                    axis on top=true,
-                                    domain=-2.5:2.5,
-                                    samples=310,
-                                    ylabel=$y$,
-                                    xlabel=$x$,
-                                ]
-                                \definecolor{c1}{HTML}{0000FF}
-                                \definecolor{c2}{HTML}{3300CC}
-                                \definecolor{c3}{HTML}{6600FF}
-                                \definecolor{c4}{HTML}{9900FF}
-                                \definecolor{c5}{HTML}{CC00FF}
-                                \definecolor{c6}{HTML}{FF00CC}
-                                \definecolor{c7}{HTML}{FF0066}
-                                \definecolor{c8}{HTML}{FF0000}
+                        % tanh plot
+                        \noindent
+                        \begin{minipage}{\linewidth}
 
-                                \addplot [mark=none,draw=c1,semithick] {tanh(0.5*cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c2,semithick] {tanh(cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c3,semithick] {tanh(2*cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c4,semithick] {tanh(4*cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c5,semithick] {tanh(8*cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c6,semithick] {tanh(16*cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c7,semithick] {tanh(32*cos(deg(x)*1/4*pi))};
-                                \addplot [mark=none,draw=c8,semithick] {tanh(64*cos(deg(x)*1/4*pi))};
-                            
-                                \addplot [mark=none,draw=black,ultra thick] {tanh(\x)};
-                                \node [right, black] at (axis cs:0.1,-0.6) {$y = \tanh (x)$};
+                            \centering
+                            \begin{tikzpicture}
+                                \begin{axis}[
+                                        xmin=-2.5, xmax=2.5,
+                                        ymin=-1.5, ymax=1.5,
+                                        axis lines=center,
+                                        axis on top=true,
+                                        domain=-2.5:2.5,
+                                        samples=310,
+                                        ylabel=$y$,
+                                        xlabel=$x$,
+                                    ]
+                                    \definecolor{c1}{HTML}{0000FF}
+                                    \definecolor{c2}{HTML}{3300CC}
+                                    \definecolor{c3}{HTML}{6600FF}
+                                    \definecolor{c4}{HTML}{9900FF}
+                                    \definecolor{c5}{HTML}{CC00FF}
+                                    \definecolor{c6}{HTML}{FF00CC}
+                                    \definecolor{c7}{HTML}{FF0066}
+                                    \definecolor{c8}{HTML}{FF0000}
+
+                                    \addplot [mark=none,draw=c1,semithick] {tanh(0.5*cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c2,semithick] {tanh(cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c3,semithick] {tanh(2*cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c4,semithick] {tanh(4*cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c5,semithick] {tanh(8*cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c6,semithick] {tanh(16*cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c7,semithick] {tanh(32*cos(deg(x)*1/4*pi))};
+                                    \addplot [mark=none,draw=c8,semithick] {tanh(64*cos(deg(x)*1/4*pi))};
                                 
-                                %% Add the asymptotes
-                                \draw [black, dotted, thick] (axis cs:-2.5,-1) -- (axis cs:-0.6,-1);
-                                \draw [black, dotted, thick] (axis cs:+2.5,+1) -- (axis cs:0,+1);
-                            \end{axis}
-                        \end{tikzpicture}
-                            
-                        \captionof{figure}{The black line shows the function plot of $y=tanh(x)$. The red line on the other hand represents the transient output of the tanh function where amplitude of the sinusoidal input is varied.}
-                        \label{plot:tanh}
-                    
-                    \end{minipage}
+                                    \addplot [mark=none,draw=black,ultra thick] {tanh(\x)};
+                                    \node [right, black] at (axis cs:0.1,-0.6) {$y = \tanh (x)$};
+                                    
+                                    %% Add the asymptotes
+                                    \draw [black, dotted, thick] (axis cs:-2.5,-1) -- (axis cs:-0.6,-1);
+                                    \draw [black, dotted, thick] (axis cs:+2.5,+1) -- (axis cs:0,+1);
+                                \end{axis}
+                            \end{tikzpicture}
+                                
+                            \captionof{figure}{The black line shows the function plot of $y=tanh(x)$. The red line on the other hand represents the transient output of the tanh function where amplitude of the sinusoidal input is varied.}
+                            \label{plot:tanh}
+                        
+                        \end{minipage}
 
-                \subsubsection{Precision Current Sink Source}
-                    A current source is required to generate a constant ink of current across the collector and the emitter of the BJT being used in the tanh function cell.
-                    We utilize the design shown in \cite{ti-sink-source}.
+                    \paragraph{Precision Current Sink Source}
+                        A current source is required to generate a constant ink of current across the collector and the emitter of the BJT being used in the tanh function cell.
+                        We utilize the design shown in \cite{ti-sink-source}.
+            
+            \subsection{Transient Shaping}
+
+                \subsubsection{Precision Peak Detector}
+                    \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}  
+
+                \subsubsection{True RMS Detector}
+                    A traditional approach to reading the average of an input signal was to implement a 
+                    
+                    For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                 
+                    
+                \subsubsection{Crossfader}
 
             \subsection{Voltage Controlled Amplifier}
 
@@ -910,7 +978,7 @@
 
         \printbibliography
 
-        %\iffalse
+        \iffalse
         % Diagram showing signal through the gain calculator.Takes time to compile due to increased accuracy of the plot.
         \begin{figure*}[!th]
 
@@ -1134,7 +1202,7 @@
             \label{fig:drc-diagram}
 
         \end{figure*}
-        %\fi
+        \fi
 
     \end{multicols*}
 
