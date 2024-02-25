@@ -515,22 +515,21 @@
                     \end{eqnarray}
     
             \subsection{Logarithmic Domain Signal Processing}
-                The intensity of loudness perceived by the human ear scales logarithmically. This means that as the volume of the sound increases, our ears become less sensitive to the change in that volume. By scaling the signal that gets fed into the compressor on a logarithmic domain, we can operate functions such as knee width compression based on the perceived loudness of the sound instead of the linear amplitude of the signal that the compressor sees. Additionally, processing the signal in the logarithmic domain can aid in achieving a better transient response when dealing with analog transient shaping circuits.\par
-                A typical transient shaping circuit such as the peak detection circuit operates on the signal by using the inherent delay seen in the charge and discharge of a capacitor, where its amplitude in relation to the surrounding RC network is expressed by equation \ref{eq:lin-cap-discharge}.
+                The perception of loudness by the human ear exhibits a relation that can be mapped to the logarithmic scale. This characteristic implies that as sound levels increase, our sensitivity to changes in volume diminishes. Leveraging this understanding, by converting the input signal into a logarithmic scale before it is processed by a compressor, we enable the compressor to modulate functions such as knee width compression in alignment with the perceived loudness rather than the signal's linear amplitude. This approach ensures that compression adjustments correlate more closely with human auditory perception. Furthermore, the benefits of logarithmic domain signal processing is not limited to only this.\par
+                In the realm of transient shaping, circuits like the peak detection circuit utilize the natural delay inherent in the charging and discharging cycles of a capacitor. The behavior of this cycle, especially its amplitude within a RC network, is mathematically described by equation \ref{eq:lin-cap-discharge}.
                 
                     \begin{equation}\label{eq:lin-cap-discharge}
                         V(t) = V_0 e^{-\frac{t}{RC}}
                     \end{equation}    
                 
-                \noindent The above equation shows that the decay in the voltage of a capacitor is represented as an exponential function, however, this could introduce an unwanted artifact as an exponentially decreasing level in volume is perceived to sound unnatural. Furthermore, this defect could be compensated by simply processing the signal in the log domain. The expression shown in equation \ref{eq:lin-cap-discharge} can be easily manipulated to show its behavior in the logarithmic domain, where we will get the expression shown in equation \ref{eq:log-cap-discharge}.
+                \noindent This equation delineates how the voltage across a capacitor decays exponentially over time. However, this exponential decay can result in a perceptually unnatural volume decrease, an artifact that could potentially detract from the desired sound quality. By transitioning the signal processing to a logarithmic domain, we can mitigate this issue. Transforming the original equation into a logarithmic form yields equation \ref{eq:log-cap-discharge}.
                 
                     \begin{equation}\label{eq:log-cap-discharge}
                         \ln(V(t)) = \ln(V_0) - \frac{t}{RC}
                     \end{equation}
                 
-                \noindent This expression essentially linearizes the decay in the perceived volume level and allows us to achieve a smoother compression when using peak-detection based circuits.
+                \noindent In this logarithmic representation, the exponential decay of voltage—and consequently, of perceived volume—is linearized. This adjustment facilitates a more natural and smoother compression effect when deploying peak-detection based circuits, aligning the signal processing more closely with the nuances of human auditory perception. 
                 
-
             \subsection{Side-Chain Filtering}
                 Side-chain filtering can be introduced to limit the range of frequency the gain computer perceives. This functionality is particularly useful in emphasizing or de-emphasizing, which tells the compressor to be more sensitive or less sensitive to a specific range of frequencies. As an example, a high-pass filter might be applied to prevent low-frequency content from triggering the compression, which is particularly useful for avoiding unnecessary compression due to bass-heavy elements in a mix. Pre-detection filtering allows for more targeted and musically relevant compression by controlling which parts of the frequency spectrum most influence the compressor's action, leading to a more controlled dynamic response.\cite{side-chain-filtering}
                 
@@ -541,7 +540,7 @@
         \section{Implementation of Discrete Circuit Compressor Components}
 
             \subsection{Precision Full-Wave Rectifier}
-                A precision full-wave rectifier has been implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
+                A precision full-wave rectifier seen in figure \ref{fig:FBR} [in addendum] has been implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
                 
             \subsection{Logarithmic Amplifiers} \label{sect:log-amp}
                 Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications. Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 megahertz. This design is often utilized with sensors in control systems due to its frequency limitations.\par
@@ -704,6 +703,7 @@
 
 
                 \subsubsection{Hyperbolic Tangent Function Cell}
+
                     A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair coupled with an input of an operational amplifier.
                     As the input range of the function cell is determined by the voltage range of the active region given by the base input of the bipolar junction transistor, it is crucial to normalize the amplitude of the signal entering the cell beforehand. As seen in figure \ref{plot:tanh}, the gated nature of BJT input allows us to create unique characteristics in the definition of how the knee control is applied.
 
@@ -1280,6 +1280,21 @@
     \newpage
 
     \section*{Addendum}
-        \textcolor{blue}{Put pictures of completed project, PCB layout, etc. over here.}
+        
+        % Full bridge rectifier
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{FBR-circuit.png}
+            \captionof{figure}{Circuit diagram of a precision full bridge rectifier implemented in the design.}
+            \label{fig:FBR}
+        \end{figure}
+
+        % Temperature compensated precision log amplifier
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{temp-comp-log-amp.png}
+            \captionof{figure}{Circuit diagram of a temperature compensated precision log amplifier.}
+            \label{fig:TCPLA}
+        \end{figure}
 
 \end{document}
