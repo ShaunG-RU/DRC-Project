@@ -533,7 +533,7 @@
             \subsection{Side-Chain Filtering}
                 Side-chain filtering can be introduced to limit the range of frequency the gain computer perceives. This functionality is particularly useful in emphasizing or de-emphasizing, which tells the compressor to be more sensitive or less sensitive to a specific range of frequencies. As an example, a high-pass filter might be applied to prevent low-frequency content from triggering the compression, which is particularly useful for avoiding unnecessary compression due to bass-heavy elements in a mix. Pre-detection filtering allows for more targeted and musically relevant compression by controlling which parts of the frequency spectrum most influence the compressor's action, leading to a more controlled dynamic response.\cite{side-chain-filtering}
                 
-            \subsection[Mixed Use of Peak Detection and RMS Level]{Mixed Use of Peak Detection\\and RMS Level}
+            \subsection[Mixed Use of Peak Detection and RMS Level]{Mixed Use of Peak Detection\\and RMS Level} \label{sect:rms-peak-mix}
                 While this is not a feature seen in commercial DRC hardware, introducing a mixer that allows a smooth adjustment between RMS level and peak detected level may offer additional flexibility for dynamic control, enabling more tailored responses to different audio materials.
                 This proposed feature allows the user to leverage the advantage of both RMS level and peak detected level, combining a smoothed average of the input signal with the fast transients.
             
@@ -677,7 +677,9 @@
                                 \node (input) at (0,0) {B};
                                 \node[block, right = of input] (log2) {log};
                                 \node[block, above = of log2] (log1) {log};
+                                \node[left = of log1] (a) {A};
                                 \node[block, below = of log2] (log3) {log};
+                                \node[left = of log3] (c) {C};
 
                                 % Sum1 shape
                                 \node[draw,
@@ -690,9 +692,17 @@
                                 \node[above] at (sum1.center){\tiny $+$};
                                 \node[below] at (sum1.center){\tiny $-$};
 
+                                \node[block, right = of sum1] (exp) {exp};
+                                \node[right = of exp] (out) {$\frac{A\times B}{C}$};
+
                                 \draw[-stealth] (log1.east) -| (sum1.north);
                                 \draw[-stealth] (log2.east) -- (sum1.west);
                                 \draw[-stealth] (log3.east) -| (sum1.south);
+                                \draw[-stealth] (sum1.east) -- (exp.west);
+                                \draw[-stealth] (a.east) -- (log1.west);
+                                \draw[-stealth] (input.east) -- (log2.west);
+                                \draw[-stealth] (c.east) -- (log3.west);
+                                \draw[-stealth] (exp.east) -- (out.west);
 
                             \end{tikzpicture}
 
@@ -701,6 +711,7 @@
 
                         \end{minipage}
 
+                    \noindent Using this feature of mathematical operations, the circuit can be arranged in a way so that we can implement the output of an gain detector described in equation \ref{eq:gain-comp}.
 
                 \subsubsection{Hyperbolic Tangent Function Cell}
 
@@ -766,6 +777,7 @@
                     For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                 
                     
                 \subsubsection{Crossfader}
+                    To implement the mechanism discussed in \ref{sect:rms-peak-mix}, 
 
             \subsection{Voltage Controlled Amplifier}
 
@@ -813,6 +825,8 @@
                     \end{minipage}
 
                 \subsubsection{Balanced Line Input/Output}
+                    The use of a balanced line driver/receiver are commonly seen in professional audio hardware, and it aids in minimizing noise and interference. The used of balanced line input and output employs differential signaling to effectively cancel out noise and electromagnetic interference picked up along cable runs, which allows  for preserving the dynamic range and subtleties of the audio signal. This setup is particularly advantageous for long cable runs and in environments with high electronic noise, ensuring that analog compressors can accurately control dynamics without the detrimental effects of added noise or signal degradation.\par
+                    While differential line receivers and drivers can be designed with ease using a set of precision resistors and precision resistors, specialized ICs such as 
 
                 \subsubsection{Precision Current Sink Source}
                     A current source is required to generate a constant ink of current across the collector and the emitter of the BJT being used in the tanh function cell.
@@ -1282,6 +1296,7 @@
     \section*{Addendum}
         
         % Full bridge rectifier
+        \noindent
         \begin{figure}[h]
             \centering
             \includegraphics[width=\textwidth]{FBR-circuit.png}
@@ -1290,6 +1305,7 @@
         \end{figure}
 
         % Temperature compensated precision log amplifier
+        \noindent
         \begin{figure}[h]
             \centering
             \includegraphics[width=\textwidth]{temp-comp-log-amp.png}
