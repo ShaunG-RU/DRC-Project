@@ -17,6 +17,7 @@
 \usepackage{lastpage}
 \usepackage{pgfplots}
 \usepackage{subcaption}
+\usepackage{dblfnote}
 \usepackage[american,siunitx]{circuitikz}
 \usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
@@ -90,120 +91,127 @@
     
     \begin{multicols*}{2}
 
-        \textbf{
-            Keywords: 
-            Signal Processing, Dynamic Range Compression, Circuit Design, Analog, Printed Circuit Boards, Signal Integrity.
-        }
+        \textbf{Keywords:} \textit{Signal Processing, Circuit Design,\\Dynamic Range Compression, Analog Circuit, Printed Circuit Board, Signal Integrity.}
 
         \section{Introduction}
             A dynamic range compressor (DRC) is an essential tool in audio processing that normalizes the loudness of a signal that has been put through. This is done by using a mechanism that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. The process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness. This technology is widely used in various areas such as music production, live performances, and even in devices like hearing aids to improve sound quality.\par
-            With the emergence of high-performance computational platforms and advancement in signal processing technologies, digital signal compression algorithms has been a de-facto standard in the industry. Digital compressors are popular in many applications, from creating music to broadcasting and beyond, as they allow for detailed and precise manipulation of sound. The digital approach to compressors and various other signal processing tools`' has revolutionized the way we work with audio, making it easier to achieve high-quality production on your personal laptop without having access to a professional recording studios.\par
-            However, despite the dominance of digital signal processing technologies, hardware compressors, where the signal is processed entirely in the analog domain, remain in use. Many audio professionals continue to prefer them for certain tasks as it has the advantage of being straightforward, avoiding some of the issues that digital formats can introduce, such as digital latency caused by AD/DA conversion or digital processing delay. Furthermore, it is advantageous in avoiding issues such as unwanted sampling artifacts and the added complexity due to its digital nature.\par
-            Analog compressors are also valued for the unique qualities they can add to sound. They are known for introducing a warmth and musicality to audio that is often described as difficult to achieve with digital methods. This effect is due to the slight alterations they make to the sound, including adding minor distortions and saturation, which can make the audio feel richer and more engaging. Thus, despite the convenience and precision of digital compressors, analog compressors still hold its own place in audio production for their ability to enhance sound in a distinctive way.\par
-            This paper will delve deeper into the technical nuances and design considerations that underpins an effective analog compressor. By examining the control parameters, exploring the functional building blocks, and discussing various control mechanisms, we aim to investigate the intricate balance between theory and practical application that lies in designing an analog compressor. The following sections will offer a comprehensive analysis of the compressor topology, discussing various optimization strategies in designing an ideal compressor. Through this exploration, the paper aims to highlight the critical decisions and engineering challenges involved in creating an analog compressors that not only meet the technical specifications, but also stands out as an appealing alternative to the widely used digital compressor.
+            With the emergence of high-performance computational platforms and advancement in signal processing technologies, digital signal compression algorithms has been a de-facto standard in the industry. Digital compressors are popular in many applications, from creating music to broadcasting and beyond, as they allow for detailed and precise manipulation of sound. The digital transformation of compressors and other signal processing tools has fundamentally changed audio production. Allowing the average consumer to achieve professional-quality production on a personal laptop without the need for an access to a professional recording studio.\par
+            Furthermore, despite the dominance of digital signal processing technologies, hardware compressors, where the signal is processed entirely in the analog domain, widely remain in use. Many audio professionals continue to prefer them for certain tasks as it offers various advantage and benefits that has an edge over software implemented compressors.\par
+            In comparison to digital compressors, analog compressors are generally valued for the unique qualities they can add to sound. They are known for introducing warmth\footnotemark and musicality to the audio that is often described as being difficult to achieve with digital methods. \cite{citations needed} This effect is due to the slight alterations the analog circuits introduce, including minor distortions and saturations, making the audio sound richer and more engaging to the audience. Analog compressors are also favored for its straightforwardness, avoiding some of the issues that digital formats can introduce, such as digital latency caused by AD/DA conversion and process run time. Furthermore, it is advantageous in avoiding issues that are caused by the inherent nature of digital compressors, such as unwanted sampling artifacts, signal aliasing, and the added complexity of software installation and digital library management. Thus, despite the convenience and precision of digital compressors, analog compressors still hold its own place in audio production for their ability to enhance sound in a distinctive way.\par
+            In light of the various advantages seen in analog compressors, this paper will delve deeper into the technical nuances and design considerations that underpins an effective analog compressor. By examining the control parameters, exploring the functional building blocks, and discussing various control mechanisms, we aim to investigate the intricate balance between theory and practical application that lies in designing an analog compressor. Furthermore, the following sections highlights the critical decisions and engineering challenges involved in creating an analog compressors that not only meet the technical specifications, but also stands out as an appealing alternative to the widely used digital compressor.
+
+            \vspace{2cm}
+
+            \noindent
+            \begin{minipage}[b]{\linewidth}
+                \noindent
+                \footnotetext{\footnotesize{The term 'warmth' is often used to refer to the pronounced reverberation time at low frequencies relative to that at higher frequencies.} \cite{britanica-warmth}}
+            \end{minipage}\hfill
+
+            %\footnotetext{\textit{The term 'warmth' is often used to refer to the pronounced reverberation time at low frequencies relative to that at higher frequencies.\cite{britanica-warmth}}}
+
+        % Compression ratio plot
+        \noindent
+        \begin{minipage}{\linewidth}
+            \centering
+            \begin{tikzpicture}
+                \begin{axis}[
+                    ticklabel style = {font=\footnotesize},
+                    xtick distance=5,
+                    ytick distance=5,
+                    xlabel={Input Level (dB)},
+                    ylabel={Output Level (dB)},
+                    xmin=-45, xmax=0,
+                    ymin=-45, ymax=0,
+                    legend pos=south east,
+                    %xmajorgrids=true,
+                    %ymajorgrids=true,
+                    grid style=dashed,
+                ]
+                
+                % No compression line
+                \addplot[
+                    color=blue,
+                    domain=-45:0,
+                ] {x};
+                
+                % 5:1 Compression, hard knee
+                \addplot[
+                    color=black,
+                    solid,
+                    domain=-45:-20,
+                ] {x + 10};
+                \addplot[
+                    color=black,
+                    solid,
+                    domain=-20:0,
+                ] {0.2*x-6};
+    
+                % 5:1 Compression, soft knee
+                \addplot[
+                    color=red,
+                    very thick,
+                    densely dotted,
+                    domain=-45:-30,
+                ] {x + 10};
+                \addplot[
+                    color=red,
+                    very thick,
+                    densely dotted,
+                    domain=-30:-10,
+                ] {-0.02*x^2-0.2*x-8};
+                \addplot[
+                    color=red,
+                    very thick,
+                    densely dotted,
+                    domain=-10:0,
+                ] {0.2*x-6};
+                
+    
+                % Make-up gain
+                \draw [<->] (axis cs:-35,-34) -- (axis cs:-35,-26);
+
+                % Knee boundary line
+                \draw [color=red!80, loosely dashdotted] (axis cs:-30,-45) -- (axis cs:-30,0);
+                \draw [color=red!80, loosely dashdotted] (axis cs:-10,-45) -- (axis cs:-10,0);
+                \draw [<->] (axis cs:-29,-7) -- (axis cs:-11,-7);
+                
+                % Threshold line
+                \draw [color=black!80, loosely dashdotted] (axis cs:-20,-45) -- (axis cs:-20,0);
+                \draw [->] (axis cs:-15,-25) -- (axis cs:-19,-25);
+
+                \fill [white] (axis cs:-25,-6.5) rectangle (axis cs:-15,-3.5);
+                \node at (axis cs:-20,-5){\scriptsize{Knee Width}};
+
+                \fill [white] (axis cs:-15,-27) rectangle (axis cs:-5,-23);
+                \node at (axis cs:-10,-25){\scriptsize{Threshold}};
+
+                \fill [white] (axis cs:-34,-31.5) rectangle (axis cs:-22,-28.5);
+                \node at (axis cs:-28,-30){\scriptsize{Make-up Gain}};
+
+                \legend{\scriptsize{Uncompressed 1:1},,\scriptsize{Hard Knee 5:1},,\scriptsize{Soft Knee 5:1}};
+                
+                \end{axis}
+            \end{tikzpicture}
+            \captionof{figure}{A typical compressor's transfer characteristics, mapped on a decibel scale.}
+            \label{fig:comp-ratio}
+        \end{minipage}
 
         \section{Compressor Control Parameters}
-            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and Side-chain, each defining a specific aspect of the compressor's behavior and its impact on the audio signal.
-
-            % Compression ratio plot
-            \noindent
-            \begin{minipage}{\linewidth}
-                \centering
-                \begin{tikzpicture}
-                    \begin{axis}[
-                        ticklabel style = {font=\footnotesize},
-                        xtick distance=5,
-                        ytick distance=5,
-                        xlabel={Input Level (dB)},
-                        ylabel={Output Level (dB)},
-                        xmin=-45, xmax=0,
-                        ymin=-45, ymax=0,
-                        legend pos=south east,
-                        %xmajorgrids=true,
-                        %ymajorgrids=true,
-                        grid style=dashed,
-                    ]
-                    
-                    % No compression line
-                    \addplot[
-                        color=blue,
-                        domain=-45:0,
-                    ] {x};
-                    
-                    % 5:1 Compression, hard knee
-                    \addplot[
-                        color=black,
-                        solid,
-                        domain=-45:-20,
-                    ] {x + 10};
-                    \addplot[
-                        color=black,
-                        solid,
-                        domain=-20:0,
-                    ] {0.2*x-6};
-        
-                    % 5:1 Compression, soft knee
-                    \addplot[
-                        color=red,
-                        very thick,
-                        densely dotted,
-                        domain=-45:-30,
-                    ] {x + 10};
-                    \addplot[
-                        color=red,
-                        very thick,
-                        densely dotted,
-                        domain=-30:-10,
-                    ] {-0.02*x^2-0.2*x-8};
-                    \addplot[
-                        color=red,
-                        very thick,
-                        densely dotted,
-                        domain=-10:0,
-                    ] {0.2*x-6};
-                    
-        
-                    % Make-up gain
-                    \draw [<->] (axis cs:-35,-34) -- (axis cs:-35,-26);
-
-                    % Knee boundary line
-                    \draw [color=red!80, loosely dashdotted] (axis cs:-30,-45) -- (axis cs:-30,0);
-                    \draw [color=red!80, loosely dashdotted] (axis cs:-10,-45) -- (axis cs:-10,0);
-                    \draw [<->] (axis cs:-29,-7) -- (axis cs:-11,-7);
-                    
-                    % Threshold line
-                    \draw [color=black!80, loosely dashdotted] (axis cs:-20,-45) -- (axis cs:-20,0);
-                    \draw [->] (axis cs:-15,-25) -- (axis cs:-19,-25);
-
-                    \fill [white] (axis cs:-25,-6.5) rectangle (axis cs:-15,-3.5);
-                    \node at (axis cs:-20,-5){\scriptsize{Knee Width}};
-
-                    \fill [white] (axis cs:-15,-27) rectangle (axis cs:-5,-23);
-                    \node at (axis cs:-10,-25){\scriptsize{Threshold}};
-
-                    \fill [white] (axis cs:-34,-31.5) rectangle (axis cs:-22,-28.5);
-                    \node at (axis cs:-28,-30){\scriptsize{Make-up Gain}};
-
-                    \legend{\scriptsize{Uncompressed 1:1},,\scriptsize{Hard Knee 5:1},,\scriptsize{Soft Knee 5:1}};
-                    
-                    \end{axis}
-                \end{tikzpicture}
-                \captionof{figure}{A typical compressor's transfer characteristics.}
-                \label{fig:comp-ratio}
-            \end{minipage}
+            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and Side-chain, each defining a specific aspect of the compressor's behavior and its impact on the input signal.
 
             \paragraph{Threshold}
                 The threshold parameter sets the level at which the compressor starts to act. Measured in decibels (dB), it defines the point above which the input signal will be compressed. When the signal level exceeds this threshold, compression is applied.
 
             \paragraph{Ratio}
-                The ratio determines the degree of compression applied to the signal once it surpasses the threshold. It is expressed as a ratio (e.g., 5:1, 10:1), and could scale up to $\infty$:1 where the compressor basically function as an limitter, where all signal levels above the set threshold level is limited to equal amplitude. In simple terms, a 5:1 ratio means that for every 5 dB, the input signal exceeds the threshold, the output signal level will be increased by only 1 dB. Higher ratios result in more aggressive compression.
+                The ratio determines the degree of compression applied to an audio signal once it exceeds a predetermined threshold level. This parameter is quantified as a ratio, such as 5:1 or 10:1, extending to infinity:1, at which point the compressor operates as a limiter, equalizing all signal levels above the threshold to a consistent amplitude. For instance, a 5:1 ratio signifies that for every increment of 5 dB by which the input signal surpasses the threshold, the output signal's level will be attenuated by only 1 dB. Consequently, higher ratios yield more pronounced compression.
 
-            \paragraph{Attack}
-                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the "attack phase" section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
+                \begin{equation} \label{eq:ratio}
+                    R=\frac{y_{dB}-T}{x_{dB}-T}
+                \end{equation}
 
-            \paragraph{Release}
-                Release time is the time it takes for the compressor to stop acting after the signal falls below the threshold. Also measured in milliseconds, a shorter release time stops the compression effect more quickly, which can help maintain natural dynamics but might result in a 'pumping' sound. A longer release time provides a smoother, more gradual return to the uncompressed state.
-            
+                \noindent Equation \ref{eq:ratio} mathematically models the compression ratio $R$, where $x_{dB}$ represents the input level gain, $y_{dB}$ the output level gain, and $T$ being the threshold. This formula dictates the change in output level for a given change in input level, relative to the threshold, providing a precise numerical value for the compression effect. The closer the value of $R$ is to 1, the more subtle the compression, while larger values indicate more aggressive compression, leading to the limiting effect.
+
                 % Transient response diagram
                 \noindent
                 \begin{minipage}{\linewidth}
@@ -211,21 +219,22 @@
                     \includesvg[inkscapelatex=false,width=0.935\linewidth]{attack-release-trans.svg}
                     \captionof{figure}{Transient response of a signal through a compressor.}
                     \label{fig:comp-trans}
-                \end{minipage}
+                \end{minipage}\\
+
+            \paragraph{Attack}
+                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the "attack phase" section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
+
+            \paragraph{Release}
+                Release time refers to the duration needed for the compressor to cease its action once the signal dips below the threshold. (as illustrated in Figure \ref{fig:comp-ratio}) This period, also expressed in milliseconds, influences the sound's dynamics; a brief release time halts the compression swiftly, preserving the natural dynamics but may lead to noticeable fluctuations in volume. Conversely, an extended release time ensures a more seamless and gradual transition back to the uncompressed sound.
 
             \paragraph{Knee}
-                The knee parameter adjusts how the compressor transitions from the non-compressed to the compressed state. A 'hard knee' setting means the compression ratio is applied abruptly as soon as the signal crosses the threshold. In contrast, a 'soft knee' setting introduces compression gradually as the signal approaches and then exceeds the threshold. This results in a more natural, less noticeable compression effect.
+                The knee parameter (measured in dB in reference to the difference in the lower and upper bound of the knee) precisely controls the compressor's transition from the uncompressed to the compressed state by adjusting its width, which measures how the compression ratio is applied at around the threshold level. A 'hard knee' setting indicates an immediate application of the compression ratio as soon as the signal crosses the threshold, resulting in an abrupt transition. Conversely, a 'soft knee' setting allows for a gradual introduction of compression as the signal nears and surpasses the threshold, due to a wider knee width. The control over the knee width allows the user to achieve a smoother, more natural compression effect, making the transition less noticeable and more musically pleasing.
             
             \paragraph{Make-Up Gain}
                 Make-up gain is a control parameter that allows you to increase the output level of the signal after it has gone through compression. This feature helps the user with adjusting the output to a consistent volume level after the signal has undergone attenuation by the compression algorithm. In the context of a song or an audio program, it allows the user to enhances the presence of the material.
 
             \paragraph{Side-chain}
-                Side-chain is a compressor control that enables external audio signals to trigger compression on another audio track. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
-
-            \paragraph{Broadband, Multiband, and Spectral Compression}
-                Broadband compressors works on the dynamics of an input signal across the entire frequency range. When a set threshold is exceeded, the entire signal is affected, regardless of which frequencies the energy of the signal is composed of.\par
-                In a multiband compressor, the entire frequency spectrum is split up into multiple bands that can be parametrized independently from each other. Hence, you are able to compress a single track or instrumental group much more flexible and heavier, without having to fear that bigger changes end up being audible too much.\par
-                With a spectral compressor, the spectral distribution of energy of a signal is analyzed continuously and compared with target values that have been calculated by intelligent algorithms. When the system recognizes that certain frequency areas are currently being overemphasized and therefore affect the compression disproportionately, these areas are automatically compressed more.
+                Side-chain is a control that is established by passing an additional audio signals to trigger the compression on the main input signal. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
         \section{Compressor Topology}
             The method of attenuation seen in a compressor could be generally categorized into two topologies including feedback and feed-forward compression. The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression, and how transparently it applies gain reduction.
@@ -233,6 +242,10 @@
             \subsection{Feedback Compression}  
                 In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure ?. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. \textcolor{red}{Feedback topology is often praised for its musicality, as it tends to produce a more natural compression effect.} The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. This topology excels in applications where preserving the natural dynamics and timbre of the audio is important.
                 
+                    \begin{equation} \label{eq:feedback}
+                        y_{dB}=x_{dB}+g_{dB}
+                    \end{equation}
+
                     % Feedback diagram
                     \noindent
                     \begin{minipage}{\linewidth}
@@ -241,8 +254,8 @@
 
                         \begin{tikzpicture}
 
-                            \node (input) at (0,0) {$x(t)$};
-                            \node (output) at (6.5,0) {$y(t)$};
+                            \node (input) at (0,0) {$x_{dB}$};
+                            \node (output) at (6.5,0) {$y_{dB}$};
 
                             % Sum1 shape
                             \node[draw,
@@ -285,6 +298,10 @@
             \subsection{Feed-forward Compression}
                 As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. \ref{fig:feedforward} This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal. \textcolor{red}{Feed-forward compressors are known for their accuracy and fast response, making them ideal for applications requiring precise dynamic control, such as in limiting scenarios where preventing signal peaks is crucial.}\par
 
+                \begin{equation}\label{eq:feedforward}
+                    y_{dB}(t)=x_{dB}(t)+g_{dB}(t)
+                \end{equation}
+
                     % Feed-forward diagram
                     \noindent
                     \begin{minipage}{\linewidth}
@@ -293,7 +310,7 @@
 
                         \begin{tikzpicture}
 
-                            \node (input) at (0,0) {$x(t)$};
+                            \node (input) at (0,0) {$x_{dB}$};
 
                             % Gain Computer
                             \node[block, below right = 0.5 and 2 of input] (gain) {Gain\\Computer};
@@ -316,7 +333,7 @@
                             ] (sum2) {};
                             \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
                             \node[left=-1pt] at (sum2.center){\tiny $+$};
-                            \node[below] at (sum2.center){\tiny $+$};
+                            \node[below] at (sum2.center){\tiny $-$};
                 
                             % Lines
                             \draw[-stealth] (input) -- (sum2.west);
@@ -324,7 +341,9 @@
                             \draw[-stealth] (gain.east) -- (sum1.west);
                             \draw[-stealth] (split) -| +(0,0.8) -| (sum1.north);
                             \draw[-stealth] (sum1.east) -| (sum2.south);
-                            \draw[-stealth] (sum2.east) -- +(0.5,0) node[right]{$y(t)$};
+                            \draw[-stealth] (sum2.east) -- +(0.5,0) node[right]{$y_{dB}$};
+
+                            \node[below right = 0.5 and 0.05 of sum2.center] (g_db) {$g_{dB}$};
                             
                         \end{tikzpicture}
                         
@@ -332,6 +351,13 @@
                         \label{fig:feedforward}
                     
                     \end{minipage}
+
+            \subsection{Additional Topologies}
+
+                \subsubsection{Broadband, Multiband, and Spectral Compression}
+                    Broadband compressors works on the dynamics of an input signal across the entire frequency range. When a set threshold is exceeded, the entire signal is affected, regardless of which frequencies the energy of the signal is composed of.\par
+                    In a multiband compressor, the entire frequency spectrum is split up into multiple bands that can be parametrized independently from each other. Hence, you are able to compress a single track or instrumental group much more flexible and heavier, without having to fear that bigger changes end up being audible too much.\par
+                    With a spectral compressor, the spectral distribution of energy of a signal is analyzed continuously and compared with target values that have been calculated by intelligent algorithms. When the system recognizes that certain frequency areas are currently being overemphasized and therefore affect the compression disproportionately, these areas are automatically compressed more.
 
         \section[Functional Building Blocks of a Compressor]{Functional Building Blocks\\of a Compressor}
             The inner components that consist the functionality of a compressor can be mainly separated into three building blocks, where the gain controller takes the role of applying the attenuation to the input, and the threshold level detector and the input volume detector consisting the gain computer is responsible of controlling the gain controller by generating the signal to control it.
@@ -777,9 +803,11 @@
                     For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                 
                     
                 \subsubsection{Crossfader}
-                    To implement the mechanism discussed in \ref{sect:rms-peak-mix}, 
+                    To implement the mechanism discussed in section \ref{sect:rms-peak-mix}, a crossfader can be implemented to allow an continuous 
 
             \subsection{Voltage Controlled Amplifier}
+                A voltage controlled amplifier allows an 
+                
 
         \section{Physical Compressor Hardware}
             This section diverges from the topics discussed in previous sections and focuses more on the technicalities involved in implementing the circuit that has been designed. Specific challenges associated with audio domain signals will be introduced to make the reader aware of anything to be cautious.
@@ -1062,6 +1090,13 @@
             \end{itemize}
 
         \printbibliography
+
+        \section*{Attribution}
+            \footnotesize{
+                \textit{\textbf{Figure \ref{fig:comp-trans}:}} \href{https://en.wikipedia.org/wiki/Dynamic_range_compression#/media/File:Audio_Compression_Attack_and_Release-2.svg}{The attack and release phases in a compressor}, Iainf (Own work) via Wikipedia, License: \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC BY-SA 3.0 DEED}\\
+
+                \noindent\textit{\textbf{Figures \ref{fig:FBR}, \ref{fig:TCPLA}:} Schematic diagrams are generated using Altium Designer.}\\
+            }
 
         \iffalse
         % Diagram showing signal through the gain calculator.Takes time to compile due to increased accuracy of the plot.
