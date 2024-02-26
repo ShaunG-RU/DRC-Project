@@ -198,7 +198,7 @@
         \end{minipage}
 
         \section{Compressor Control Parameters}
-            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and Side-chain, each defining a specific aspect of the compressor's behavior and its impact on the input signal.
+            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and Side-chain; each defining a specific aspect of the compressor's behavior and its impact on the input signal.
 
             \paragraph{Threshold}
                 The threshold parameter sets the level at which the compressor starts to act. Measured in decibels (dB), it defines the point above which the input signal will be compressed. When the signal level exceeds this threshold, compression is applied.
@@ -222,7 +222,7 @@
                 \end{minipage}\\
 
             \paragraph{Attack}
-                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the "attack phase" section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
+                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the 'attack phase' section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
 
             \paragraph{Release}
                 Release time refers to the duration needed for the compressor to cease its action once the signal dips below the threshold. (as illustrated in Figure \ref{fig:comp-ratio}) This period, also expressed in milliseconds, influences the sound's dynamics; a brief release time halts the compression swiftly, preserving the natural dynamics but may lead to noticeable fluctuations in volume. Conversely, an extended release time ensures a more seamless and gradual transition back to the uncompressed sound.
@@ -237,13 +237,19 @@
                 Side-chain is a control that is established by passing an additional audio signals to trigger the compression on the main input signal. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
         \section{Compressor Topology}
-            The method of attenuation seen in a compressor could be generally categorized into two topologies including feedback and feed-forward compression. The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression, and how transparently it applies gain reduction.
-    
+            The method of attenuation seen in a compressor could be generally categorized into two topologies including feedback and feed-forward compression. Both topologies can be expressed as a relation described in equation \ref{eq:gen-topology}, where the output, $y_{dB}$, is given by the sum of input, $x_{dB}$, and the gain/attenuation level, $g_{dB}$, which is determined by the gain computer. 
+
+                \begin{equation} \label{eq:gen-topology}
+                    y_{dB}(t)=x_{dB}(t)+g_{dB}(t)
+                \end{equation}
+            
+            \noindent The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression. Other topologies in addition to the feedback and feed-forward type is discussed and is examined as well.
+
             \subsection{Feedback Compression}  
-                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure ?. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. \textcolor{red}{Feedback topology is often praised for its musicality, as it tends to produce a more natural compression effect.} The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. This topology excels in applications where preserving the natural dynamics and timbre of the audio is important.
+                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure \ref{fig:feedback}. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as theoretically, an unlimited negative amplification is required by the gain computer, which is not possible when implemented in physical hardware.
                 
                     \begin{equation} \label{eq:feedback}
-                        y_{dB}=x_{dB}+g_{dB}
+                        g_{dB}=(1-R)(y_{dB}-T)
                     \end{equation}
 
                     % Feedback diagram
@@ -296,10 +302,11 @@
                     \end{minipage}
                 
             \subsection{Feed-forward Compression}
-                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. \ref{fig:feedforward} This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal. \textcolor{red}{Feed-forward compressors are known for their accuracy and fast response, making them ideal for applications requiring precise dynamic control, such as in limiting scenarios where preventing signal peaks is crucial.}\par
+                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (As seen in figure \ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal.
+                Both implementations of feedback and feed-forward compressors involves a common process: subtracting the threshold from the signal level, which is sourced either from the input in feed-forward designs or the output in feedback designs. This is followed by half-wave rectification and then multiplication of the result by a slope variable, which varies between feed-forward and feedback compressor designs.
 
                 \begin{equation}\label{eq:feedforward}
-                    y_{dB}(t)=x_{dB}(t)+g_{dB}(t)
+                    g_{dB}=(\frac{1}{R}-1)(x_{dB}-T)
                 \end{equation}
 
                     % Feed-forward diagram
