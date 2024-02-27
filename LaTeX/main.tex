@@ -19,7 +19,7 @@
 \usepackage{subcaption}
 \usepackage{dblfnote}
 \usepackage[american,siunitx]{circuitikz}
-\usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
+\usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} %\nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
 %\usepackage{indentfirst}
 %\usepackage{mathptmx}
@@ -97,15 +97,15 @@
             A dynamic range compressor (DRC) is an essential tool in audio processing that normalizes the loudness of a signal that has been put through. This is done by using a mechanism that attenuates signals above a set threshold, utilizing a variable gain mechanism governed by a level-detection algorithm. The process effectively lowers the volume of louder segments of the audio while maintaining the level of quieter sections, resulting in a more uniform overall loudness. This technology is widely used in various areas such as music production, live performances, and even in devices like hearing aids to improve sound quality.\par
             With the emergence of high-performance computational platforms and advancement in signal processing technologies, digital signal compression algorithms has been a de-facto standard in the industry. Digital compressors are popular in many applications, from creating music to broadcasting and beyond, as they allow for detailed and precise manipulation of sound. The digital transformation of compressors and other signal processing tools has fundamentally changed audio production. Allowing the average consumer to achieve professional-quality production on a personal laptop without the need for an access to a professional recording studio.\par
             Furthermore, despite the dominance of digital signal processing technologies, hardware compressors, where the signal is processed entirely in the analog domain, widely remain in use. Many audio professionals continue to prefer them for certain tasks as it offers various advantage and benefits that has an edge over software implemented compressors.\par
-            In comparison to digital compressors, analog compressors are generally valued for the unique qualities they can add to sound. They are known for introducing warmth\footnotemark and musicality to the audio that is often described as being difficult to achieve with digital methods. \cite{citations needed} This effect is due to the slight alterations the analog circuits introduce, including minor distortions and saturations, making the audio sound richer and more engaging to the audience. Analog compressors are also favored for its straightforwardness, avoiding some of the issues that digital formats can introduce, such as digital latency caused by AD/DA conversion and process run time. Furthermore, it is advantageous in avoiding issues that are caused by the inherent nature of digital compressors, such as unwanted sampling artifacts, signal aliasing, and the added complexity of software installation and digital library management. Thus, despite the convenience and precision of digital compressors, analog compressors still hold its own place in audio production for their ability to enhance sound in a distinctive way.\par
+            In comparison to digital compressors, analog compressors are generally valued for the unique qualities they can add to sound. They are known for introducing warmth\footnotemark and musicality to the audio that is often described as being difficult to achieve with digital methods. \cite{sos-warmth} This effect is due to the slight alterations the analog circuits introduce, including minor distortions and saturations, making the audio sound richer and more engaging to the audience. Analog compressors are also favored for its straightforwardness, avoiding some of the issues that digital formats can introduce, such as digital latency caused by AD/DA conversion and process run time. Furthermore, it is advantageous in avoiding issues that are caused by the inherent nature of digital compressors, such as unwanted sampling artifacts, signal aliasing, and the added complexity of software installation and digital library management. Thus, despite the convenience and precision of digital compressors, analog compressors still hold its own place in audio production for their ability to enhance sound in a distinctive way.\par
             In light of the various advantages seen in analog compressors, this paper will delve deeper into the technical nuances and design considerations that underpins an effective analog compressor. By examining the control parameters, exploring the functional building blocks, and discussing various control mechanisms, we aim to investigate the intricate balance between theory and practical application that lies in designing an analog compressor. Furthermore, the following sections highlights the critical decisions and engineering challenges involved in creating an analog compressors that not only meet the technical specifications, but also stands out as an appealing alternative to the widely used digital compressor.
 
             \vspace{2cm}
 
-            \noindent
+            \par\noindent\rule{\linewidth}{0.5pt}
             \begin{minipage}[b]{\linewidth}
-                \noindent
-                \footnotetext{\footnotesize{The term 'warmth' is often used to refer to the pronounced reverberation time at low frequencies relative to that at higher frequencies.} \cite{britanica-warmth}}
+                \vspace{2pt}
+                \footnotesize{$^1$ The term 'warmth' is often used to refer to the pronounced reverberation time at low frequencies relative to that at higher frequencies.} \cite{britanica-warmth}
             \end{minipage}\hfill
 
             %\footnotetext{\textit{The term 'warmth' is often used to refer to the pronounced reverberation time at low frequencies relative to that at higher frequencies.\cite{britanica-warmth}}}
@@ -246,6 +246,14 @@
             \noindent The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression.
 
             \subsection{Feedback Compression}
+                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure \ref{fig:feedback}. Assuming a hard knee with no attack or release, equation \ref{eq:feedback} models the output of the gain computer in such topology.\par
+
+                    \begin{equation} \label{eq:feedback}
+                        g_{dB}=(1-R)(y_{dB}-T)
+                    \end{equation}
+                
+                \noindent In general, the feedback topology allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. Furthermore, the inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range.\par
+                However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as it would require an infinite negative amplification applied at the gain computer stage.
 
                     % Feedback diagram
                     \noindent
@@ -297,15 +305,6 @@
                         \label{fig:feedback}
                     
                     \end{minipage}
-
-                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure \ref{fig:feedback}. Assuming a hard knee with no attack or release, equation \ref{eq:feedback} models the output of the gain computer in such topology.\par
-
-                    \begin{equation} \label{eq:feedback}
-                        g_{dB}=(1-R)(y_{dB}-T)
-                    \end{equation}
-                
-                In general, the feedback topology allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. Furthermore, the inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range.\par
-                However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as it would require an infinite negative amplification applied at the gain computer stage.
                 
             \subsection{Feed-forward Compression}
                 As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (As seen in figure \ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal.\par
@@ -314,7 +313,7 @@
                         g_{dB}=(\frac{1}{R}-1)(x_{dB}-T)
                     \end{equation}
                     
-                The gain computer's output, $g_{dB}$ can be modeled by the equation \ref{eq:feedforward}, and when in comparison to equation \ref{eq:feedback}, it can be shown that the inherent issue seen in requiring an infinite amplification is no longer a problem as the slope for the limiter simply reaches a slope of -1. 
+                \noindent The gain computer's output, $g_{dB}$ can be modeled by the equation \ref{eq:feedforward}, and when in comparison to equation \ref{eq:feedback}, it can be shown that the inherent issue seen in requiring an infinite amplification is no longer a problem in feed-forward topology as the slope for the limiter simply reaches a slope of -1. For this reason, many modern implementation of the both digital and analog compressor rely on the feed-forward variant.
 
                     % Feed-forward diagram
                     \noindent
@@ -372,13 +371,15 @@
                 \subsubsection{Upward compression}
         
                 \subsubsection{Broadband, Multiband, and Spectral Compression}
-                    Broadband compressors operate by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy. Differing from this approach, a multiband compressor divides the entire frequency spectrum into multiple bands that can be independently adjusted. This allows for more flexible and significant compression of a single track or instrumental group without the risk of making extensive changes too audibly noticeable. On another front, spectral compressors continuously analyze the spectral distribution of a signal's energy and compare it with target values determined by intelligent algorithms. When the system identifies that certain frequency areas are being overemphasized, thus disproportionately affecting the compression, those areas are automatically subjected to more intense compression. This nuanced handling of frequency-specific dynamics facilitates a more tailored and effective compression strategy.
+                    Broadband compressors operate by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy.\par
+                    Differing from this approach, a multiband compressor divides the entire frequency spectrum into multiple bands that can be independently adjusted. This allows for more flexible and significant compression of a single track or instrumental group without the risk of making extensive changes too audibly noticeable. \par
+                    On another front, spectral compressors continuously analyze the spectral distribution of a signal's energy and compare it with target values determined by intelligent algorithms. When the system identifies that certain frequency areas are being overemphasized, thus disproportionately affecting the compression, those areas are automatically subjected to more intense compression.
 
         \section[Functional Building Blocks of a Compressor]{Functional Building Blocks\\of a Compressor}
-            The inner components that consist the functionality of a compressor can be mainly separated into three building blocks, where the gain controller takes the role of applying the attenuation to the input, and the threshold level detector and the input volume detector consisting the gain computer is responsible of controlling the gain controller by generating the signal to control it.
+            The inner components that consist the functionality of a compressor can be mainly separated into three sections, including the output amplifier, compression calculator, and the level detector. Where the output amplifier takes the role of directly adjusting the amplitude of the compressor, the compression calculator and the level detector (consisting the gain computer) is responsible of generating the control signal for the output amplifier that varies the attenuation level. Within this section, various implementation of output amplifier, compression calculator, and the level detector is examined.
 
-            \subsection{Gain Detector}
-                The gain computer is responsible for generating the control voltage, which dictates the gain reduction level applied to the signal. This stage encompasses parameters including Threshold (T), Ratio (R), and Knee Width (W), where its relation in regards to the output of the gain computer is described by a set of bounded equations shown in \ref{eq:gain-comp}.
+            \subsection{Compression Calculator}
+                The gain computer is responsible for generating the control voltage, which dictates the gain reduction level applied to the signal. This stage is based on determining amplitude-based parameters of the attenuation generated by the gain computer, including Threshold (T), Ratio (R), and Knee Width (W), where its relation in regards to the output of the gain computer is described by a set of bounded equations shown in equation \ref{eq:gain-comp}.
 
                     % Expression of knee control in terms of 
                     \begin{equation}
@@ -391,27 +392,47 @@
                         \label{eq:gain-comp}
                     \end{equation}
 
-                When it comes to implementing this function on an analog equation, the non-linear relation makes it harder.
+                When the knee width is set to zero, the smooth knee is identical to the hard knee.
             
             \subsection{Level Detector}
-                The level detector is responsible for providing a representation of the loudness of the input signal. There are a two main ways including the peak detector and the RMS detector to generate the control voltage based on the input. The level detector is employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain. This smooth adjustment in gain results from the specified attack and release durations. Fine-tuning these durations is essential for the compressor's effectiveness, as the selection of these parameters frequently correlates with the occurrence of undesirable distortions.
+                The level detector is responsible for providing a representation of the loudness of the input signal, where its output function is mainly based on operating time-varying (often introducing delay) functions on the input. Two main implementations of the level detectors are commonly seen in compressors including the peak detector and the RMS detector. Such detectors are employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain based on the topology later discussed in \ref{reference to section}.
                 
                 \subsubsection{Peak Reading Detector}
-                    The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified time-frame, ensuring the dynamic range of audio material is maintained without clipping. The peak detector operates by identifying the highest level of the signal, which is essential for applications like limiting and peak normalization to prevent distortion. While highly effective at preserving signal integrity, its primary disadvantage lies in its potential to cause overly conservative gain reduction in compressors, as it responds to transient peaks that may not reflect the overall perceived loudness. This can sometimes result in less natural compression effects, as it disregards the human ear's time-based perception of loudness.
-                
-                \subsubsection{Average Reading Detector}
-                    
+                    The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified time-frame, ensuring the dynamic range of audio material is maintained without clipping. Furthermore, a variant on the standard peak detector, called a quasi-peak detector, are often used in the context of compressors, where attack and release time can be incorporated by incorporating a charge-storing component. (as shown in figure \ref{fig:lossy-peak-det})
+
+                        % Lossy peak detector diagram
+                        \noindent
+                        \begin{minipage}{\linewidth}
+                            \centering
+                            \begin{circuitikz}[scale = 0.8, transform shape]
+                                \draw
+                                (0,0) node[left]{Input}
+                                (0,0) to[empty diode, *-] (2,0)
+                                to[R, l_=$R_A$] (4,0)
+                                to[short] (5,0)
+                                to[C, l_=$C$] (5,-2) node[sground]{}
+                                (5,0) to[short] (6.5,0)
+                                to[R, l_=$R_R$] (6.5,-2) node[sground]{}
+                                (6.5,0) to[short, -*] (7.5,0)
+                                (7.5,0) node[right]{Output}
+                                ;
+                            \end{circuitikz}
+                            \captionof{figure}{Circuit diagram of a lossy peak detector.}
+                            \label{fig:lossy-peak-det}
+                        \end{minipage}
+
+                    \noindent In the configuration shown, the diode allows current to flow in one direction, charging the capacitor to the peak voltage level of the input signal. The resistor provides a discharge path for the capacitor, setting the time it takes for the detector to respond to changes in signal level. This arrangement captures and holds the maximum amplitude of the signal momentarily, allowing the compressor circuitry to adjust the gain based on this peak value.\par
+
+                    While highly effective at preserving signal transients, its primary disadvantage lies in its potential to cause overly conservative gain reduction in compressors, as it responds to transient peaks that may not reflect the overall perceived loudness. This can sometimes result in less natural compression effects, as it disregards the human ear's time-based perception of loudness.                    
                 
                 \subsubsection{RMS Reading Detector}
-                    Referencing the Root Mean Squared (RMS) value of the input signal may be useful when we would like to set the compression reference based on the smoothed average of the input signal. Unlike peak detection, 
-                    
-                    The RMS value in its continuous form expression is defined by the following function. \cite{aes-that-rms}
+                    Utilizing the root mean square (RMS) value of the input signal is particularly helpful when you would like to reference the average power of the input signal, which is more aligned with how our ears perceive loudness. Unlike peak detection, the output of the RMS reading detector has an affect on the both transient and amplitude of the output, where its continuous form expression is defined by equation \cite{aes-that-rms}.
                     
                         \begin{equation}
                             V_{RMS} = \lim_{T \to \infty}\sqrt{\frac{1}{T}\int_{-\infty}^{T} v_{in}^2(t) \,\cdot dt}
                         \end{equation}
                     
-                    Utilizing the RMS value of the input signal is particularly helpful when you would like to utilize a reference that is more aligned with how our ears perceive loudness. RMS detection ensures more consistent levels throughout the audio material, as it's less influenced by short transient peaks, and is suited for providing a more musical and natural-sounding compression.
+                    \noindent RMS detection ensures more consistent levels throughout the audio material, as it's less influenced by short transient peaks, and is suited for providing a more musical and natural-sounding compression. Additionally, the RMS detector offers an edge over the average reading detector particularly in their ability to provide true measurements of power across a variety of waveform types as highlighted in table \ref{table:ave-err}.
 
                         % RMS and peak comparison table
                         \begin{table*}[!th]
@@ -430,13 +451,13 @@
                             \end{tabularx}
                             \caption{Error introduced by an average responding circuit when measuring common waveforms.}
                             \label{table:ave-err}
-                        \end{table*}
+                        \end{table*}    
 
-                \subsubsection{Crest Factor}
-                    The crest factor, representing the ratio of a signal's peak amplitude to its root mean square (RMS) value, plays a important role in the control of dynamic range compression. By quantifying the extent of peaky-ness in audio signals, it offers a valuable metric for adjusting the gain in dynamic range compressors, aligning more closely with the intricacies of human auditory perception. This parameter is particularly crucial in scenarios where maintaining audio fidelity is paramount, as it helps in tailoring the compression process to preserve the natural dynamics of the source material while preventing auditory fatigue in listeners.\par
-                    In practical terms, the crest factor informs the design of gain control circuitry by facilitating a more discerning response to varying signal characteristics. It enables the compression algorithm to dynamically adjust its parameters, such as threshold and ratio, based on the signal's momentary peaky-ness rather than its average level or instantaneous peaks alone. This approach ensures a more balanced and transparent output, minimizing the risk of over-compression, which can lead to a loss of dynamic range and a 'flattened' audio experience.
+                    Furthermore, utilizing the RMS value may falls short compared to peak reading detectors as it may not react quickly enough to fast input transient, which can lead to unwanted distortion or clipping if the peaks are not adequately managed. Additionally, due to the function of RMS value being based on an indeterminate time ranging from the $t=0$ to $\infty$, it comes at a cost of abandoning control parameters such as attack and release in the context of implementing compressors.
 
-            \subsection{Gain Level Controller}
+                    \columnbreak
+
+            \subsection{Output Amplifier}
                 The gain control in a dynamic range compressor can be achieved by using a voltage controlled amplifier (VCA) where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release).
         
         \section[Optimizing Compressor Performance]{Optimizing Compressor\\Performance}
@@ -444,7 +465,6 @@
             \subsection{Compressor Topology Selection}
                 Both feedback and feed-forward topologies offer unique benefits and are chosen based on the specific requirements of the application. However, due to the inherent setback seen in feed-forward topology where it requires an infinite level of amplification to achieve perfect limiting, (as discussed in section \ref{sec:comp-tpgy}) the feedback variant remains a more precise and popular option in comparison.\par
                 Furthermore, the feed-forward topology can be further sub-categorized based on the placement of the level detector and the transient shaping component.
-
 
                 \textcolor{blue}{According to a paper by Giannoulis et al. \cite{drc-tutorial}, "the detector directly smooths the control voltage instead of the input signal." Since the control voltage automatically returns back to zero when the compressor does not attenuate, we do not depend on a fixed threshold, and a smooth release envelope is guaranteed. The trajectory now behaves exponentially in the decibel domain, which means that the release time is independent of the actual amount of compression. This behavior seems smoother to the ear since the human sense of hearing is roughly logarithmic.} 
 
@@ -537,8 +557,8 @@
                     \end{figure*}
     
             \subsection{Logarithmic Domain Signal Processing}
-                The perception of loudness by the human ear exhibits a relation that can be mapped to the logarithmic scale. This characteristic implies that as sound levels increase, our sensitivity to changes in volume diminishes. Leveraging this understanding, by converting the input signal into a logarithmic scale before it is processed by a compressor, we enable the compressor to modulate functions such as knee width compression in alignment with the perceived loudness rather than the signal's linear amplitude. This approach ensures that compression adjustments correlate more closely with human auditory perception. Furthermore, the benefits of logarithmic domain signal processing is not limited to only this.\par
-                In the realm of transient shaping, circuits like the peak detection circuit utilize the natural delay inherent in the charging and discharging cycles of a capacitor. The behavior of this cycle, especially its amplitude within a RC network, is mathematically described by equation \ref{eq:lin-cap-discharge}.
+                The perception of loudness by the human ear exhibits a relation that can be mapped to the logarithmic scale. This characteristic implies that as sound levels increase, our sensitivity to changes in volume diminishes. Leveraging this understanding, by converting the input signal into a logarithmic scale before it is processed by a compressor, we enable the compressor to modulate functions such as knee width compression in alignment with the perceived loudness rather than the signal's linear amplitude. This approach ensures that compression adjustments correlate more closely with human auditory perception.\par
+                Furthermore, in the realm of transient shaping, circuits like the peak detection circuit utilize the natural delay inherent in the charging and discharging cycles of a capacitor. The behavior of this cycle, especially its amplitude within a RC network, is mathematically described by equation \ref{eq:lin-cap-discharge}.
                 
                     \begin{equation}\label{eq:lin-cap-discharge}
                         V(t) = V_0 e^{-\frac{t}{RC}}
@@ -611,39 +631,39 @@
                 \subsubsection{Pseudo-Logarithmic Approximator}
                     A multistage logarithmic amplifier utilizes a cascaded arrangement of amplifier stages as shown in figure \ref{fig:multi-stage-log-amp}, where each stage is designed to operate over a specific portion of the input signal's dynamic range. The principle behind this configuration is to divide the wide input dynamic range into smaller segments, with each segment being processed by a different amplifier stage. Each stage typically consists of a linear amplifier followed by a compression mechanism, which together produce an output proportional to the logarithm of the input signal within its designated segment.\cite{ad-high-freq-log-amp}\par
 
-                    % diagram of multi-stage log amplifier 
-                    \noindent
-                    \begin{minipage}{\linewidth}
-                        \centering
-                        \begin{circuitikz}[scale = 0.745, transform shape]
+                        % diagram of multi-stage log amplifier 
+                        \noindent
+                        \begin{minipage}{\linewidth}
+                            \centering
+                            \begin{circuitikz}[scale = 0.745, transform shape]
 
-                            \node (input) at (0,0) {Input};
-                            
-                            \node[buffer, right = of input] (gain1) {$A_1$};
-                            \node[buffer, right = of gain1] (gain2) {$A_2$};
-                            \node[buffer, right = of gain2] (gain3) {$A_3$};
-                            \node[buffer, right = of gain3] (gain4) {$A_4$};
-                            \node[draw, circle, below right = of gain4, minimum size=15pt] (sum) {$\sum$};
-                            \node[right = of sum] (output) {Output};
+                                \node (input) at (0,0) {Input};
+                                
+                                \node[buffer, right = of input] (gain1) {$A_1$};
+                                \node[buffer, right = of gain1] (gain2) {$A_2$};
+                                \node[buffer, right = of gain2] (gain3) {$A_3$};
+                                \node[buffer, right = of gain3] (gain4) {$A_4$};
+                                \node[draw, circle, below right = of gain4, minimum size=15pt] (sum) {$\sum$};
+                                \node[right = of sum] (output) {Output};
 
-                            \draw[line] (input.east) -- (gain1.west);
-                            \draw[line] (gain1.east) -- (gain2.west) node[midway](split1) {};
-                            \draw[line] (gain2.east) -- (gain3.west) node[midway](split2) {};
-                            \draw[line] (gain3.east) -- (gain4.west) node[midway](split3) {};
+                                \draw[line] (input.east) -- (gain1.west);
+                                \draw[line] (gain1.east) -- (gain2.west) node[midway](split1) {};
+                                \draw[line] (gain2.east) -- (gain3.west) node[midway](split2) {};
+                                \draw[line] (gain3.east) -- (gain4.west) node[midway](split3) {};
 
-                            \draw[line] (split1.center) |- (sum.225);
-                            \draw[line] (split2.center) |- (sum.west);
-                            \draw[line] (split3.center) |- (sum.135);
-                            \draw[line] (gain4.east) -| (sum.north);
+                                \draw[line] (split1.center) |- (sum.225);
+                                \draw[line] (split2.center) |- (sum.west);
+                                \draw[line] (split3.center) |- (sum.135);
+                                \draw[line] (gain4.east) -| (sum.north);
 
-                            \draw[line] (sum.east) -- (output.west);
-                            
-                        \end{circuitikz}
-                        \captionof{figure}{Multistage log amplifier architecture}
-                        \label{fig:multi-stage-log-amp}
-                    \end{minipage}
+                                \draw[line] (sum.east) -- (output.west);
+                                
+                            \end{circuitikz}
+                            \captionof{figure}{Multistage log amplifier architecture}
+                            \label{fig:multi-stage-log-amp}
+                        \end{minipage}
 
-                    The overall output is a piecewise linear approximation of the logarithmic function across the input range, achieved by summing the outputs of all stages. This approach allows for a broader dynamic range and better approximation accuracy than a single-stage logarithmic amplifier. The multistage design compensates for the non-idealities of individual components and enables the circuit to emulate a more accurate logarithmic response by effectively stitching together the outputs of each stage. Calibration and careful design considerations are essential to ensure continuity and minimize discontinuities between the segments handled by different stages.
+                    \par The overall output is a piecewise linear approximation of the logarithmic function across the input range, achieved by summing the outputs of all stages. This approach allows for a broader dynamic range and better approximation accuracy than a single-stage logarithmic amplifier. The multistage design compensates for the non-idealities of individual components and enables the circuit to emulate a more accurate logarithmic response by effectively stitching together the outputs of each stage. Calibration and careful design considerations are essential to ensure continuity and minimize discontinuities between the segments handled by different stages.
 
             \subsection{Gain Computer}
 
@@ -797,27 +817,6 @@
                     \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}
 
                     A simple peak detection circuit can be implemented using a diode, a capacitor, and a resistor.
-                    
-                        % Lossy peak detector diagram
-                        \noindent
-                        \begin{minipage}{\linewidth}
-                            \centering
-                            \begin{circuitikz}[scale = 0.8, transform shape]
-                                \draw
-                                (0,0) node[left]{Input}
-                                (0,0) to[empty diode, *-] (2,0)
-                                to[R, l_=$R_A$] (4,0)
-                                to[short] (5,0)
-                                to[C, l_=$C$] (5,-2) node[sground]{}
-                                (5,0) to[short] (6.5,0)
-                                to[R, l_=$R_R$] (6.5,-2) node[sground]{}
-                                (6.5,0) to[short, -*] (7.5,0)
-                                (7.5,0) node[right]{Output}
-                                ;
-                            \end{circuitikz}
-                            \captionof{figure}{Circuit diagram of a lossy peak detector.}
-                            \label{fig:lossy-peak-det}
-                        \end{minipage}
 
                 \subsubsection{True RMS Detector}
                     A traditional approach to reading the average of an input signal was to implement a      
@@ -1098,7 +1097,7 @@
             \footnotesize{
                 \textit{\textbf{Figure \ref{fig:comp-trans}:}} \href{https://en.wikipedia.org/wiki/Dynamic_range_compression#/media/File:Audio_Compression_Attack_and_Release-2.svg}{The attack and release phases in a compressor}, Iainf (Own work) via Wikipedia, License: \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC BY-SA 3.0 DEED}\\
 
-                \noindent\textit{\textbf{Figures \ref{fig:FBR}, \ref{fig:TCPLA}:} Schematic diagrams are generated using Altium Designer.}\\
+                \noindent\textit{\textbf{Figures \ref{fig:htan-circuit}, \ref{fig:FBR}, \ref{fig:TCPLA}, \ref{fig:peak-det-circuit}:} Schematic diagrams are generated using Altium Designer.}\\
             }
 
         \section*{Resources}
@@ -1343,7 +1342,18 @@
     \newpage
 
     \section*{Addendum}
+
+        % Hyperbolic tangent function cell
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{htan-circuit.png}
+            \captionof{figure}{Circuit implementation of the hyperbolic tangent function cell.}
+            \label{fig:htan-circuit}
+        \end{figure}
         
+        \vspace{-5ex}
+
         % Full bridge rectifier
         \noindent
         \begin{figure}[h]
@@ -1364,23 +1374,17 @@
             \label{fig:TCPLA}
         \end{figure}
 
+        \vspace{-5ex}
+
         % 
         \noindent
         \begin{figure}[h]
             \centering
             \includegraphics[width=\textwidth]{peak-detector.png}
             \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
-            \label{fig:TCPLA}
+            \label{fig:peak-det-circuit}
         \end{figure}
 
-        \vspace{-5ex}
-
-        \noindent
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=\textwidth]{negative-clipper.png}
-            \captionof{figure}{Circuit diagram of a negative clipper}
-            \label{fig:TCPLA}
-        \end{figure}
+        
 
 \end{document}
