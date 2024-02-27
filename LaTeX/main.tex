@@ -236,21 +236,16 @@
             \paragraph{Side-chain}
                 Side-chain is a control that is established by passing an additional audio signals to trigger the compression on the main input signal. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
-        \section{Compressor Topology}
+        \section{Compressor Topology} \label{sec:comp-tpgy}
             The method of attenuation seen in a compressor could be generally categorized into two topologies including feedback and feed-forward compression. Both topologies can be expressed as a relation described in equation \ref{eq:gen-topology}, where the output, $y_{dB}$, is given by the sum of input, $x_{dB}$, and the gain/attenuation level, $g_{dB}$, which is determined by the gain computer. 
 
                 \begin{equation} \label{eq:gen-topology}
                     y_{dB}(t)=x_{dB}(t)+g_{dB}(t)
                 \end{equation}
             
-            \noindent The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression. Other topologies in addition to the feedback and feed-forward type is discussed and is examined as well.
+            \noindent The topology of an compressor fundamentally influences the performance, sound characteristics, and functionality of dynamic range compressors. Such influences can be seen in factors such as how quickly a compressor reacts to signal changes, the smoothness or aggressiveness of compression.
 
-            \subsection{Feedback Compression}  
-                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure \ref{fig:feedback}. This configuration allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. The inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range. However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as theoretically, an unlimited negative amplification is required by the gain computer, which is not possible when implemented in physical hardware.
-                
-                    \begin{equation} \label{eq:feedback}
-                        g_{dB}=(1-R)(y_{dB}-T)
-                    \end{equation}
+            \subsection{Feedback Compression}
 
                     % Feedback diagram
                     \noindent
@@ -294,20 +289,32 @@
                             \draw[-stealth] (split1.center) |- (gain.east) node[right = of gain](split2){};
                             \draw[-stealth] (split2) -| +(0,0.8) -| (sum2.north);
                             
+                            \node[below left = 0.5 and 0.05 of sum1.center] (g_db) {$g_{dB}$};
+
                         \end{tikzpicture}
                             
                         \captionof{figure}{Control diagram of a feedback compressor topology.}
                         \label{fig:feedback}
                     
                     \end{minipage}
+
+                In a feedback topology, the output signal is looped back and used as part of the signal processing chain as shown in figure \ref{fig:feedback}. Assuming a hard knee with no attack or release, equation \ref{eq:feedback} models the output of the gain computer in such topology.\par
+
+                    \begin{equation} \label{eq:feedback}
+                        g_{dB}=(1-R)(y_{dB}-T)
+                    \end{equation}
+                
+                In general, the feedback topology allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. Furthermore, the inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range.\par
+                However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as it would require an infinite negative amplification applied at the gain computer stage.
                 
             \subsection{Feed-forward Compression}
-                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (As seen in figure \ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal.
-                Both implementations of feedback and feed-forward compressors involves a common process: subtracting the threshold from the signal level, which is sourced either from the input in feed-forward designs or the output in feedback designs. This is followed by half-wave rectification and then multiplication of the result by a slope variable, which varies between feed-forward and feedback compressor designs.
+                As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (As seen in figure \ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal.\par
 
-                \begin{equation}\label{eq:feedforward}
-                    g_{dB}=(\frac{1}{R}-1)(x_{dB}-T)
-                \end{equation}
+                    \begin{equation}\label{eq:feedforward}
+                        g_{dB}=(\frac{1}{R}-1)(x_{dB}-T)
+                    \end{equation}
+                    
+                The gain computer's output, $g_{dB}$ can be modeled by the equation \ref{eq:feedforward}, and when in comparison to equation \ref{eq:feedback}, it can be shown that the inherent issue seen in requiring an infinite amplification is no longer a problem as the slope for the limiter simply reaches a slope of -1. 
 
                     % Feed-forward diagram
                     \noindent
@@ -360,7 +367,10 @@
                     \end{minipage}
 
             \subsection{Additional Topologies}
+                In addition to feed-forward and feedback topologies, there are other variations in where an compressor can be implemented. Such topology often includes\dots
 
+                \subsubsection{Upward compression}
+        
                 \subsubsection{Broadband, Multiband, and Spectral Compression}
                     Broadband compressors operate by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy. Differing from this approach, a multiband compressor divides the entire frequency spectrum into multiple bands that can be independently adjusted. This allows for more flexible and significant compression of a single track or instrumental group without the risk of making extensive changes too audibly noticeable. On another front, spectral compressors continuously analyze the spectral distribution of a signal's energy and compare it with target values determined by intelligent algorithms. When the system identifies that certain frequency areas are being overemphasized, thus disproportionately affecting the compression, those areas are automatically subjected to more intense compression. This nuanced handling of frequency-specific dynamics facilitates a more tailored and effective compression strategy.
 
@@ -387,7 +397,7 @@
                 The level detector is responsible for providing a representation of the loudness of the input signal. There are a two main ways including the peak detector and the RMS detector to generate the control voltage based on the input. The level detector is employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain. This smooth adjustment in gain results from the specified attack and release durations. Fine-tuning these durations is essential for the compressor's effectiveness, as the selection of these parameters frequently correlates with the occurrence of undesirable distortions.
                 
                 \subsubsection{Peak Reading Detector}
-                    The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified timeframe, ensuring the dynamic range of audio material is maintained without clipping. The peak detector operates by identifying the highest level of the signal, which is essential for applications like limiting and peak normalization to prevent distortion. While highly effective at preserving signal integrity, its primary disadvantage lies in its potential to cause overly conservative gain reduction in compressors, as it responds to transient peaks that may not reflect the overall perceived loudness. This can sometimes result in less natural compression effects, as it disregards the human ear's time-based perception of loudness.
+                    The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified time-frame, ensuring the dynamic range of audio material is maintained without clipping. The peak detector operates by identifying the highest level of the signal, which is essential for applications like limiting and peak normalization to prevent distortion. While highly effective at preserving signal integrity, its primary disadvantage lies in its potential to cause overly conservative gain reduction in compressors, as it responds to transient peaks that may not reflect the overall perceived loudness. This can sometimes result in less natural compression effects, as it disregards the human ear's time-based perception of loudness.
                 
                 \subsubsection{Average Reading Detector}
                     
@@ -423,8 +433,8 @@
                         \end{table*}
 
                 \subsubsection{Crest Factor}
-                    The crest factor, representing the ratio of a signal's peak amplitude to its root mean square (RMS) value, plays a important role in the control of dynamic range compression. By quantifying the extent of peakiness in audio signals, it offers a valuable metric for adjusting the gain in dynamic range compressors, aligning more closely with the intricacies of human auditory perception. This parameter is particularly crucial in scenarios where maintaining audio fidelity is paramount, as it helps in tailoring the compression process to preserve the natural dynamics of the source material while preventing auditory fatigue in listeners.\par
-                    In practical terms, the crest factor informs the design of gain control circuitry by facilitating a more discerning response to varying signal characteristics. It enables the compression algorithm to dynamically adjust its parameters, such as threshold and ratio, based on the signal's momentary peakiness rather than its average level or instantaneous peaks alone. This approach ensures a more balanced and transparent output, minimizing the risk of overcompression, which can lead to a loss of dynamic range and a 'flattened' audio experience.
+                    The crest factor, representing the ratio of a signal's peak amplitude to its root mean square (RMS) value, plays a important role in the control of dynamic range compression. By quantifying the extent of peaky-ness in audio signals, it offers a valuable metric for adjusting the gain in dynamic range compressors, aligning more closely with the intricacies of human auditory perception. This parameter is particularly crucial in scenarios where maintaining audio fidelity is paramount, as it helps in tailoring the compression process to preserve the natural dynamics of the source material while preventing auditory fatigue in listeners.\par
+                    In practical terms, the crest factor informs the design of gain control circuitry by facilitating a more discerning response to varying signal characteristics. It enables the compression algorithm to dynamically adjust its parameters, such as threshold and ratio, based on the signal's momentary peaky-ness rather than its average level or instantaneous peaks alone. This approach ensures a more balanced and transparent output, minimizing the risk of over-compression, which can lead to a loss of dynamic range and a 'flattened' audio experience.
 
             \subsection{Gain Level Controller}
                 The gain control in a dynamic range compressor can be achieved by using a voltage controlled amplifier (VCA) where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release).
@@ -432,6 +442,17 @@
         \section[Optimizing Compressor Performance]{Optimizing Compressor\\Performance}
             
             \subsection{Compressor Topology Selection}
+                Both feedback and feed-forward topologies offer unique benefits and are chosen based on the specific requirements of the application. However, due to the inherent setback seen in feed-forward topology where it requires an infinite level of amplification to achieve perfect limiting, (as discussed in section \ref{sec:comp-tpgy}) the feedback variant remains a more precise and popular option in comparison.\par
+                Furthermore, the feed-forward topology can be further sub-categorized based on the placement of the level detector and the transient shaping component.
+
+
+                \textcolor{blue}{According to a paper by Giannoulis et al. \cite{drc-tutorial}, "the detector directly smooths the control voltage instead of the input signal." Since the control voltage automatically returns back to zero when the compressor does not attenuate, we do not depend on a fixed threshold, and a smooth release envelope is guaranteed. The trajectory now behaves exponentially in the decibel domain, which means that the release time is independent of the actual amount of compression. This behavior seems smoother to the ear since the human sense of hearing is roughly logarithmic.} 
+
+                    \begin{eqnarray}
+                        x_G(t)&=&20log_{10}|x(t)|\\
+                        x_L(t)&=&x_G(t)-y_G(t)\\
+                        x_{dB}(t)&=&-y_L(t)
+                    \end{eqnarray}
 
                     % Control diagram of compressor to be implemented
                     \begin{figure*}[!th]
@@ -514,17 +535,6 @@
                         \label{fig:drc-diagram}
 
                     \end{figure*}
-
-                \textcolor{blue}{Taking in account of various components that consists the gain computer, which has been discussed in the previous section, different types of variation can be further implemented to...}
-
-                Both feedback and feedforward topologies offer unique benefits and are chosen based on the specific requirements of the application. The selection between feedback and feedforward topology affects aspects such as the compressor's responsiveness, the ease of implementation, and the overall sound character. Integrating these topologies within the broader system design, taking into account control systems theory and practical implementation considerations, is essential for optimizing the compressor's performance and achieving the desired dynamic range control.\par
-                \textcolor{blue}{According to a paper by Giannoulis et al. \cite{drc-tutorial}, "the detector directly smooths the control voltage instead of the input signal." Since the control voltage automatically returns back to zero when the compressor does not attenuate, we do not depend on a fixed threshold, and a smooth release envelope is guaranteed. The trajectory now behaves exponentially in the decibel domain, which means that the release time is independent of the actual amount of compression. This behavior seems smoother to the ear since the human sense of hearing is roughly logarithmic.} 
-
-                    \begin{eqnarray}
-                        x_G(t)&=&20log_{10}|x(t)|\\
-                        x_L(t)&=&x_G(t)-y_G(t)\\
-                        x_{dB}(t)&=&-y_L(t)
-                    \end{eqnarray}
     
             \subsection{Logarithmic Domain Signal Processing}
                 The perception of loudness by the human ear exhibits a relation that can be mapped to the logarithmic scale. This characteristic implies that as sound levels increase, our sensitivity to changes in volume diminishes. Leveraging this understanding, by converting the input signal into a logarithmic scale before it is processed by a compressor, we enable the compressor to modulate functions such as knee width compression in alignment with the perceived loudness rather than the signal's linear amplitude. This approach ensures that compression adjustments correlate more closely with human auditory perception. Furthermore, the benefits of logarithmic domain signal processing is not limited to only this.\par
@@ -1092,7 +1102,7 @@
             }
 
         \section*{Resources}
-            All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
+            All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}, including...
             
             \begin{itemize}
                 \item \href{https://github.com/ShaunG-RU/DRC-Project/blob/main/Altium/DRC.pdf}{Latest updated schematic} of the implemented analog compressor.
@@ -1343,6 +1353,8 @@
             \label{fig:FBR}
         \end{figure}
 
+        \vspace{-5ex}
+
         % Temperature compensated precision log amplifier
         \noindent
         \begin{figure}[h]
@@ -1360,6 +1372,8 @@
             \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
             \label{fig:TCPLA}
         \end{figure}
+
+        \vspace{-5ex}
 
         \noindent
         \begin{figure}[h]
