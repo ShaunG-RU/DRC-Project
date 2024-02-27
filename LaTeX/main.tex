@@ -579,24 +579,31 @@
                 
             \subsection[Mixed Use of Peak Detection and RMS Level]{Mixed Use of Peak Detection\\and RMS Level} \label{sect:rms-peak-mix}
                 To mitigate the inherent drawbacks identified in peak and RMS (Root Mean Square) level detectors, as discussed in section \ref{sect:lvl-det}, a unique and a previously un-explored method can be adopted by allowing the user to dynamically mix the two signals. While there are commercial hardware compressors that allow the user to toggle its level detector either between peak and RMS detectors, we can further modify this feature by incorporating a cross-fading mixer. The cross-fading mixer enables a fluid transition between RMS level detection and peak level detection, letting the user determine its respective mixing ratio.\par
-                Furthermore, by implementing a feature that automatically adjusts the mix between the peak and RMS level, governed by a PID controller that keeps the crest factor constant over a moving average signal, the compressor is able to automatically scale its attack and release values based on the input audio material.
+                Furthermore, by implementing a feature that automatically adjusts the mix between the peak and RMS levels, governed by a algorithm (such as a PID controller) that maintains a constant crest factor over a moving average signal, the compressor is able to automatically scale its attack and release values based on the input audio material. This dynamic adjustment is made possible by continuously analyzing the crest factor, defined as the ratio of the peak level to the RMS level of a signal, represented by the equation:
+
+                    \begin{equation}
+                        \text{Crest Factor} = \frac{\text{Peak Level}}{\text{RMS Level}}
+                    \end{equation}
+
+                \noindent Furthermore, employing the crest factor enables users to assess the equilibrium between transient and sustained components in a mix, offering insights on compression strategy.                
             
         \section{Implementation of Discrete Circuit Compressor Components}
+            The following section progresses with an in-depth exploration of compressor components, further extending the discussion to transition into their implementation through the use of analog circuits.
 
             \subsection{Precision Full-Wave Rectifier}
-                A precision full-wave rectifier seen in figure \ref{fig:FBR} [in addendum] has been implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
+                A precision full-wave rectifier seen in figure \ref{fig:FBR} [in addendum] can be implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
                 
             \subsection{Logarithmic Amplifiers} \label{sect:log-amp}
                 Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications. Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 megahertz. This design is often utilized with sensors in control systems due to its frequency limitations.\par
 
                 \subsubsection{Transimpedance Log Amplifier}
-                    The voltage drop across a silicon diode exhibits a relationship that is proportional to the logarithm of the current flowing through when it's integrated into the feedback loop of an inverting operational amplifier. 
+                    The voltage drop across a bipolar junction transistor exhibits a relationship that is proportional to the logarithm of the current flowing through when it's integrated into the feedback loop of an inverting operational amplifier. 
                     
                         \begin{equation}
                             V_{out}=\frac{kT}{q}ln(\frac{I_{in}}{I_{es}})
                         \end{equation}
                     
-                    \noindent The configuration as shown in figure \ref{} enables the output voltage of the op-amp to be directly proportional to the logarithm of the input current, where it effectively transforms the op-amp into a logarithmic amplifier.\par
+                    \noindent The configuration as shown in figure \ref{fig:trans-log-amp} enables the output voltage of the op-amp to be directly proportional to the logarithm of the input current, where it effectively transforms the op-amp into a logarithmic amplifier.\par
 
                     % diagram of transimpedance log amplifier
                     \noindent
@@ -669,9 +676,7 @@
 
             \subsection{Gain Computer}
 
-                \subsubsection{Precision Clipper}
-
-                    % Feed-forward diagram
+                    % Gain computer diagram
                     \noindent
                     \begin{minipage}{\linewidth}
 
@@ -698,6 +703,9 @@
                         \label{fig:knee-control}
 
                     \end{minipage}
+
+                \subsubsection{Precision Clipper}
+                    \textcolor{blue}{Here we will discuss various implementation of analog clipping circuit, such as one shown in \ref{fig:neg-clipper}.}
 
                 \subsubsection{Analog Multiplier and Dividers}
                     Leveraging the log and anti-log amplifiers explored in section \ref{sect:log-amp}, we possess the ability to execute both multiplication and division operations within the realm of analog circuitry. This unique capability stems from the fundamental principles of logarithmic computations, where the addition of two numbers in the logarithmic domain equates to their multiplication in the standard numerical domain once the anti-logarithm (exponential function) is applied to the resultant value as shown in equation \ref{eq:log-domain-add}.
@@ -761,9 +769,8 @@
                     \noindent Using this feature of mathematical operations, the circuit can be arranged in a way so that we can implement the output of an gain detector described in equation \ref{eq:gain-comp}.
 
                 \subsubsection{Hyperbolic Tangent Function Cell}
-
-                    A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair coupled with an input of an operational amplifier.
-                    As the input range of the function cell is determined by the voltage range of the active region given by the base input of the bipolar junction transistor, it is crucial to normalize the amplitude of the signal entering the cell beforehand. As seen in figure \ref{plot:tanh}, the gated nature of BJT input allows us to create unique characteristics in the definition of how the knee control is applied.
+                    In place of using log dividers and multipliers to achieve the quadratic knee compression characteristics described by equation \ref{eq:gain-comp}, a unique method of utilizing a hyperbolic tangent function can be implemented.\par
+                    A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair coupled with an input of an operational amplifier. As the input range of the function cell is determined by the voltage range of the active region given by the base input of the bipolar junction transistor, it is crucial to normalize the amplitude of the signal entering the cell beforehand. As seen in figure \ref{plot:tanh}, the gated nature of BJT input allows us to create unique characteristics in the definition of how the knee control is applied.
 
                         % tanh plot
                         \noindent
@@ -827,7 +834,7 @@
                     To implement the mechanism discussed in section \ref{sect:rms-peak-mix}, a crossfader can be implemented to allow an continuous 
 
             \subsection{Voltage Controlled Amplifier}
-                A voltage controlled amplifier allows an 
+                \textcolor{blue}{Here, I will discuss various implementations of gain control methods, such as variable-mu, optical, FET-based, diode-bridge, and VCA.}
                 
 
         \section{Physical Compressor Hardware}
@@ -839,7 +846,6 @@
                 \subsubsection{Power Delivery}
                     Audio domain applications gain advantages from utilizing a bipolar bias power supply. Such a supply enhances the effective utilization of IC's full dynamic range, facilitates rail-to-rail amplification, shields the analog signal from ground noise, and delivers numerous additional benefits. \cite{ti-3-v-rails}\par
                     To receive the benefits of a split rail power supply while reducing unwanted noise and ripples seen in common topologies such as a simple switching mode power supply, a topology where a inverting charge pump is combined with an linear \& low-dropout (LDO) regulator. (shown in figure)\par
-                    \textcolor{blue}{Discuss the difference in LDO over traditional power regulation sources. The DRC circuit will require a DC power source that will be converted to several voltage domains (+12V, -12V, 5V).}
                     
                     % Power management scheme diagram
                     \noindent
@@ -1090,10 +1096,9 @@
                 \textcolor{blue}{Go over components used in the circuit and why that specific part was picked. Discuss how component selection could affect thermal characteristics, linearity, bandwidth etc.}
         
         \section{Discussion}
-            \textcolor{blue}{The discussion goes here.}
-
-        \section*{Acknowledgments}
-            \textcolor{blue}{Put acknowledgments here. }
+            In our analysis of dynamic range compression in analog audio signal processing, we've delved into the nuanced interplay between theory and practice, revealing the depth and complexity inherent in designing effective compressors. The choice between feedback and feed-forward topologies is not merely technical; it's an artistic decision that reflects the intended sonic character and functionality of the compressor. Feedback designs, with their smooth and musical compression, contrast with the precision and control offered by feed-forward configurations, showcasing the diverse palette of sounds that engineers and musicians can draw from.\par
+            The discussion around the relevance of analog techniques in a predominantly digital era underscores a significant finding: the unique character and warmth that analog compressors impart to audio signals are irreplaceable and highly valued. This characteristic warmth, a result of complex analog non-linearities, remains a sought-after quality, emphasizing the importance of analog technology in achieving certain sonic aesthetics.\par 
+            Looking ahead, the potential for integrating analog and digital methodologies opens new avenues for innovation. The development of hybrid systems that combine the tactile richness of analog with the versatility and precision of digital control points to a future where the boundaries of audio processing are continually expanded. This evolving landscape not only challenges us to rethink our approaches to dynamic range compression but also to consider how these technologies can enhance musical expression and creativity.
 
         \section*{Attribution}
             \footnotesize{
@@ -1111,7 +1116,66 @@
 
         \printbibliography
 
+    \end{multicols*}
+
+    \newpage
+
+    \section*{Addendum}
+
+        % Hyperbolic tangent function cell
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{htan-circuit.png}
+            \captionof{figure}{Circuit implementation of the hyperbolic tangent function cell.}
+            \label{fig:htan-circuit}
+        \end{figure}
         
+        \vspace{-5ex}
+
+        % negative clipper
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{negative-clipper.png}
+            \captionof{figure}{Circuit diagram of a precision clipper.}
+            \label{fig:neg-clipper}
+        \end{figure}
+
+        \vspace{-5ex}
+
+        % Full bridge rectifier
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{FBR-circuit.png}
+            \captionof{figure}{Circuit diagram of a precision full bridge rectifier implemented in the design.}
+            \label{fig:FBR}
+        \end{figure}
+
+        \vspace{-5ex}
+
+        % Temperature compensated precision log amplifier
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{temp-comp-log-amp.png}
+            \captionof{figure}{Circuit diagram of a temperature compensated precision log amplifier.}
+            \label{fig:TCPLA}
+        \end{figure}
+
+        \vspace{-5ex}
+
+        % 
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{peak-detector.png}
+            \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
+            \label{fig:peak-det-circuit}
+        \end{figure}
+
+    \newpage
 
         \iffalse
         % Diagram showing signal through the gain calculator.Takes time to compile due to increased accuracy of the plot.
@@ -1338,55 +1402,5 @@
 
         \end{figure*}
         \fi
-
-    \end{multicols*}
-
-    \newpage
-
-    \section*{Addendum}
-
-        % Hyperbolic tangent function cell
-        \noindent
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=\textwidth]{htan-circuit.png}
-            \captionof{figure}{Circuit implementation of the hyperbolic tangent function cell.}
-            \label{fig:htan-circuit}
-        \end{figure}
-        
-        \vspace{-5ex}
-
-        % Full bridge rectifier
-        \noindent
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=\textwidth]{FBR-circuit.png}
-            \captionof{figure}{Circuit diagram of a precision full bridge rectifier implemented in the design.}
-            \label{fig:FBR}
-        \end{figure}
-
-        \vspace{-5ex}
-
-        % Temperature compensated precision log amplifier
-        \noindent
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=\textwidth]{temp-comp-log-amp.png}
-            \captionof{figure}{Circuit diagram of a temperature compensated precision log amplifier.}
-            \label{fig:TCPLA}
-        \end{figure}
-
-        \vspace{-5ex}
-
-        % 
-        \noindent
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=\textwidth]{peak-detector.png}
-            \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
-            \label{fig:peak-det-circuit}
-        \end{figure}
-
-        
 
 \end{document}
