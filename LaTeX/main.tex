@@ -362,9 +362,7 @@
             \subsection{Additional Topologies}
 
                 \subsubsection{Broadband, Multiband, and Spectral Compression}
-                    Broadband compressors works on the dynamics of an input signal across the entire frequency range. When a set threshold is exceeded, the entire signal is affected, regardless of which frequencies the energy of the signal is composed of.\par
-                    In a multiband compressor, the entire frequency spectrum is split up into multiple bands that can be parametrized independently from each other. Hence, you are able to compress a single track or instrumental group much more flexible and heavier, without having to fear that bigger changes end up being audible too much.\par
-                    With a spectral compressor, the spectral distribution of energy of a signal is analyzed continuously and compared with target values that have been calculated by intelligent algorithms. When the system recognizes that certain frequency areas are currently being overemphasized and therefore affect the compression disproportionately, these areas are automatically compressed more.
+                    Broadband compressors operate by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy. Differing from this approach, a multiband compressor divides the entire frequency spectrum into multiple bands that can be independently adjusted. This allows for more flexible and significant compression of a single track or instrumental group without the risk of making extensive changes too audibly noticeable. On another front, spectral compressors continuously analyze the spectral distribution of a signal's energy and compare it with target values determined by intelligent algorithms. When the system identifies that certain frequency areas are being overemphasized, thus disproportionately affecting the compression, those areas are automatically subjected to more intense compression. This nuanced handling of frequency-specific dynamics facilitates a more tailored and effective compression strategy.
 
         \section[Functional Building Blocks of a Compressor]{Functional Building Blocks\\of a Compressor}
             The inner components that consist the functionality of a compressor can be mainly separated into three building blocks, where the gain controller takes the role of applying the attenuation to the input, and the threshold level detector and the input volume detector consisting the gain computer is responsible of controlling the gain controller by generating the signal to control it.
@@ -386,34 +384,15 @@
                 When it comes to implementing this function on an analog equation, the non-linear relation makes it harder.
             
             \subsection{Level Detector}
-                The level detector is responsible for providing a representation of the loudness of the input signal. There are a two main ways including the peak detector and the RMS detector to generate the control voltage based on the input.
-
-                \subsubsection{Average Reading Level}
+                The level detector is responsible for providing a representation of the loudness of the input signal. There are a two main ways including the peak detector and the RMS detector to generate the control voltage based on the input. The level detector is employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain. This smooth adjustment in gain results from the specified attack and release durations. Fine-tuning these durations is essential for the compressor's effectiveness, as the selection of these parameters frequently correlates with the occurrence of undesirable distortions.
                 
-                    A simple peak detection circuit can be implemented using a diode, a capacitor, and a resistor.
+                \subsubsection{Peak Reading Detector}
+                    The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified timeframe, ensuring the dynamic range of audio material is maintained without clipping. The peak detector operates by identifying the highest level of the signal, which is essential for applications like limiting and peak normalization to prevent distortion. While highly effective at preserving signal integrity, its primary disadvantage lies in its potential to cause overly conservative gain reduction in compressors, as it responds to transient peaks that may not reflect the overall perceived loudness. This can sometimes result in less natural compression effects, as it disregards the human ear's time-based perception of loudness.
+                
+                \subsubsection{Average Reading Detector}
                     
-                    % Lossy peak detector diagram
-                    \noindent
-                    \begin{minipage}{\linewidth}
-                        \centering
-                        \begin{circuitikz}[scale = 0.8, transform shape]
-                            \draw
-                            (0,0) node[left]{Input}
-                            (0,0) to[empty diode, *-] (2,0)
-                            to[R, l_=$R_A$] (4,0)
-                            to[short] (5,0)
-                            to[C, l_=$C$] (5,-2) node[sground]{}
-                            (5,0) to[short] (6.5,0)
-                            to[R, l_=$R_R$] (6.5,-2) node[sground]{}
-                            (6.5,0) to[short, -*] (7.5,0)
-                            (7.5,0) node[right]{Output}
-                            ;
-                        \end{circuitikz}
-                        \captionof{figure}{Circuit diagram of a lossy peak detector.}
-                        \label{fig:lossy-peak-det}
-                    \end{minipage}
-                    
-                \subsubsection{RMS Level Referencing}
+                
+                \subsubsection{RMS Reading Detector}
                     Referencing the Root Mean Squared (RMS) value of the input signal may be useful when we would like to set the compression reference based on the smoothed average of the input signal. Unlike peak detection, 
                     
                     The RMS value in its continuous form expression is defined by the following function. \cite{aes-that-rms}
@@ -577,11 +556,50 @@
                 
             \subsection{Logarithmic Amplifiers} \label{sect:log-amp}
                 Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications. Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 megahertz. This design is often utilized with sensors in control systems due to its frequency limitations.\par
-                In the context of analog compressors,  
+
+                \subsubsection{Transimpedance Log Amplifier}
+                    The voltage drop across a silicon diode exhibits a relationship that is proportional to the logarithm of the current flowing through when it's integrated into the feedback loop of an inverting operational amplifier. 
+                    
+                        \begin{equation}
+                            V_{out}=\frac{kT}{q}ln(\frac{I_{in}}{I_{es}})
+                        \end{equation}
+                    
+                    \noindent The configuration as shown in figure \ref{} enables the output voltage of the op-amp to be directly proportional to the logarithm of the input current, where it effectively transforms the op-amp into a logarithmic amplifier.\par
+
+                    % diagram of transimpedance log amplifier
+                    \noindent
+                    \begin{minipage}{\linewidth}
+                        \centering
+                        \begin{circuitikz} 
+
+                            \draw (0,0) node[op amp, scale=0.5] (opamp) {}
+                            (opamp.+) node[left] {}
+                            (opamp.-) node[left] {};
+                            
+                            % NPN transistor
+                            \draw (opamp.-) 
+                            to[short] ++(0,2) node[npn, rotate=90, anchor=C] (npn) {}
+                            (npn.B) to[short] ++(0,0.3) node[ground] {};
+
+                            \draw (opamp.-) to[R] ++(-2,0) node[left] {$x$};
+
+                            
+                            % Feedback to inverting input
+                            \draw (npn.E) |- (opamp.out) to[short] ++(1,0) node[right] {$log(x)$};
+                            
+                            % Non-inverting input to ground
+                            \draw (opamp.+) to[short] ++(0,-0.1) node[ground] {};
+
+                        \end{circuitikz}
+                        \captionof{figure}{Transimpedance log amplifier}
+                        \label{fig:trans-log-amp}
+                    \end{minipage}
+
+                    However, the transimpedance logarithmic amplifier faces challenges such as temperature-dependent performance, limitation to unipolar signals, and variable/limited bandwidth, which affects precision and efficiency. 
+                    Furthermore, in a situation combining multiple amplifiers for both logarithmic and anti-logarithmic computations on a single chip, temperature-induced inconsistencies are mitigated. Such cases can be emulated when working with discrete circuit components where opamps, transistors, and resistors that are part of the log amp consists from a single package, or in close proximity to match its ambient temperature. \cite{ad-log-amp-basics}
 
                 \subsubsection{Pseudo-Logarithmic Approximator}
                     A multistage logarithmic amplifier utilizes a cascaded arrangement of amplifier stages as shown in figure \ref{fig:multi-stage-log-amp}, where each stage is designed to operate over a specific portion of the input signal's dynamic range. The principle behind this configuration is to divide the wide input dynamic range into smaller segments, with each segment being processed by a different amplifier stage. Each stage typically consists of a linear amplifier followed by a compression mechanism, which together produce an output proportional to the logarithm of the input signal within its designated segment.\cite{ad-high-freq-log-amp}\par
-                    The overall output is a piecewise linear approximation of the logarithmic function across the input range, achieved by summing the outputs of all stages. This approach allows for a broader dynamic range and better approximation accuracy than a single-stage logarithmic amplifier. The multistage design compensates for the non-idealities of individual components and enables the circuit to emulate a more accurate logarithmic response by effectively stitching together the outputs of each stage. Calibration and careful design considerations are essential to ensure continuity and minimize discontinuities between the segments handled by different stages.
 
                     % diagram of multi-stage log amplifier 
                     \noindent
@@ -615,43 +633,7 @@
                         \label{fig:multi-stage-log-amp}
                     \end{minipage}
 
-                \subsubsection{Transimpedance Log Amplifier}
-
-                    % diagram of transimpedance log amplifier
-                    \noindent
-                    \begin{minipage}{\linewidth}
-                        \centering
-                        \begin{circuitikz} 
-
-                            \draw (0,0) node[op amp, scale=0.5] (opamp) {}
-                            (opamp.+) node[left] {}
-                            (opamp.-) node[left] {};
-                            
-                            % NPN transistor
-                            \draw (opamp.-) 
-                            to[short] ++(0,2) node[npn, rotate=90, anchor=C] (npn) {}
-                            (npn.B) to[short] ++(0,0.3) node[ground] {};
-
-                            \draw (opamp.-) to[R] ++(-2,0) node[left] {$x$};
-
-                            
-                            % Feedback to inverting input
-                            \draw (npn.E) |- (opamp.out) to[short] ++(1,0) node[right] {$log(x)$};
-                            
-                            % Non-inverting input to ground
-                            \draw (opamp.+) to[short] ++(0,-0.1) node[ground] {};
-
-                        \end{circuitikz}
-                        \captionof{figure}{Transimpedance log amplifier}
-                        \label{fig:trans-log-amp}
-                    \end{minipage}
-
-                    \begin{equation}
-                        V_{out}=\frac{kT}{q}ln(\frac{I_{in}}{I_{es}})
-                    \end{equation}
-
-                \textcolor{blue}{Explain the difference in exponential decay vs linear decay and its significance. I plan to implement the circuit that appears in an application report \cite{ti-log-conv} by Texas Instruments.}
-                \textcolor{blue}{This circuit reverts the signal that has converted to dB scale back into the linear domain signal.}
+                    The overall output is a piecewise linear approximation of the logarithmic function across the input range, achieved by summing the outputs of all stages. This approach allows for a broader dynamic range and better approximation accuracy than a single-stage logarithmic amplifier. The multistage design compensates for the non-idealities of individual components and enables the circuit to emulate a more accurate logarithmic response by effectively stitching together the outputs of each stage. Calibration and careful design considerations are essential to ensure continuity and minimize discontinuities between the segments handled by different stages.
 
             \subsection{Gain Computer}
 
@@ -802,12 +784,33 @@
             \subsection{Transient Shaping}
 
                 \subsubsection{Precision Peak Detector}
-                    \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}  
+                    \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}
+
+                    A simple peak detection circuit can be implemented using a diode, a capacitor, and a resistor.
+                    
+                        % Lossy peak detector diagram
+                        \noindent
+                        \begin{minipage}{\linewidth}
+                            \centering
+                            \begin{circuitikz}[scale = 0.8, transform shape]
+                                \draw
+                                (0,0) node[left]{Input}
+                                (0,0) to[empty diode, *-] (2,0)
+                                to[R, l_=$R_A$] (4,0)
+                                to[short] (5,0)
+                                to[C, l_=$C$] (5,-2) node[sground]{}
+                                (5,0) to[short] (6.5,0)
+                                to[R, l_=$R_R$] (6.5,-2) node[sground]{}
+                                (6.5,0) to[short, -*] (7.5,0)
+                                (7.5,0) node[right]{Output}
+                                ;
+                            \end{circuitikz}
+                            \captionof{figure}{Circuit diagram of a lossy peak detector.}
+                            \label{fig:lossy-peak-det}
+                        \end{minipage}
 
                 \subsubsection{True RMS Detector}
-                    A traditional approach to reading the average of an input signal was to implement a 
-                    
-                    For the RMS detector, an LTC1966 true-RMS detector by Analog Devices will be used. The LTC1966 utilizes a $\Delta\Sigma$ computational technology patented by Analog Devices, which makes it simpler to use, more accurate, requires less power, and is dramatically more flexible than the conventional log anti-log RMS-to-DC converters.                 
+                    A traditional approach to reading the average of an input signal was to implement a      
                     
                 \subsubsection{Crossfader}
                     To implement the mechanism discussed in section \ref{sect:rms-peak-mix}, a crossfader can be implemented to allow an continuous 
@@ -1075,19 +1078,18 @@
             \subsection{Component Selection}
                 \textcolor{blue}{Go over components used in the circuit and why that specific part was picked. Discuss how component selection could affect thermal characteristics, linearity, bandwidth etc.}
         
-        \section{Performance Evaluation}
-
-            \subsection{Simulation}
-                \textcolor{blue}{Talk about simulation methodology and results here. Note if changes are made to the circuit retroactively at this stage of the design process.}
-
-            \subsection{Measurements}
-                \textcolor{red}{Here, I discuss the performance of the physical compressor hardware and draw attention between the real-life and simulated values. This section will be redacted in case the hardware can't be put together before the deadline of this paper, which is March 8th, 2024.}
-        
         \section{Discussion}
             \textcolor{blue}{The discussion goes here.}
 
         \section*{Acknowledgments}
             \textcolor{blue}{Put acknowledgments here. }
+
+        \section*{Attribution}
+            \footnotesize{
+                \textit{\textbf{Figure \ref{fig:comp-trans}:}} \href{https://en.wikipedia.org/wiki/Dynamic_range_compression#/media/File:Audio_Compression_Attack_and_Release-2.svg}{The attack and release phases in a compressor}, Iainf (Own work) via Wikipedia, License: \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC BY-SA 3.0 DEED}\\
+
+                \noindent\textit{\textbf{Figures \ref{fig:FBR}, \ref{fig:TCPLA}:} Schematic diagrams are generated using Altium Designer.}\\
+            }
 
         \section*{Resources}
             All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}.
@@ -1098,12 +1100,7 @@
 
         \printbibliography
 
-        \section*{Attribution}
-            \footnotesize{
-                \textit{\textbf{Figure \ref{fig:comp-trans}:}} \href{https://en.wikipedia.org/wiki/Dynamic_range_compression#/media/File:Audio_Compression_Attack_and_Release-2.svg}{The attack and release phases in a compressor}, Iainf (Own work) via Wikipedia, License: \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC BY-SA 3.0 DEED}\\
-
-                \noindent\textit{\textbf{Figures \ref{fig:FBR}, \ref{fig:TCPLA}:} Schematic diagrams are generated using Altium Designer.}\\
-            }
+        
 
         \iffalse
         % Diagram showing signal through the gain calculator.Takes time to compile due to increased accuracy of the plot.
@@ -1352,6 +1349,23 @@
             \centering
             \includegraphics[width=\textwidth]{temp-comp-log-amp.png}
             \captionof{figure}{Circuit diagram of a temperature compensated precision log amplifier.}
+            \label{fig:TCPLA}
+        \end{figure}
+
+        % 
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{peak-detector.png}
+            \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
+            \label{fig:TCPLA}
+        \end{figure}
+
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{negative-clipper.png}
+            \captionof{figure}{Circuit diagram of a negative clipper}
             \label{fig:TCPLA}
         \end{figure}
 
