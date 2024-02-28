@@ -198,7 +198,7 @@
         \end{minipage}
 
         \section{Compressor Control Parameters}
-            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and Side-chain; each defining a specific aspect of the compressor's behavior and its impact on the input signal.
+            A compressor's functionality is governed by its control parameters, which allow users to configure the effect's characteristics. Key parameters include Threshold, Ratio, Attack, Release, Knee, and make-up gain; each defining a specific aspect of the compressor's behavior and its impact on the input signal.
 
             \paragraph{Threshold}
                 The threshold parameter sets the level at which the compressor starts to act. Measured in decibels (dB), it defines the point above which the input signal will be compressed. When the signal level exceeds this threshold, compression is applied.
@@ -222,13 +222,13 @@
                 \end{minipage}\\
 
             \paragraph{Attack}
-                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the 'attack phase' section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural character.
+                The attack time determines the time it takes for the compressor to start acting after the signal exceeds the threshold, as seen in the 'attack phase' section of figure \ref{fig:comp-trans}. It is usually measured in milliseconds (ms). A fast attack time means the compressor responds quickly to level changes, suitable for controlling sharp, transient sounds. A slower attack allows some of the initial transients through, preserving more of the signal's natural characteristics.
 
             \paragraph{Release}
                 Release time refers to the duration needed for the compressor to cease its action once the signal dips below the threshold. (as illustrated in Figure \ref{fig:comp-ratio}) This period, also expressed in milliseconds, influences the sound's dynamics; a brief release time halts the compression swiftly, preserving the natural dynamics but may lead to noticeable fluctuations in volume. Conversely, an extended release time ensures a more seamless and gradual transition back to the uncompressed sound.
 
             \paragraph{Knee}
-                The knee parameter (measured in dB in reference to the difference in the lower and upper bound of the knee) precisely controls the compressor's transition from the uncompressed to the compressed state by adjusting its width, which measures how the compression ratio is applied at around the threshold level. A 'hard knee' setting indicates an immediate application of the compression ratio as soon as the signal crosses the threshold, resulting in an abrupt transition. Conversely, a 'soft knee' setting allows for a gradual introduction of compression as the signal nears and surpasses the threshold, due to a wider knee width. The control over the knee width allows the user to achieve a smoother, more natural compression effect, making the transition less noticeable and more musically pleasing.
+                The knee parameter precisely controls the compressor's transition from the uncompressed to the compressed state by adjusting its width, which measures how the compression ratio is applied at around the threshold level. (Where the width is measured in dB in reference to the difference in the lower and upper bound of the knee) A 'hard knee' setting indicates an immediate application of the compression ratio as soon as the signal crosses the threshold, resulting in an abrupt transition. Conversely, a 'soft knee' setting allows for a gradual introduction of compression as the signal nears and surpasses the threshold, due to a wider knee width. The control over the knee width allows the user to achieve a smoother, more natural compression effect, making the transition less noticeable.
             
             \paragraph{Make-Up Gain}
                 Make-up gain is a control parameter that allows you to increase the output level of the signal after it has gone through compression. This feature helps the user with adjusting the output to a consistent volume level after the signal has undergone attenuation by the compression algorithm. In the context of a song or an audio program, it allows the user to enhances the presence of the material.
@@ -250,7 +250,7 @@
                     \end{equation}
                 
                 \noindent In general, the feedback topology allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. Furthermore, the inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range.\par
-                However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as it would require an infinite negative amplification applied at the gain computer stage.
+                However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as it would require an infinite negative amplification applied at the gain computer stage to achieve equal infinite negative attenuation.
 
                 \vspace{2ex}
 
@@ -371,25 +371,25 @@
                 \vspace{2ex}
 
             \subsection{Additional Topologies}
-                In addition to feed-forward and feedback topologies, there are other methods in where additional features in a compressor can be implemented. This section discuss such additions seen in commercial compressors, such as external side-chaining, multiband compression, and upward compression.
+                In addition to feed-forward and feedback topologies, there are other methods in where additional features in a compressor can be implemented. This section discuss features commonly seen in commercial compressors, such as external side-chaining, multiband compression, and upward compression.
 
                 \subsubsection{External Side-chain}
                     Side-chain is a control that is established by passing an additional audio signals to trigger the compression on the main input signal. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
                 \subsubsection{Upward compression}
-                    Upward compression, in contrast to traditional downward compression described in previous sections, operates by selectively amplifying signals below the threshold, effectively minimizing dynamic range by elevating softer sounds closer to the level of louder ones. This process is critical for enhancing audibility of low-level details without affecting the peaks, making it invaluable for audio applications requiring nuanced sound enhancement, such as in music production and sound design.\par
+                    Upward compression, in contrast to traditional downward compression described in previous sections, operates by selectively amplifying signals below the threshold, effectively minimizing dynamic range by elevating softer sounds closer to the level of louder ones. This process is critical for enhancing audibility of low-level details without affecting the peaks, making it valuable for audio applications requiring nuanced sound enhancement, such as in music production and sound design.\par
                     Key to its application is the careful management of the noise floor, as amplification of quiet signals inherently raises background noise levels. Thus, upward compression requires a delicate balance between enhancing desired signals and controlling unwanted noise, utilizing advanced digital algorithms for RMS or peak detection to maintain audio fidelity.
         
                 \subsubsection{Broadband, Multiband, and Spectral Compression}
-                    Broadband compressors operate by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy.\par
+                    Broadband compressors are the most standard type of compressor discussed in the previous sections where its operates by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy.\par
                     Differing from this approach, a multiband compressor divides the entire frequency spectrum into multiple bands that can be independently adjusted. This allows for more flexible and significant compression of a single track or instrumental group without the risk of making extensive changes too audibly noticeable. \par
                     On another front, spectral compressors continuously analyze the spectral distribution of a signal's energy and compare it with target values determined by intelligent algorithms. When the system identifies that certain frequency areas are being overemphasized, thus disproportionately affecting the compression, those areas are automatically subjected to more intense compression.
 
         \section[Functional Building Blocks of a Compressor]{Functional Building Blocks\\of a Compressor}
-            The inner components that consist the functionality of a compressor can be mainly separated into three sections, including the output amplifier, compression calculator, and the level detector. Where the output amplifier takes the role of directly adjusting the amplitude of the compressor, the compression calculator and the level detector (consisting the gain computer) is responsible of generating the control signal for the output amplifier that varies the attenuation level. Within this section, various implementation of output amplifier, compression calculator, and the level detector is examined.
+            The inner components that consist the functionality of a compressor can be mainly separated into three sections, including the compression calculator, level detector, and the output amplifier. Where the output amplifier takes the role of directly adjusting the amplitude of the compressor, the compression calculator and the level detector (consisting the gain computer) is responsible of generating the control signal for the output amplifier that varies the attenuation level. Within this section, various implementation of output amplifier, compression calculator, and the level detector is examined.
 
             \subsection{Compression Calculator}
-                The gain computer is responsible for generating the control voltage, which dictates the gain reduction level applied to the signal. This stage is based on determining amplitude-based parameters of the attenuation generated by the gain computer, including Threshold (T), Ratio (R), and Knee Width (W), where its relation in regards to the output of the gain computer is described by a set of bounded equations shown in equation \ref{eq:gain-comp}.
+                The gain computer is responsible for generating the control voltage, which dictates the gain reduction level applied to the signal. This stage is based on determining amplitude-based parameters of the control signal generated by the gain computer, including Threshold (T), Ratio (R), and Knee Width (W), where its relation in regards to the output of the gain computer is described by a set of bounded equations shown in equation \ref{eq:gain-comp}.
 
                     % Expression of knee control in terms of 
                     \begin{equation}
@@ -435,32 +435,36 @@
 
                     \vspace{2ex}
 
-                    \noindent In the configuration shown, the diode allows current to flow in one direction, charging the capacitor to the peak voltage level of the input signal. The resistor provides a discharge path for the capacitor, setting the time it takes for the detector to respond to changes in signal level. This arrangement captures and holds the maximum amplitude of the signal momentarily, allowing the compressor circuitry to adjust the gain based on this peak value.\par
+                    \noindent In the configuration shown above, the diode allows current to flow in one direction, charging the capacitor to the peak voltage level of the input signal. The resistor provides a discharge path for the capacitor, setting the time it takes for the detector to respond to changes in signal level. This arrangement captures and holds the maximum amplitude of the signal momentarily, allowing the compressor circuitry to adjust the gain based on this peak value.\par
 
                     While highly effective at preserving signal transients, its primary disadvantage lies in its potential to cause overly conservative gain reduction in compressors, as it responds to transient peaks that may not reflect the overall perceived loudness. This can sometimes result in less natural compression effects, as it disregards the human ear's time-based perception of loudness.  
                     
+
+                % RMS and peak comparison table
+                \begin{table*}[!th]
+                    \centering
+                    \begin{tabularx}{\textwidth}{|l*{4}{|C}|}
+                        \hline
+                        Type of Waveform (1V Peak Amplitude) & Crest Factor $(V_{Peak}/V_{RMS})$ & RMS value & Average Reading Circuit & Error (\%) \\ \hline
+                        Undistorted Sine Wave & 1.414 & 0.707 & 0.707 & 0 \\    \hline
+                        Gaussian Noise & 3 & 0.333 & 0.295 & -11.4 \\   \hline
+                        Undistorted Triangle Wave & 1.73 & 0.577 & 0.555 & -3.8 \\   \hline
+                        Gaussian Noise (98\% of Peaks<1V) & 3 & 0.333 & 0.295 & -11.4 \\    \hline
+                        Rectangular & 2 & 0.5 & 0.278 & -44 \\    \hline
+                        Pulse Train & 10 & 0.1 & 0.011 & -89 \\    \hline
+                        SCR Waveform (50\% Duty) & 2 & 0.354 & 0.354 & -28 \\    \hline
+                        SCR Waveform (25\% Duty) & 4.7 & 0.212 & 0.150 & -30 \\    \hline
+                    \end{tabularx}
+                    \caption{Error introduced by an average responding circuit when measuring common waveforms.}
+                    \label{table:ave-err}
+                \end{table*}
+
                 \subsubsection{Average Reading Detector}
                     The average reading detector is designed to capture the mean amplitude of an input signal over a defined time period, providing a measure that reflects the general level of the signal rather than its peak values. This approach is particularly useful in applications where the overall energy of the signal, rather than its instantaneous peaks is of interest.\par
                     The operation of an average reading detector can be implemented by simply removing the rectification stage (diode) where the signal is directly passed through a low-pass filter to obtain a DC level proportional to the average amplitude of the input waveform. 
                 
-                        % RMS and peak comparison table
-                        \begin{table*}[!th]
-                            \centering
-                            \begin{tabularx}{\textwidth}{|l*{4}{|C}|}
-                                \hline
-                                Type of Waveform (1V Peak Amplitude) & Crest Factor $(V_{Peak}/V_{RMS})$ & RMS value & Average Reading Circuit & Error (\%) \\ \hline
-                                Undistorted Sine Wave & 1.414 & 0.707 & 0.707 & 0 \\    \hline
-                                Gaussian Noise & 3 & 0.333 & 0.295 & -11.4 \\   \hline
-                                Undistorted Triangle Wave & 1.73 & 0.577 & 0.555 & -3.8 \\   \hline
-                                Gaussian Noise (98\% of Peaks<1V) & 3 & 0.333 & 0.295 & -11.4 \\    \hline
-                                Rectangular & 2 & 0.5 & 0.278 & -44 \\    \hline
-                                Pulse Train & 10 & 0.1 & 0.011 & -89 \\    \hline
-                                SCR Waveform (50\% Duty) & 2 & 0.354 & 0.354 & -28 \\    \hline
-                                SCR Waveform (25\% Duty) & 4.7 & 0.212 & 0.150 & -30 \\    \hline
-                            \end{tabularx}
-                            \caption{Error introduced by an average responding circuit when measuring common waveforms.}
-                            \label{table:ave-err}
-                        \end{table*} 
+
+                    
 
                 \subsubsection{RMS Reading Detector}
                     Utilizing the root mean square (RMS) value of the input signal is particularly helpful when you would like to reference the average power of the input signal, which is more aligned with how our ears perceive loudness. Unlike peak detection, the output of the RMS reading detector has an affect on the both transient and amplitude of the output, where its continuous form expression is defined by equation \cite{aes-that-rms}.
@@ -471,11 +475,15 @@
                     
                     \noindent RMS detection ensures more consistent levels throughout the audio material, as it's less influenced by short transient peaks, and is suited for providing a more musical and natural-sounding compression. Additionally, the RMS detector offers an edge over the average reading detector particularly in their ability to provide true measurements of power across a variety of waveform types as highlighted in table \ref{table:ave-err}.   
 
-                    Furthermore, utilizing the RMS value may falls short compared to peak reading detectors as it may not react quickly enough to fast input transient, which can lead to unwanted distortion or clipping if the peaks are not adequately managed. Additionally, due to the function of RMS value being based on an indeterminate time ranging from the $t=0$ to $\infty$, it comes at a cost of abandoning control parameters such as attack and release in the context of implementing compressors.
+                     
+
+                    Furthermore, utilizing the RMS value may falls short compared to peak reading detectors as it may not react quickly enough to fast input transient, which can lead to unwanted distortion or clipping if the peaks are not adequately managed. Additionally, due to the function of RMS value being based on an indeterminate time ranging from the $t=0$ to $\infty$, it comes at a cost of having less control over parameters such as attack and release in the context of implementing compressors.
 
             \subsection{Output Amplifier}
                 The gain control in a dynamic range compressor can be achieved by using a components such as a voltage controlled amplifier (VCA),  where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release). Furthermore, counterparts to the VCA that can be used in analog circuits are later discussed in section \ref{sect:vca}.
         
+
+
         \section[Optimizing Compressor Performance]{Optimizing Compressor\\Performance}
             
             \subsection{Compressor Topology Selection}
@@ -579,7 +587,7 @@
                         V(t) = V_0 e^{-\frac{t}{RC}}
                     \end{equation}    
                 
-                \noindent This equation delineates how the voltage across a capacitor decays exponentially over time. However, this exponential decay can result in a perceptually unnatural volume decrease, an artifact that could potentially detract from the desired sound quality. By transitioning the signal processing to a logarithmic domain, we can mitigate this issue. Transforming the original equation into a logarithmic form yields equation \ref{eq:log-cap-discharge}.
+                \noindent This equation shows how the voltage across a capacitor decays exponentially over time. The exponential decay that is exhibited by this characteristics can result in a perceptually unnatural volume decrease, and an artifact that could potentially detract from the desired sound quality. By transitioning the signal processing to a logarithmic domain, we can mitigate this issue. Transforming the original equation into a logarithmic form yields equation \ref{eq:log-cap-discharge}.
                 
                     \begin{equation}\label{eq:log-cap-discharge}
                         \ln(V(t)) = \ln(V_0) - \frac{t}{RC}
@@ -607,6 +615,122 @@
 
             \subsection{Precision Full-Wave Rectifier}
                 A precision full-wave rectifier seen in figure \ref{fig:FBR} can be implemented to output the absolute value of the input signal. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, it can safely be fed into the log amplifier.
+
+                                % diagram of detailed gain computer components
+                                \begin{figure*}[!t]
+                                    \centering
+                                    \resizebox{\textwidth}{!}{%
+                                        \begin{tikzpicture}
+                                                
+                                            \node (input) at (0,0) {$x_{lin}(t)$};
+                                                                    
+                                            % Blocks
+                                            \node[block, right = 0.5 of input] (abs) {Full Wave\\Rectifier};
+                                            \node[block, right = 0.5 of abs] (log) {dB\\Conv.};
+                
+                                            % Sum1 shape
+                                            \node[draw,
+                                                circle,
+                                                minimum size=0.6cm,
+                                                below right = 0.5 and 1.5 of log,
+                                            ] (-t+w/2) {};
+                                            \draw (-t+w/2.north east) -- (-t+w/2.south west) (-t+w/2.north west) -- (-t+w/2.south east);
+                                            \node[left=-1pt] at (-t+w/2.center){\tiny $+$};
+                                            \node[below] at (-t+w/2.center){\tiny $-$};
+                
+                                            % Sum1 shape
+                                            \node[draw,
+                                                circle,
+                                                minimum size=0.6cm,
+                                                above = 1.7 of -t+w/2,
+                                            ] (-t) {};
+                                            \draw (-t.north east) -- (-t.south west) (-t.north west) -- (-t.south east);
+                                            \node[left=-1pt] at (-t.center){\tiny $+$};
+                                            \node[below] at (-t.center){\tiny $-$};
+                                    
+                                            \node[block, right = of -t+w/2] (clip2) {Neg. Clipper\\$y\geq 0$};
+                                            \node[block, above = 1.5 of clip2] (clip1) {Neg. Clipper\\$y\geq 0$};
+                                            
+                                            \node[block, right = of clip2] (clip3) {Pos. Clipper\\$y\leq W$};
+                                            
+                                            \node[block, right = of clip3] (log2) {Log.\\Amp};
+                                            \node[block, above = 1.5 of log2] (log1) {Log.\\Amp};
+                
+                                            % Sum1 shape
+                                            \node[draw,
+                                                circle,
+                                                minimum size=0.6cm,
+                                                right = of log1,
+                                            ] (sum1) {};
+                                            \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
+                                            \node[left=-1pt] at (sum1.center){\tiny $+$};
+                                            \node[below] at (sum1.center){\tiny $+$};
+                
+                                            % Sum2 shape
+                                            \node[draw,
+                                                circle,
+                                                minimum size=0.6cm,
+                                                right = of log2,
+                                            ] (sum2) {};
+                                            \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
+                                            \node[left=-1pt] at (sum2.center){\tiny $+$};
+                                            \node[below] at (sum2.center){\tiny $+$};
+                
+                                            \node[block, right = of sum1] (exp1) {Exp.\\Amp};
+                                            \node[block, right = of sum2] (exp2) {Exp.\\Amp};
+                
+                                            % Sum2 shape
+                                            \node[draw,
+                                                circle,
+                                                minimum size=0.6cm,
+                                                above right = 0.5 and 1 of exp2,
+                                            ] (sum3) {};
+                                            \draw (sum3.north east) -- (sum3.south west) (sum3.north west) -- (sum3.south east);
+                                            \node[above] at (sum3.center){\tiny $+$};
+                                            \node[below] at (sum3.center){\tiny $+$};
+                
+                                            \node[block, right = of sum3] (peak) {Pseudo\\Peak Detector};
+                                            \node[right = of peak] (out) {$g_{dB}(t)$};
+                
+                                            \draw[-stealth] (input.east) -- (abs.west);
+                                            \draw[-stealth] (abs.east) -- (log.west);
+                                            \draw[-stealth] (log.south) |- (-t+w/2.west);
+                                            \draw[-stealth] (log.north) |- (-t.west);
+                                            \draw[-stealth] (-t.east) -- (clip1.west);
+                                            \draw[-stealth] (-t+w/2.east) -- (clip2.west);
+                                            \draw[-stealth] (clip2.east) -- (clip3.west);
+                                            \draw[-stealth] (clip1.east) -- (log1.west);
+                                            \draw[-stealth] (clip3.east) -- (log2.west);
+                                            \draw[-stealth] (log1.east) -- (sum1.west);
+                                            \draw[-stealth] (log2.east) -- (sum2.west);
+                                            \draw[-stealth] (sum1.east) -- (exp1.west);
+                                            \draw[-stealth] (sum2.east) -- (exp2.west);
+                                            \draw[-stealth] (exp1.east) -| (sum3.north);
+                                            \draw[-stealth] (exp2.east) -| (sum3.south);
+                                            \draw[-stealth] (sum3.east) -- (peak.west);
+                                            \draw[-stealth] (peak.east) -- (out.west);
+                
+                                            % Arrows and labels for M
+                                            \node[below = 0.5cm of -t+w/2] (m1) {$\{-T+\frac{W}{2}\}$};
+                                            \draw[densely dotted] (m1) -- (-t+w/2.south);
+                
+                                            \node[below = 0.5cm of -t] (m2) {$-T$};
+                                            \draw[densely dotted] (m2) -- (-t.south);
+                
+                                            \node[below = 0.5cm of sum1] (m3) {$-\ln(R)$};
+                                            \draw[densely dotted] (m3) -- (sum1.south);
+                
+                                            \node[below = 0.5cm of sum2] (m4) {$\{\ln(\frac{1}{R}-1)-\ln(2W)\}$};
+                                            \draw[densely dotted] (m4) -- (sum2.south);
+                                            
+                
+                                        \end{tikzpicture}%
+                                    }
+                
+                                    \caption{System diagram showing inner components of the gain computer being proposed.}
+                                    \label{fig:gain-comp-diagram}
+                
+                                \end{figure*}
                 
             \subsection{Logarithmic Amplifiers} \label{sect:log-amp}
                 Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications. Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 Mhz. This design is often utilized with sensors in control systems due to its frequency limitations.\par
@@ -619,6 +743,8 @@
                         \end{equation}
                     
                     \noindent The configuration as shown in figure \ref{fig:trans-log-amp} enables the output voltage of the op-amp to be directly proportional to the logarithm of the input current, where it effectively transforms the op-amp into a logarithmic amplifier.\par
+
+                    \vspace{2ex}
 
                     % diagram of transimpedance log amplifier
                     \noindent
@@ -648,8 +774,12 @@
                         \label{fig:trans-log-amp}
                     \end{minipage}
 
+                    \vspace{2ex}
+
                     While this configuration of log amplifier can achieve an dynamic range of around -120dB, \cite{ad-log-amp-basics} the transimpedance logarithmic amplifier faces challenges such as temperature-dependent performance, limitation to unipolar signals, and variable/limited bandwidth, which affects precision and efficiency. 
                     Furthermore, in a situation combining multiple amplifiers for both logarithmic and anti-logarithmic computations on a single chip, temperature-induced inconsistencies are mitigated. Such cases can be emulated when working with discrete circuit components where opamps, transistors, and resistors that are part of the log amp consists from a single package, or in close proximity to match its ambient temperature. \cite{ad-log-amp-basics}
+
+
 
                 \subsubsection{Pseudo-Logarithmic Approximator}
                     A multistage logarithmic amplifier utilizes a cascaded arrangement of amplifier stages as shown in figure \ref{fig:multi-stage-log-amp}, where each stage is designed to operate over a specific portion of the input signal's dynamic range. The principle behind this configuration is to divide the wide input dynamic range into smaller segments, with each segment being processed by a different amplifier stage. Each stage typically consists of a linear amplifier followed by a compression mechanism, which together produce an output proportional to the logarithm of the input signal within its designated segment.\cite{ad-high-freq-log-amp}\par
@@ -692,121 +822,7 @@
 
                     \par The overall output is a piecewise linear approximation of the logarithmic function across the input range, achieved by summing the outputs of all stages. This approach allows for a broader dynamic range and better approximation accuracy than a single-stage logarithmic amplifier. The multistage design compensates for the non-idealities of individual components and enables the circuit to emulate a more accurate logarithmic response by effectively stitching together the outputs of each stage. Calibration and careful design considerations are essential to ensure continuity and minimize discontinuities between the segments handled by different stages.
 
-            % diagram of detailed gain computer components
-            \begin{figure*}[!t]
-                \centering
-                \resizebox{\textwidth}{!}{%
-                    \begin{tikzpicture}
-                            
-                        \node (input) at (0,0) {$x_{lin}(t)$};
-                                                
-                        % Blocks
-                        \node[block, right = 0.5 of input] (abs) {Full Wave\\Rectifier};
-                        \node[block, right = 0.5 of abs] (log) {dB\\Conv.};
-        
-                        % Sum1 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            below right = 0.5 and 1.5 of log,
-                        ] (-t+w/2) {};
-                        \draw (-t+w/2.north east) -- (-t+w/2.south west) (-t+w/2.north west) -- (-t+w/2.south east);
-                        \node[left=-1pt] at (-t+w/2.center){\tiny $+$};
-                        \node[below] at (-t+w/2.center){\tiny $-$};
-        
-                        % Sum1 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            above = 1.7 of -t+w/2,
-                        ] (-t) {};
-                        \draw (-t.north east) -- (-t.south west) (-t.north west) -- (-t.south east);
-                        \node[left=-1pt] at (-t.center){\tiny $+$};
-                        \node[below] at (-t.center){\tiny $-$};
-                
-                        \node[block, right = of -t+w/2] (clip2) {Neg. Clipper\\$y\geq 0$};
-                        \node[block, above = 1.5 of clip2] (clip1) {Neg. Clipper\\$y\geq 0$};
-                        
-                        \node[block, right = of clip2] (clip3) {Pos. Clipper\\$y\leq W$};
-                        
-                        \node[block, right = of clip3] (log2) {Log.\\Amp};
-                        \node[block, above = 1.5 of log2] (log1) {Log.\\Amp};
-        
-                        % Sum1 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            right = of log1,
-                        ] (sum1) {};
-                        \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
-                        \node[left=-1pt] at (sum1.center){\tiny $+$};
-                        \node[below] at (sum1.center){\tiny $+$};
-        
-                        % Sum2 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            right = of log2,
-                        ] (sum2) {};
-                        \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
-                        \node[left=-1pt] at (sum2.center){\tiny $+$};
-                        \node[below] at (sum2.center){\tiny $+$};
-        
-                        \node[block, right = of sum1] (exp1) {Exp.\\Amp};
-                        \node[block, right = of sum2] (exp2) {Exp.\\Amp};
-        
-                        % Sum2 shape
-                        \node[draw,
-                            circle,
-                            minimum size=0.6cm,
-                            above right = 0.5 and 1 of exp2,
-                        ] (sum3) {};
-                        \draw (sum3.north east) -- (sum3.south west) (sum3.north west) -- (sum3.south east);
-                        \node[above] at (sum3.center){\tiny $+$};
-                        \node[below] at (sum3.center){\tiny $+$};
-        
-                        \node[block, right = of sum3] (peak) {Pseudo\\Peak Detector};
-                        \node[right = of peak] (out) {$g_{dB}(t)$};
-        
-                        \draw[-stealth] (input.east) -- (abs.west);
-                        \draw[-stealth] (abs.east) -- (log.west);
-                        \draw[-stealth] (log.south) |- (-t+w/2.west);
-                        \draw[-stealth] (log.north) |- (-t.west);
-                        \draw[-stealth] (-t.east) -- (clip1.west);
-                        \draw[-stealth] (-t+w/2.east) -- (clip2.west);
-                        \draw[-stealth] (clip2.east) -- (clip3.west);
-                        \draw[-stealth] (clip1.east) -- (log1.west);
-                        \draw[-stealth] (clip3.east) -- (log2.west);
-                        \draw[-stealth] (log1.east) -- (sum1.west);
-                        \draw[-stealth] (log2.east) -- (sum2.west);
-                        \draw[-stealth] (sum1.east) -- (exp1.west);
-                        \draw[-stealth] (sum2.east) -- (exp2.west);
-                        \draw[-stealth] (exp1.east) -| (sum3.north);
-                        \draw[-stealth] (exp2.east) -| (sum3.south);
-                        \draw[-stealth] (sum3.east) -- (peak.west);
-                        \draw[-stealth] (peak.east) -- (out.west);
-
-                        % Arrows and labels for M
-                        \node[below = 0.5cm of -t+w/2] (m1) {$\{-T+\frac{W}{2}\}$};
-                        \draw[densely dotted] (m1) -- (-t+w/2.south);
-        
-                        \node[below = 0.5cm of -t] (m2) {$-T$};
-                        \draw[densely dotted] (m2) -- (-t.south);
-
-                        \node[below = 0.5cm of sum1] (m3) {$-\ln(R)$};
-                        \draw[densely dotted] (m3) -- (sum1.south);
-
-                        \node[below = 0.5cm of sum2] (m4) {$\{\ln(\frac{1}{R}-1)-\ln(2W)\}$};
-                        \draw[densely dotted] (m4) -- (sum2.south);
-                        
-
-                    \end{tikzpicture}%
-                }
-        
-                \caption{System diagram showing inner components of the gain computer being proposed.}
-                \label{fig:gain-comp-diagram}
-        
-            \end{figure*}
+            
 
             \subsection{Gain Computer}     
                 A unique approach has been taken to implement the knee characteristics of an gain computer within the analog domain. The proposed design shown in figure \ref{fig:gain-comp-diagram} takes on the implementation of the feed-forward topology discussed in previous sections, and expands on it by sub-dividing the gain computer topology based on the each domain of operation shown in equation \ref{eq:gain-comp}. To implement the segmentation of the compression function applied by the gain computer, the copy of the signal entering the side-chain is split into two, where an offset is applied, get its amplitude clipped according to the range of function bounded by parameters such as threshold and knee width.\par
@@ -1222,6 +1238,8 @@
             In our analysis of dynamic range compression in the realm of analog audio signal processing, we've delved into the details seen in between theory and practice, revealing the depth and complexity inherent in designing effective compressors. The choice between feedback and feed-forward topologies is not merely technical; it's an artistic decision that reflects the intended sonic character and functionality of the compressor. Feedback designs, with their smooth and musical compression, contrast with the precision and control offered by feed-forward configurations, showcasing the diverse palette of sounds that engineers and musicians can draw from.\par
             The discussion around the relevance of analog techniques in a predominantly digital era underscores a significant finding: the unique character and warmth that analog compressors impart to audio signals are irreplaceable and highly valued. This characteristic warmth, a result of complex analog non-linearities, remains a sought-after quality, emphasizing the importance of analog technology in achieving certain sonic aesthetics.\par 
             Looking ahead, the potential for integrating analog and digital methodologies opens new avenues for innovation. The development of hybrid systems that combine the tactile richness of analog with the versatility and precision of digital control points to a future where the boundaries of audio processing are continually expanded. This evolving landscape not only challenges us to rethink our approaches to dynamic range compression but also to consider how these technologies can enhance musical expression and creativity.
+
+        \vspace{15ex}
 
         \section*{Resources}
             All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}, including...
