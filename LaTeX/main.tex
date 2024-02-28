@@ -19,7 +19,7 @@
 \usepackage{subcaption}
 \usepackage{dblfnote}
 \usepackage[american,siunitx]{circuitikz}
-\usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} %\nocite{*}
+\usepackage[backend=biber, defernumbers=true, sorting=none]{biblatex} \nocite{*}
 \usepackage[font={footnotesize,it},labelfont={footnotesize,it,bf}]{caption}
 %\usepackage{indentfirst}
 %\usepackage{mathptmx}
@@ -255,6 +255,8 @@
                 \noindent In general, the feedback topology allows for the compressor to react to the processed signal, enabling a more adaptive response to the audio material. Furthermore, the inherent nature of the feedback system ensures that the compressor's adjustments are directly influenced by its own output, leading to a smoother and more consistent control over dynamic range.\par
                 However, the design of the feedback mechanism also presents several limitations, including the lack of a look-ahead capability and its ineffectiveness as an ideal limiter, as it would require an infinite negative amplification applied at the gain computer stage.
 
+                \vspace{2ex}
+
                     % Feedback diagram
                     \noindent
                     \begin{minipage}{\linewidth}
@@ -306,6 +308,8 @@
                     
                     \end{minipage}
                 
+                \vspace{2ex}
+
             \subsection{Feed-forward Compression}
                 As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (As seen in figure \ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal.\par
 
@@ -314,6 +318,8 @@
                     \end{equation}
                     
                 \noindent The gain computer's output, $g_{dB}$ can be modeled by the equation \ref{eq:feedforward}, and when in comparison to equation \ref{eq:feedback}, it can be shown that the inherent issue seen in requiring an infinite amplification is no longer a problem in feed-forward topology as the slope for the limiter simply reaches a slope of -1. For this reason, many modern implementation of the both digital and analog compressor rely on the feed-forward variant.
+
+                \vspace{2ex}
 
                     % Feed-forward diagram
                     \noindent
@@ -364,9 +370,11 @@
                         \label{fig:feedforward}
                     
                     \end{minipage}
+                
+                \vspace{2ex}
 
             \subsection{Additional Topologies}
-                In addition to feed-forward and feedback topologies, there are other variations in where an compressor can be implemented. Such topology often includes\dots
+                In addition to feed-forward and feedback topologies, there are other methods in where a compressor can be implemented. Such topology often includes\dots
 
                 \subsubsection{Upward compression}
         
@@ -392,13 +400,15 @@
                         \label{eq:gain-comp}
                     \end{equation}
 
-                When the knee width is set to zero, the smooth knee is identical to the hard knee.
+                \noindent Due to the inherent nature of how knee compression is implemented, when the knee width is set to zero, the smooth knee is essentially identical to the hard knee.
             
             \subsection{Level Detector} \label{sect:lvl-det}
-                The level detector is responsible for providing a representation of the loudness of the input signal, where its output function is mainly based on operating time-varying (often introducing delay) functions on the input. Two main implementations of the level detectors are commonly seen in compressors including the peak detector and the RMS detector. Such detectors are employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain based on the topology later discussed in \ref{reference to section}.
+                The level detector is responsible for providing a representation of the loudness of the input signal, where its output function is mainly based on operating time-varying (often introducing delay) functions on the input. Two main implementations of the level detectors are commonly seen in compressors including the peak detector and the RMS detector. Such detectors are employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain based on the topology later discussed in \ref{}.
                 
                 \subsubsection{Peak Reading Detector}
                     The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified time-frame, ensuring the dynamic range of audio material is maintained without clipping. Furthermore, a variant on the standard peak detector, called a quasi-peak detector, are often used in the context of compressors, where attack and release time can be incorporated by incorporating a charge-storing component. (as shown in figure \ref{fig:lossy-peak-det})
+
+                    \vspace{2ex}
 
                         % Lossy peak detector diagram
                         \noindent
@@ -420,6 +430,8 @@
                             \captionof{figure}{Circuit diagram of a lossy peak detector.}
                             \label{fig:lossy-peak-det}
                         \end{minipage}
+
+                    \vspace{2ex}
 
                     \noindent In the configuration shown, the diode allows current to flow in one direction, charging the capacitor to the peak voltage level of the input signal. The resistor provides a discharge path for the capacitor, setting the time it takes for the detector to respond to changes in signal level. This arrangement captures and holds the maximum amplitude of the signal momentarily, allowing the compressor circuitry to adjust the gain based on this peak value.\par
 
@@ -460,13 +472,13 @@
                     Furthermore, utilizing the RMS value may falls short compared to peak reading detectors as it may not react quickly enough to fast input transient, which can lead to unwanted distortion or clipping if the peaks are not adequately managed. Additionally, due to the function of RMS value being based on an indeterminate time ranging from the $t=0$ to $\infty$, it comes at a cost of abandoning control parameters such as attack and release in the context of implementing compressors.
 
             \subsection{Output Amplifier}
-                The gain control in a dynamic range compressor can be achieved by using a voltage controlled amplifier (VCA) where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release).
+                The gain control in a dynamic range compressor can be achieved by using a components such as a voltage controlled amplifier (VCA),  where its gain factor is modulated by a control voltage generated by the level detection circuitry. The VCA adjusts the signal's gain based on this control voltage, which reflects the signal's amplitude relative to the compressor's parameters (threshold, ratio, attack, release). Furthermore, counterparts to the VCA that can be used in analog circuits are later discussed in section \ref{sect:vca}.
         
         \section[Optimizing Compressor Performance]{Optimizing Compressor\\Performance}
             
             \subsection{Compressor Topology Selection}
                 Both feedback and feed-forward topologies offer unique benefits and are chosen based on the specific requirements of the application. However, due to the inherent setback seen in feed-forward topology where it requires an infinite level of amplification to achieve perfect limiting, (as discussed in section \ref{sec:comp-tpgy}) the feedback variant remains a more precise and popular option in the modern day.\par
-                Furthermore, the feed-forward topology can be further sub-categorized based on the placement of the level detector and the transient shaping component, as shown in figure \ref{figure to be inserted}.
+                Furthermore, the feed-forward topology can be further sub-categorized based on the placement of the level detector and the transient shaping component, as shown in figure \ref{}.
 
                     \begin{eqnarray}
                         x_G(t)&=&20log_{10}|x(t)|\\
@@ -588,13 +600,13 @@
                 \noindent Furthermore, employing the crest factor enables users to assess the equilibrium between transient and sustained components in a mix, offering insights on compression strategy.                
             
         \section{Implementation of Discrete Circuit Compressor Components}
-            The following section progresses with an in-depth exploration of compressor components, further extending the discussion to transition into their implementation through the use of analog circuits.
+            The following section continues with an in-depth exploration of compressor components, further extending the discussion to transition into their implementation through the use of analog circuits.
 
             \subsection{Precision Full-Wave Rectifier}
-                A precision full-wave rectifier seen in figure \ref{fig:FBR} [in addendum] can be implemented to feed the absolute value of the input signal into the level detection circuitry. This is necessary as the level detection circuitry could detect signals only over positive ranges. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, the level detector can output a value that represents the energy of the entire signal instead of half of it.
+                A precision full-wave rectifier seen in figure \ref{fig:FBR} can be implemented to output the absolute value of the input signal. By converting a signal that ranges over the negative and positive ranges into a signal that is represented only in the positive domain, it can safely be fed into the log amplifier.
                 
             \subsection{Logarithmic Amplifiers} \label{sect:log-amp}
-                Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications. Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 megahertz. This design is often utilized with sensors in control systems due to its frequency limitations.\par
+                Two primary log amplifier designs exist: the multistage log amplifier and the transimpedance log amplifier. The multistage variant relies on a series of amplifiers limiting the signal in sequence, a technique commonly employed for processing high-frequency signals up to several gigahertz, especially in radar and communications applications. Conversely, the DC log amplifier incorporates either a diode or a diode-connected transistor within the feedback loop of an op-amp, limiting its frequency range to below 20 Mhz. This design is often utilized with sensors in control systems due to its frequency limitations.\par
 
                 \subsubsection{Transimpedance Log Amplifier}
                     The voltage drop across a bipolar junction transistor exhibits a relationship that is proportional to the logarithm of the current flowing through when it's integrated into the feedback loop of an inverting operational amplifier. 
@@ -617,12 +629,11 @@
                             
                             % NPN transistor
                             \draw (opamp.-) 
-                            to[short] ++(0,2) node[npn, rotate=90, anchor=C] (npn) {}
+                            to[short] ++(0,1.5) node[npn, rotate=90, anchor=C] (npn) {}
                             (npn.B) to[short] ++(0,0.3) node[ground] {};
 
                             \draw (opamp.-) to[R] ++(-2,0) node[left] {$x$};
 
-                            
                             % Feedback to inverting input
                             \draw (npn.E) |- (opamp.out) to[short] ++(1,0) node[right] {$log(x)$};
                             
@@ -639,6 +650,8 @@
 
                 \subsubsection{Pseudo-Logarithmic Approximator}
                     A multistage logarithmic amplifier utilizes a cascaded arrangement of amplifier stages as shown in figure \ref{fig:multi-stage-log-amp}, where each stage is designed to operate over a specific portion of the input signal's dynamic range. The principle behind this configuration is to divide the wide input dynamic range into smaller segments, with each segment being processed by a different amplifier stage. Each stage typically consists of a linear amplifier followed by a compression mechanism, which together produce an output proportional to the logarithm of the input signal within its designated segment.\cite{ad-high-freq-log-amp}\par
+
+                    \vspace{2ex}
 
                         % diagram of multi-stage log amplifier 
                         \noindent
@@ -672,42 +685,133 @@
                             \label{fig:multi-stage-log-amp}
                         \end{minipage}
 
+                    \vspace{2ex}
+
                     \par The overall output is a piecewise linear approximation of the logarithmic function across the input range, achieved by summing the outputs of all stages. This approach allows for a broader dynamic range and better approximation accuracy than a single-stage logarithmic amplifier. The multistage design compensates for the non-idealities of individual components and enables the circuit to emulate a more accurate logarithmic response by effectively stitching together the outputs of each stage. Calibration and careful design considerations are essential to ensure continuity and minimize discontinuities between the segments handled by different stages.
 
-            \subsection{Gain Computer}
-
-                    % Gain computer diagram
-                    \noindent
-                    \begin{minipage}{\linewidth}
-
-                        \centering
-
-                        \begin{tikzpicture}[scale = 0.8, transform shape]
-
-                            \node (input) at (0,0) {$x(t)$};
-                            \node[block, right = of input] (clip+-) {$2|x-T|\leq W$\\Clipper};
-                            \node[block, above = of input] (offset) {$-W/2$\\Offset};
-                            \node[block, above = of clip+-] (clip-) {$2(x-T)>W$\\Clipper};
-                            \node[block, right = of clip+-] (peak1) {Peak\\Detector};
-                            \node[block, above = of peak1] (peak2) {Peak\\Detector};
-                            \node[block, right = of peak1] (tanh) {$tanh$ \\Cell};
-                            \node[block, right = of tanh] (vca1) {VCA};
-                            \node[block, above right = of vca1] (vca2) {VCA};
+            % diagram of detailed gain computer components
+            \begin{figure*}[!t]
+                \centering
+                \resizebox{\textwidth}{!}{%
+                    \begin{tikzpicture}
                             
+                        \node (input) at (0,0) {$x_{dB}(t)$};
+                                                
+                        % Blocks
+                        \node[block, right = 0.5 of input] (abs) {Full Wave\\Rectifier};
+                        \node[block, right = 0.5 of abs] (log) {Log.\\Amp};
+        
+                        % Sum1 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            below right = 0.5 and 1.5 of log,
+                        ] (-t+w/2) {};
+                        \draw (-t+w/2.north east) -- (-t+w/2.south west) (-t+w/2.north west) -- (-t+w/2.south east);
+                        \node[left=-1pt] at (-t+w/2.center){\tiny $+$};
+                        \node[below] at (-t+w/2.center){\tiny $-$};
+        
+                        % Sum1 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            above = 1.7 of -t+w/2,
+                        ] (-t) {};
+                        \draw (-t.north east) -- (-t.south west) (-t.north west) -- (-t.south east);
+                        \node[left=-1pt] at (-t.center){\tiny $+$};
+                        \node[below] at (-t.center){\tiny $-$};
+                
+                        \node[block, right = of -t+w/2] (clip2) {Neg. Clipper\\$y\geq 0$};
+                        \node[block, above = 1.5 of clip2] (clip1) {Neg. Clipper\\$y\geq 0$};
+                        
+                        \node[block, right = of clip2] (clip3) {Pos. Clipper\\$y\leq W$};
+                        
+                        \node[block, right = of clip3] (log2) {Log.\\Amp};
+                        \node[block, above = 1.5 of log2] (log1) {Log.\\Amp};
+        
+                        % Sum1 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            right = of log1,
+                        ] (sum1) {};
+                        \draw (sum1.north east) -- (sum1.south west) (sum1.north west) -- (sum1.south east);
+                        \node[left=-1pt] at (sum1.center){\tiny $+$};
+                        \node[below] at (sum1.center){\tiny $+$};
+        
+                        % Sum2 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            right = of log2,
+                        ] (sum2) {};
+                        \draw (sum2.north east) -- (sum2.south west) (sum2.north west) -- (sum2.south east);
+                        \node[left=-1pt] at (sum2.center){\tiny $+$};
+                        \node[below] at (sum2.center){\tiny $+$};
+        
+                        \node[block, right = of sum1] (exp1) {Exp.\\Amp};
+                        \node[block, right = of sum2] (exp2) {Exp.\\Amp};
+        
+                        % Sum2 shape
+                        \node[draw,
+                            circle,
+                            minimum size=0.6cm,
+                            above right = 0.5 and 1 of exp2,
+                        ] (sum3) {};
+                        \draw (sum3.north east) -- (sum3.south west) (sum3.north west) -- (sum3.south east);
+                        \node[above] at (sum3.center){\tiny $+$};
+                        \node[below] at (sum3.center){\tiny $+$};
+        
+                        \node[block, right = of sum3] (peak) {Pseudo\\Peak Detector};
+                        \node[right = of peak] (out) {$g_{dB}(t)$};
+        
+                        \draw[-stealth] (input.east) -- (abs.west);
+                        \draw[-stealth] (abs.east) -- (log.west);
+                        \draw[-stealth] (log.south) |- (-t+w/2.west);
+                        \draw[-stealth] (log.north) |- (-t.west);
+                        \draw[-stealth] (-t.east) -- (clip1.west);
+                        \draw[-stealth] (-t+w/2.east) -- (clip2.west);
+                        \draw[-stealth] (clip2.east) -- (clip3.west);
+                        \draw[-stealth] (clip1.east) -- (log1.west);
+                        \draw[-stealth] (clip3.east) -- (log2.west);
+                        \draw[-stealth] (log1.east) -- (sum1.west);
+                        \draw[-stealth] (log2.east) -- (sum2.west);
+                        \draw[-stealth] (sum1.east) -- (exp1.west);
+                        \draw[-stealth] (sum2.east) -- (exp2.west);
+                        \draw[-stealth] (exp1.east) -| (sum3.north);
+                        \draw[-stealth] (exp2.east) -| (sum3.south);
+                        \draw[-stealth] (sum3.east) -- (peak.west);
+                        \draw[-stealth] (peak.east) -- (out.west);
 
-                            \draw[densely dotted] (peak1.north) -- (peak2.south);
-                            
-                        \end{tikzpicture}
+                        % Arrows and labels for M
+                        \node[below = 0.5cm of -t+w/2] (m1) {$\{-T+\frac{W}{2}\}$};
+                        \draw[densely dotted] (m1) -- (-t+w/2.south);
+        
+                        \node[below = 0.5cm of -t] (m2) {$-T$};
+                        \draw[densely dotted] (m2) -- (-t.south);
 
-                        \captionof{figure}{Knee control scheme}
-                        \label{fig:knee-control}
+                        \node[below = 0.5cm of sum1] (m3) {$-\ln(R)$};
+                        \draw[densely dotted] (m3) -- (sum1.south);
 
-                    \end{minipage}
+                        \node[below = 0.5cm of sum2] (m4) {$\{\ln(\frac{1}{R}-1)-\ln(2W)\}$};
+                        \draw[densely dotted] (m4) -- (sum2.south);
+                        
+
+                    \end{tikzpicture}%
+                }
+        
+                \caption{System diagram showing inner components of the gain computer being proposed.}
+                \label{fig:gain-comp-diagram}
+        
+            \end{figure*}
+
+            \subsection{Gain Computer}               
 
                 \subsubsection{Precision Clipper}
-                    \textcolor{blue}{Here we will discuss various implementation of analog clipping circuit, such as one shown in \ref{fig:neg-clipper}.}
+                    A clipper is a type of electronic circuit that generates an output by eliminating segments of the input that exceed or fall below a specified reference value. This results in the output of a clipper mirroring the input except for the section that has been clipped. Consequently, the peak-to-peak amplitude of a clipper's output will invariably be smaller than that of its input.\par
+                    In context of the compressor that is being implemented, a clipper is being implemented to restrict the signal entering the gain computer based on equation \ref{eq:gain-comp}.
 
-                \subsubsection{Analog Multiplier and Dividers}
+                \subsubsection{Analog Multiplier and Dividers} \label{sec:analog-mul-and-div}
                     Leveraging the log and anti-log amplifiers explored in section \ref{sect:log-amp}, we possess the ability to execute both multiplication and division operations within the realm of analog circuitry. This unique capability stems from the fundamental principles of logarithmic computations, where the addition of two numbers in the logarithmic domain equates to their multiplication in the standard numerical domain once the anti-logarithm (exponential function) is applied to the resultant value as shown in equation \ref{eq:log-domain-add}.
                     
                         \begin{equation} \label{eq:log-domain-add}
@@ -721,6 +825,8 @@
                         \end{equation}
 
                     \noindent Furthermore, such set of operations using log and anti-log amplifiers could be implement in the following manner.
+                    
+                    \vspace{2ex}
 
                         \noindent
                         \begin{minipage}{\linewidth}
@@ -766,10 +872,12 @@
 
                         \end{minipage}
 
+                    \vspace{2ex}
+
                     \noindent Using this feature of mathematical operations, the circuit can be arranged in a way so that we can implement the output of an gain detector described in equation \ref{eq:gain-comp}.
 
                 \subsubsection{Hyperbolic Tangent Function Cell}
-                    In place of using log dividers and multipliers to achieve the quadratic knee compression characteristics described by equation \ref{eq:gain-comp}, a unique method of utilizing a hyperbolic tangent function can be implemented.\par
+                    In place of using log dividers and multipliers to achieve the quadratic knee compression characteristics described by equation \ref{eq:gain-comp}, a unique method of utilizing a hyperbolic tangent function can be implemented to model the behavior.\par
                     A hyperbolic tangent function can be achieved in the analog signal domain by implementing a differential transistor pair coupled with an input of an operational amplifier. As the input range of the function cell is determined by the voltage range of the active region given by the base input of the bipolar junction transistor, it is crucial to normalize the amplitude of the signal entering the cell beforehand. As seen in figure \ref{plot:tanh}, the gated nature of BJT input allows us to create unique characteristics in the definition of how the knee control is applied.
 
                         % tanh plot
@@ -823,29 +931,24 @@
             \subsection{Transient Shaping}
 
                 \subsubsection{Precision Peak Detector}
-                    \textcolor{blue}{This is an alternative to the RMS detector. However, it excels at fast attack signals compared to the RMS detector. This allows the compressor to process signals at higher speeds instead of simply normalizing the volume.}
-
-                    A simple peak detection circuit can be implemented using a diode, a capacitor, and a resistor.
+                    A simple peak detection circuit can be implemented using a diode, a capacitor, and a resistor as shown in figure \ref{fig:lossy-peak-det}. Furthermore, an alternative peak detector with decoupled attack and release can be implemented as seen in figure \ref{fig:peak-det-circuit}, where the input signal undergoes immediate peak detection for swift peak estimation, followed by buffering and smoothing via a first-order low-pass filter. This approach ensures the detector remains unaffected by the level discrepancies arising from the varying time constants typical of standard peak detector circuits.
 
                 \subsubsection{True RMS Detector}
-                    A traditional approach to reading the average of an input signal was to implement a      
-                    
-                \subsubsection{Crossfader}
-                    To implement the mechanism discussed in section \ref{sect:rms-peak-mix}, a crossfader can be implemented to allow an continuous 
+                    When the first electronic RMS detectors were introduced to the industry, they were designed to strictly adhere to the RMS definition, produced linear, not logarithmic, outputs by squaring the input signal, averaging it over time with a low-pass filter or integrator, and then taking the square root. This analog computation involved the use of costly variable-transconductance analog multipliers. \cite{rms-history}\par
+                    In the modern day, as RMS values can be determined through implementation of digital processing technologies, most analog IC offering of an RMS detector is based on application related to the RF domain, where it remains difficult to perform digital processing due to its extreme high frequency. However, companies such as \href{https://www.thatcorp.com/}{THAT corporation\textsuperscript{\texttrademark}} produces RMS detectors for audio domain applications mainly based on the Blackmer RMS detector, where its architecture relies on nonlinear filters implemented in the log domain.
 
-            \subsection{Voltage Controlled Amplifier}
-                \textcolor{blue}{Here, I will discuss various implementations of gain control methods, such as variable-mu, optical, FET-based, diode-bridge, and VCA.}
+            \subsection{Voltage Controlled Amplifier}\label{sect:vca}
+                \textcolor{blue}{Here, I will discuss various implementations of gain control methods, such as variable-mu, optical, FET-based, diode-bridge, and VCA.}\cite{analog-comp-types}
                 
 
-        \section{Physical Compressor Hardware}
-            This section diverges from the topics discussed in previous sections and focuses more on the technicalities involved in implementing the circuit that has been designed. Specific challenges associated with audio domain signals will be introduced to make the reader aware of anything to be cautious.
-            \textcolor{blue}{I plan to use Altium Designer for designing the PCB. Describe steps taken during the PCB design process and any important points noticed.}
+        \section{Physical Hardware}
+            This section diverges from the topics discussed in previous sections and focuses more on the technicalities involved in implementing the compressor circuit. Specific challenges associated with audio domain signals will be introduced, as well as certain features seen in commonly used compressor hardware.
 
             \subsection{Miscellaneous Circuitry}
 
                 \subsubsection{Power Delivery}
-                    Audio domain applications gain advantages from utilizing a bipolar bias power supply. Such a supply enhances the effective utilization of IC's full dynamic range, facilitates rail-to-rail amplification, shields the analog signal from ground noise, and delivers numerous additional benefits. \cite{ti-3-v-rails}\par
-                    To receive the benefits of a split rail power supply while reducing unwanted noise and ripples seen in common topologies such as a simple switching mode power supply, a topology where a inverting charge pump is combined with an linear \& low-dropout (LDO) regulator. (shown in figure)\par
+                    Audio domain applications gain advantages from utilizing a bipolar bias power supply. Such a supply enhances the effective utilization of IC's full dynamic range, facilitates rail-to-rail amplification, and shields the analog signal from ground noise. \cite{ti-3-v-rails}\par
+                    To receive the benefits of a split rail power supply while reducing unwanted noise and ripples seen in common topologies such as a simple switching mode power supply, a topology where a inverting charge pump can be combined with an linear \& low-dropout (LDO) regulator. (shown in figure)\par
                     
                     % Power management scheme diagram
                     \noindent
@@ -881,222 +984,218 @@
 
                 \subsubsection{Balanced Line Input/Output}
                     The use of a balanced line driver/receiver are commonly seen in professional audio hardware, and it aids in minimizing noise and interference. The used of balanced line input and output employs differential signaling to effectively cancel out noise and electromagnetic interference picked up along cable runs, which allows  for preserving the dynamic range and subtleties of the audio signal. This setup is particularly advantageous for long cable runs and in environments with high electronic noise, ensuring that analog compressors can accurately control dynamics without the detrimental effects of added noise or signal degradation.\par
-                    While differential line receivers and drivers can be designed with ease using a set of precision resistors and precision resistors, specialized ICs such as 
 
-                \subsubsection{Precision Current Sink Source}
-                    A current source is required to generate a constant ink of current across the collector and the emitter of the BJT being used in the tanh function cell.
-                    We utilize the design shown in \cite{ti-sink-source}.
+            \subsection{Component Selection}
+                \textcolor{blue}{Go over components used in the circuit and why that specific part was picked. Discuss how component selection could affect thermal characteristics, linearity, bandwidth etc.}
+                
+                \paragraph{Op-Amp}
+                \paragraph{VCA}
+                \paragraph{BJT}
+
+            % PCB stackup layer comparison
+            \begin{figure*}[!th]
+
+                \centering
+
+                \begin{subfigure}[b]{0.3333\linewidth}
+                    \centering
+                    \begin{tikzpicture}
+                        
+                        % Light green background
+                        \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                        % Top soldermask
+                        \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
+                        % S1
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-0.4) rectangle ++(3,0.2);
+
+                        % S3
+                        \path[fill = red,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-0.8) rectangle ++(1,0.2);
+                        \path[fill = red,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (2,-0.8) rectangle ++(1,0.2);
+                        
+                        % S5
+                        \path[fill = blue,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-1.2) rectangle ++(1,0.2);
+                        \path[fill = blue,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (2,-1.2) rectangle ++(1,0.2);
+                        
+                        % S7
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-1.6) rectangle ++(3,0.2);
+
+                        % Bottom soldermask
+                        \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
+
+                        % Outline
+                        \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
+
+                        % Component
+                        \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
+                        \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
+
+                        % Labels
+                        \node at (-1.25,-0.325) {\footnotesize\bf GND};
+                        \node at (-1.25,-0.725) {\footnotesize\bf SIG \& $+$PWR};
+                        \node at (-1.25,-1.125) {\footnotesize\bf SIG \& $-$PWR};
+                        \node at (-1.25,-1.525) {\footnotesize\bf GND};
+
+                    \end{tikzpicture}
+                    \caption{{Outer GND stackup.}}
+                \end{subfigure}\hfill
+                \begin{subfigure}[b]{0.3333\linewidth}
+                    \centering
+                    \begin{tikzpicture}
+                        
+                        % Light green background
+                        \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                        % Top soldermask
+                        \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
+                        % S1
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-0.4) rectangle ++(3,0.2);
+
+                        % S3
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-0.8) rectangle ++(1,0.2);
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (2,-0.8) rectangle ++(1,0.2);
+                        
+                        % S5
+                        \path[fill = blue,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=red},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-1.2) rectangle ++(1,0.2);
+                        \path[fill = blue,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=red},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (2,-1.2) rectangle ++(1,0.2);
+                        
+                        % S7
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-1.6) rectangle ++(3,0.2);
+
+                        % Bottom soldermask
+                        \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
+
+                        % Outline
+                        \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
+
+                        % Component
+                        \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
+                        \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
+
+                        % Labels
+                        \node at (-0.75,-0.325) {\footnotesize\bf SIG};
+                        \node at (-0.75,-0.725) {\footnotesize\bf GND};
+                        \node at (-0.75,-1.125) {\footnotesize\bf $\pm$PWR};
+                        \node at (-0.75,-1.525) {\footnotesize\bf SIG};
+
+                    \end{tikzpicture}
+                    \caption{{One-sided hybrid stackup.}}
+                \end{subfigure}\hfill
+                \begin{subfigure}[b]{0.3333\linewidth}
+                    \centering
+                    \begin{tikzpicture}
+                        
+                        % Light green background
+                        \fill[green!50] (0,-1.4) rectangle ++(3,1);
+
+                        % Top soldermask
+                        \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
+
+                        % S1
+                        \path[fill = red,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-0.4) rectangle ++(3,0.2);
+
+                        % S3
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-0.8) rectangle ++(1,0.2);
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (2,-0.8) rectangle ++(1,0.2);
+                        
+                        % S5
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-1.2) rectangle ++(1,0.2);
+                        \path[fill = copper,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (2,-1.2) rectangle ++(1,0.2);
+                        
+                        % S7
+                        \path[fill = blue,
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
+                            postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
+                        ] (0,-1.6) rectangle ++(3,0.2);
+
+                        % Bottom soldermask
+                        \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
+
+                        % Outline
+                        \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
+
+                        % Component
+                        \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
+                        \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
+
+                        % Labels
+                        \node at (-1.25,-0.325) {\footnotesize\bf SIG \& $+$PWR};
+                        \node at (-1.25,-0.725) {\footnotesize\bf GND};
+                        \node at (-1.25,-1.125) {\footnotesize\bf GND};
+                        \node at (-1.25,-1.525) {\footnotesize\bf SIG \& $-$PWR};
+
+                    \end{tikzpicture}
+                    \caption{{Inner GND stackup.}}
+                \end{subfigure}\hfill
+                \captionof{figure}{Various PCB stackup configurations.}
+                \label{fig:pcb-stackup}
+            \end{figure*}
 
             \subsection{Printed Circuit Board Design}
 
                 \subsubsection{Layer Stackup}
                     With the emergence of low-cost off-shore PCB manufacturing services, PCBs are easily in the reach of an average consumer who are looking to design and produce a small quantity of electronic hardware. Due to the low-cost of 2 layer and 4 layer PCBs, a 4 layer PCB can be selected as its flexible in the routing of traces and offer better signal integrity.\par
-                    The three PCB stackups depicted in figure \ref{fig:pcb-stackup}, each offers distinct advantages for power delivery and signal integrity across dual power domains. The outer GND stackup provides superior EMI shielding by enclosing signal and power layers within ground planes, ensuring stable signal propagation but potentially increasing PDN inductance due to distant power planes. The one-sided hybrid stackup allows for a compact design, situating power close to its loads on one side but risking signal integrity due to the lack of adjacent ground planes. Finally, the inner GND stackup optimizes for both power integrity, with closely coupled power and ground planes minimizing PDN impedance, and signal integrity, as signals are tightly sandwiched between grounds, albeit at the potential cost of less effective EMI shielding compared to the outer GND configuration. Each stackup requires a tailored approach to manage the complexities of positive and negative power rails, thermal performance, and mechanical robustness.
-
-                    % PCB stackup layer comparison
-                    \begin{figure*}[ht]
-
-                        \centering
-
-                        \begin{subfigure}[b]{0.3333\linewidth}
-                            \centering
-                            \begin{tikzpicture}
-                                
-                                % Light green background
-                                \fill[green!50] (0,-1.4) rectangle ++(3,1);
-
-                                % Top soldermask
-                                \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
-
-                                % S1
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-0.4) rectangle ++(3,0.2);
-
-                                % S3
-                                \path[fill = red,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-0.8) rectangle ++(1,0.2);
-                                \path[fill = red,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (2,-0.8) rectangle ++(1,0.2);
-                                
-                                % S5
-                                \path[fill = blue,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-1.2) rectangle ++(1,0.2);
-                                \path[fill = blue,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (2,-1.2) rectangle ++(1,0.2);
-                                
-                                % S7
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-1.6) rectangle ++(3,0.2);
-
-                                % Bottom soldermask
-                                \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
-
-                                % Outline
-                                \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
-
-                                % Component
-                                \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
-                                \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
-
-                                % Labels
-                                \node at (-1.25,-0.325) {\footnotesize\bf GND};
-                                \node at (-1.25,-0.725) {\footnotesize\bf SIG \& $+$PWR};
-                                \node at (-1.25,-1.125) {\footnotesize\bf SIG \& $-$PWR};
-                                \node at (-1.25,-1.525) {\footnotesize\bf GND};
-
-                            \end{tikzpicture}
-                            \caption{{Outer GND stackup.}}
-                        \end{subfigure}\hfill
-                        \begin{subfigure}[b]{0.3333\linewidth}
-                            \centering
-                            \begin{tikzpicture}
-                                
-                                % Light green background
-                                \fill[green!50] (0,-1.4) rectangle ++(3,1);
-
-                                % Top soldermask
-                                \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
-
-                                % S1
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-0.4) rectangle ++(3,0.2);
-
-                                % S3
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-0.8) rectangle ++(1,0.2);
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (2,-0.8) rectangle ++(1,0.2);
-                                
-                                % S5
-                                \path[fill = blue,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=red},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-1.2) rectangle ++(1,0.2);
-                                \path[fill = blue,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=red},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (2,-1.2) rectangle ++(1,0.2);
-                                
-                                % S7
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-1.6) rectangle ++(3,0.2);
-
-                                % Bottom soldermask
-                                \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
-
-                                % Outline
-                                \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
-
-                                % Component
-                                \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
-                                \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
-
-                                % Labels
-                                \node at (-0.75,-0.325) {\footnotesize\bf SIG};
-                                \node at (-0.75,-0.725) {\footnotesize\bf GND};
-                                \node at (-0.75,-1.125) {\footnotesize\bf $\pm$PWR};
-                                \node at (-0.75,-1.525) {\footnotesize\bf SIG};
-
-                            \end{tikzpicture}
-                            \caption{{One-sided hybrid stackup.}}
-                        \end{subfigure}\hfill
-                        \begin{subfigure}[b]{0.3333\linewidth}
-                            \centering
-                            \begin{tikzpicture}
-                                
-                                % Light green background
-                                \fill[green!50] (0,-1.4) rectangle ++(3,1);
-
-                                % Top soldermask
-                                \fill[forestgreen(web)] (0,-0.2) rectangle ++(3,0.2);
-
-                                % S1
-                                \path[fill = red,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-0.4) rectangle ++(3,0.2);
-
-                                % S3
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-0.8) rectangle ++(1,0.2);
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (2,-0.8) rectangle ++(1,0.2);
-                                
-                                % S5
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-1.2) rectangle ++(1,0.2);
-                                \path[fill = copper,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=forestgreen(traditional)},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (2,-1.2) rectangle ++(1,0.2);
-                                
-                                % S7
-                                \path[fill = blue,
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt}]},pattern color=yellow},
-                                    postaction={pattern={Lines[angle=45,line width=12pt,distance={6pt},xshift=6pt]},pattern color=copper}
-                                ] (0,-1.6) rectangle ++(3,0.2);
-
-                                % Bottom soldermask
-                                \fill[forestgreen(web)] (0,-1.8) rectangle ++(3,0.2);
-
-                                % Outline
-                                \path[draw, semithick] (0,-1.8) rectangle ++(3,1.8);
-
-                                % Component
-                                \fill[gray!100] (0.5,0) rectangle ++(2,0.25);
-                                \path[draw, semithick] (0.5,0) rectangle ++(2,0.25);
-
-                                % Labels
-                                \node at (-1.25,-0.325) {\footnotesize\bf SIG \& $+$PWR};
-                                \node at (-1.25,-0.725) {\footnotesize\bf GND};
-                                \node at (-1.25,-1.125) {\footnotesize\bf GND};
-                                \node at (-1.25,-1.525) {\footnotesize\bf SIG \& $-$PWR};
-
-                            \end{tikzpicture}
-                            \caption{{Inner GND stackup.}}
-                        \end{subfigure}\hfill
-                        \captionof{figure}{Various PCB stackup configurations.}
-                        \label{fig:pcb-stackup}
-                    \end{figure*}
+                    The three PCB stackups depicted in figure \ref{fig:pcb-stackup}, each offers distinct advantages for power delivery and signal integrity across dual power domains. The outer GND stackup provides superior EMI shielding by enclosing signal and power layers within ground planes, ensuring stable signal propagation but potentially increasing PDN inductance due to distant power planes.\par
+                    The one-sided hybrid stackup allows for a compact design, situating power close to its loads on one side but risking signal integrity due to the lack of adjacent ground planes. Finally, the inner GND stackup optimizes for both power integrity, with closely coupled power and ground planes minimizing PDN impedance, and signal integrity, as signals are tightly sandwiched between grounds, albeit at the potential cost of less effective EMI shielding compared to the outer GND configuration. Each stackup requires a tailored approach to manage the complexities of positive and negative power rails, thermal performance, and mechanical robustness.
 
                 \subsubsection{Component Placement}
-
-                \subsubsection{Design Rules and Consraints}
-                    The majority of design rule and constraints have been determined by referencing the tolerance specification set by the PCB manufacturer. 
-
-                \subsubsection{Signal Integrity and EMI Precausions}
-
-            \subsection{Component Selection}
-                \textcolor{blue}{Go over components used in the circuit and why that specific part was picked. Discuss how component selection could affect thermal characteristics, linearity, bandwidth etc.}
+                    While mechanical requirements determines the initial requirements, general guidelines on good floor-planing should be implemented to reduce trace length while spacing out components that may produce external EMI. In lieu of implementing log-based multipliers discussed in section \ref{sec:analog-mul-and-div}, the components consisting the log and the anti-log section should either be thermally coupled to each other or be placed in proximity to reduce error seen in its operation.
         
-        \section{Discussion}
-            In our analysis of dynamic range compression in analog audio signal processing, we've delved into the nuanced interplay between theory and practice, revealing the depth and complexity inherent in designing effective compressors. The choice between feedback and feed-forward topologies is not merely technical; it's an artistic decision that reflects the intended sonic character and functionality of the compressor. Feedback designs, with their smooth and musical compression, contrast with the precision and control offered by feed-forward configurations, showcasing the diverse palette of sounds that engineers and musicians can draw from.\par
+        \section*{Discussion}
+            In our analysis of dynamic range compression in the realm of analog audio signal processing, we've delved into the details seen in between theory and practice, revealing the depth and complexity inherent in designing effective compressors. The choice between feedback and feed-forward topologies is not merely technical; it's an artistic decision that reflects the intended sonic character and functionality of the compressor. Feedback designs, with their smooth and musical compression, contrast with the precision and control offered by feed-forward configurations, showcasing the diverse palette of sounds that engineers and musicians can draw from.\par
             The discussion around the relevance of analog techniques in a predominantly digital era underscores a significant finding: the unique character and warmth that analog compressors impart to audio signals are irreplaceable and highly valued. This characteristic warmth, a result of complex analog non-linearities, remains a sought-after quality, emphasizing the importance of analog technology in achieving certain sonic aesthetics.\par 
             Looking ahead, the potential for integrating analog and digital methodologies opens new avenues for innovation. The development of hybrid systems that combine the tactile richness of analog with the versatility and precision of digital control points to a future where the boundaries of audio processing are continually expanded. This evolving landscape not only challenges us to rethink our approaches to dynamic range compression but also to consider how these technologies can enhance musical expression and creativity.
 
@@ -1126,20 +1225,31 @@
         \noindent
         \begin{figure}[h]
             \centering
-            \includegraphics[width=\textwidth]{htan-circuit.png}
+            \includegraphics[width=0.85\textwidth]{htan-circuit.png}
             \captionof{figure}{Circuit implementation of the hyperbolic tangent function cell.}
             \label{fig:htan-circuit}
         \end{figure}
-        
+
         \vspace{-5ex}
 
         % negative clipper
         \noindent
         \begin{figure}[h]
             \centering
-            \includegraphics[width=\textwidth]{negative-clipper.png}
+            \includegraphics[width=0.8\textwidth]{negative-clipper.png}
             \captionof{figure}{Circuit diagram of a precision clipper.}
             \label{fig:neg-clipper}
+        \end{figure}
+
+        \vspace{-5ex}
+
+        % 
+        \noindent
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth]{peak-detector.png}
+            \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
+            \label{fig:peak-det-circuit}
         \end{figure}
 
         \vspace{-5ex}
@@ -1164,19 +1274,8 @@
             \label{fig:TCPLA}
         \end{figure}
 
-        \vspace{-5ex}
-
-        % 
-        \noindent
-        \begin{figure}[h]
-            \centering
-            \includegraphics[width=\textwidth]{peak-detector.png}
-            \captionof{figure}{Circuit diagram of an peak detector circuit with adjustable attack and release}
-            \label{fig:peak-det-circuit}
-        \end{figure}
-
     \newpage
-
+    
         \iffalse
         % Diagram showing signal through the gain calculator.Takes time to compile due to increased accuracy of the plot.
         \begin{figure*}[!th]
