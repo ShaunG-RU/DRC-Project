@@ -233,9 +233,6 @@
             \paragraph{Make-Up Gain}
                 Make-up gain is a control parameter that allows you to increase the output level of the signal after it has gone through compression. This feature helps the user with adjusting the output to a consistent volume level after the signal has undergone attenuation by the compression algorithm. In the context of a song or an audio program, it allows the user to enhances the presence of the material.
 
-            \paragraph{Side-chain}
-                Side-chain is a control that is established by passing an additional audio signals to trigger the compression on the main input signal. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
-
         \section{Compressor Topology} \label{sec:comp-tpgy}
             The method of attenuation seen in a compressor could be generally categorized into two topologies including feedback and feed-forward compression. Both topologies can be expressed as a relation described in equation \ref{eq:gen-topology}, where the output, $y_{dB}$, is given by the sum of input, $x_{dB}$, and the gain/attenuation level, $g_{dB}$, which is determined by the gain computer. 
 
@@ -310,14 +307,14 @@
                 
                 \vspace{2ex}
 
-            \subsection{Feed-forward Compression}
+            \subsection{Feed-forward Compression} \label{sect:feed-forward-comp}
                 As opposed to the feedback topology, feed-forward topology uses the input signal directly to control the compression process, without the influence of the compressed signal in the control loop. (As seen in figure \ref{fig:feedforward}) This allows for more precise and immediate control over the compression characteristics, as the system's response is solely based on the incoming audio signal.\par
 
                     \begin{equation}\label{eq:feedforward}
                         g_{dB}=(\frac{1}{R}-1)(x_{dB}-T)
                     \end{equation}
                     
-                \noindent The gain computer's output, $g_{dB}$ can be modeled by the equation \ref{eq:feedforward}, and when in comparison to equation \ref{eq:feedback}, it can be shown that the inherent issue seen in requiring an infinite amplification is no longer a problem in feed-forward topology as the slope for the limiter simply reaches a slope of -1. For this reason, many modern implementation of the both digital and analog compressor rely on the feed-forward variant.
+                \noindent The gain computer's output, $g_{dB}$ can be modeled by equation \ref{eq:feedforward}, and when in comparison to equation \ref{eq:feedback}, it can be shown that the inherent issue seen in requiring an infinite amplification is no longer a problem in feed-forward topology as the slope for the limiter simply reaches a slope of -1. For this reason, many modern implementation of the both digital and analog compressor rely on the feed-forward variant.
 
                 \vspace{2ex}
 
@@ -374,9 +371,14 @@
                 \vspace{2ex}
 
             \subsection{Additional Topologies}
-                In addition to feed-forward and feedback topologies, there are other methods in where a compressor can be implemented. Such topology often includes\dots
+                In addition to feed-forward and feedback topologies, there are other methods in where additional features in a compressor can be implemented. This section discuss such additions seen in commercial compressors, such as external side-chaining, multiband compression, and upward compression.
+
+                \subsubsection{External Side-chain}
+                    Side-chain is a control that is established by passing an additional audio signals to trigger the compression on the main input signal. This technique allows the compressor to react not to its own input signal, but to the dynamics of another, offering creative applications such as ducking, where the volume of one sound is reduced by the presence of another (e.g., background music lowering when someone speaks). It's a powerful tool for achieving more complex mixing and mastering effects, enhancing clarity, and creating rhythmic variations in audio production.
 
                 \subsubsection{Upward compression}
+                    Upward compression, in contrast to traditional downward compression described in previous sections, operates by selectively amplifying signals below the threshold, effectively minimizing dynamic range by elevating softer sounds closer to the level of louder ones. This process is critical for enhancing audibility of low-level details without affecting the peaks, making it invaluable for audio applications requiring nuanced sound enhancement, such as in music production and sound design.\par
+                    Key to its application is the careful management of the noise floor, as amplification of quiet signals inherently raises background noise levels. Thus, upward compression requires a delicate balance between enhancing desired signals and controlling unwanted noise, utilizing advanced digital algorithms for RMS or peak detection to maintain audio fidelity.
         
                 \subsubsection{Broadband, Multiband, and Spectral Compression}
                     Broadband compressors operate by adjusting the dynamics of an input signal across the entire frequency range; when a set threshold is exceeded, the entire signal is affected, regardless of the specific frequencies composing the signal's energy.\par
@@ -400,10 +402,10 @@
                         \label{eq:gain-comp}
                     \end{equation}
 
-                \noindent Due to the inherent nature of how knee compression is implemented, when the knee width is set to zero, the smooth knee is essentially identical to the hard knee.
+                \noindent Furthermore, due to the inherent nature of how knee compression is implemented, when the knee width is set to zero, the smooth knee is essentially identical to the hard knee.
             
             \subsection{Level Detector} \label{sect:lvl-det}
-                The level detector is responsible for providing a representation of the loudness of the input signal, where its output function is mainly based on operating time-varying (often introducing delay) functions on the input. Two main implementations of the level detectors are commonly seen in compressors including the peak detector and the RMS detector. Such detectors are employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain based on the topology later discussed in \ref{}.
+                The level detector is responsible for providing a representation of the loudness of the input signal, where its output function is mainly based on operating time-varying (often introducing delay) functions on the input. Two main implementations of the level detectors are commonly seen in compressors including the peak detector and the RMS detector. Such detectors are employed to ensure a consistent depiction of the signal's intensity and can be implemented at multiple points within the side-chain based on the topology.
                 
                 \subsubsection{Peak Reading Detector}
                     The peak reading detector is crucial for capturing the maximum amplitude of the input signal within a specified time-frame, ensuring the dynamic range of audio material is maintained without clipping. Furthermore, a variant on the standard peak detector, called a quasi-peak detector, are often used in the context of compressors, where attack and release time can be incorporated by incorporating a charge-storing component. (as shown in figure \ref{fig:lossy-peak-det})
@@ -441,15 +443,6 @@
                     The average reading detector is designed to capture the mean amplitude of an input signal over a defined time period, providing a measure that reflects the general level of the signal rather than its peak values. This approach is particularly useful in applications where the overall energy of the signal, rather than its instantaneous peaks is of interest.\par
                     The operation of an average reading detector can be implemented by simply removing the rectification stage (diode) where the signal is directly passed through a low-pass filter to obtain a DC level proportional to the average amplitude of the input waveform. 
                 
-                \subsubsection{RMS Reading Detector}
-                    Utilizing the root mean square (RMS) value of the input signal is particularly helpful when you would like to reference the average power of the input signal, which is more aligned with how our ears perceive loudness. Unlike peak detection, the output of the RMS reading detector has an affect on the both transient and amplitude of the output, where its continuous form expression is defined by equation \cite{aes-that-rms}.
-                    
-                        \begin{equation}
-                            V_{RMS} = \lim_{T \to \infty}\sqrt{\frac{1}{T}\int_{-\infty}^{T} v_{in}^2(t) \,\cdot dt}
-                        \end{equation}
-                    
-                    \noindent RMS detection ensures more consistent levels throughout the audio material, as it's less influenced by short transient peaks, and is suited for providing a more musical and natural-sounding compression. Additionally, the RMS detector offers an edge over the average reading detector particularly in their ability to provide true measurements of power across a variety of waveform types as highlighted in table \ref{table:ave-err}.
-
                         % RMS and peak comparison table
                         \begin{table*}[!th]
                             \centering
@@ -467,7 +460,16 @@
                             \end{tabularx}
                             \caption{Error introduced by an average responding circuit when measuring common waveforms.}
                             \label{table:ave-err}
-                        \end{table*}    
+                        \end{table*} 
+
+                \subsubsection{RMS Reading Detector}
+                    Utilizing the root mean square (RMS) value of the input signal is particularly helpful when you would like to reference the average power of the input signal, which is more aligned with how our ears perceive loudness. Unlike peak detection, the output of the RMS reading detector has an affect on the both transient and amplitude of the output, where its continuous form expression is defined by equation \cite{aes-that-rms}.
+                    
+                        \begin{equation}
+                            V_{RMS} = \lim_{T \to \infty}\sqrt{\frac{1}{T}\int_{-\infty}^{T} v_{in}^2(t) \,\cdot dt}
+                        \end{equation}
+                    
+                    \noindent RMS detection ensures more consistent levels throughout the audio material, as it's less influenced by short transient peaks, and is suited for providing a more musical and natural-sounding compression. Additionally, the RMS detector offers an edge over the average reading detector particularly in their ability to provide true measurements of power across a variety of waveform types as highlighted in table \ref{table:ave-err}.   
 
                     Furthermore, utilizing the RMS value may falls short compared to peak reading detectors as it may not react quickly enough to fast input transient, which can lead to unwanted distortion or clipping if the peaks are not adequately managed. Additionally, due to the function of RMS value being based on an indeterminate time ranging from the $t=0$ to $\infty$, it comes at a cost of abandoning control parameters such as attack and release in the context of implementing compressors.
 
@@ -478,13 +480,14 @@
             
             \subsection{Compressor Topology Selection}
                 Both feedback and feed-forward topologies offer unique benefits and are chosen based on the specific requirements of the application. However, due to the inherent setback seen in feed-forward topology where it requires an infinite level of amplification to achieve perfect limiting, (as discussed in section \ref{sec:comp-tpgy}) the feedback variant remains a more precise and popular option in the modern day.\par
-                Furthermore, the feed-forward topology can be further sub-categorized based on the placement of the level detector and the transient shaping component, as shown in figure \ref{}.
 
+                    \iffalse
                     \begin{eqnarray}
                         x_G(t)&=&20log_{10}|x(t)|\\
                         x_L(t)&=&x_G(t)-y_G(t)\\
                         x_{dB}(t)&=&-y_L(t)
                     \end{eqnarray}
+                    \fi
 
                     % Control diagram of compressor to be implemented
                     \begin{figure*}[!th]
@@ -645,7 +648,7 @@
                         \label{fig:trans-log-amp}
                     \end{minipage}
 
-                    However, the transimpedance logarithmic amplifier faces challenges such as temperature-dependent performance, limitation to unipolar signals, and variable/limited bandwidth, which affects precision and efficiency. 
+                    While this configuration of log amplifier can achieve an dynamic range of around -120dB, \cite{ad-log-amp-basics} the transimpedance logarithmic amplifier faces challenges such as temperature-dependent performance, limitation to unipolar signals, and variable/limited bandwidth, which affects precision and efficiency. 
                     Furthermore, in a situation combining multiple amplifiers for both logarithmic and anti-logarithmic computations on a single chip, temperature-induced inconsistencies are mitigated. Such cases can be emulated when working with discrete circuit components where opamps, transistors, and resistors that are part of the log amp consists from a single package, or in close proximity to match its ambient temperature. \cite{ad-log-amp-basics}
 
                 \subsubsection{Pseudo-Logarithmic Approximator}
@@ -695,11 +698,11 @@
                 \resizebox{\textwidth}{!}{%
                     \begin{tikzpicture}
                             
-                        \node (input) at (0,0) {$x_{dB}(t)$};
+                        \node (input) at (0,0) {$x_{lin}(t)$};
                                                 
                         % Blocks
                         \node[block, right = 0.5 of input] (abs) {Full Wave\\Rectifier};
-                        \node[block, right = 0.5 of abs] (log) {Log.\\Amp};
+                        \node[block, right = 0.5 of abs] (log) {dB\\Conv.};
         
                         % Sum1 shape
                         \node[draw,
@@ -805,7 +808,9 @@
         
             \end{figure*}
 
-            \subsection{Gain Computer}               
+            \subsection{Gain Computer}     
+                A unique approach has been taken to implement the knee characteristics of an gain computer within the analog domain. The proposed design shown in figure \ref{fig:gain-comp-diagram} takes on the implementation of the feed-forward topology discussed in previous sections, and expands on it by sub-dividing the gain computer topology based on the each domain of operation shown in equation \ref{eq:gain-comp}. To implement the segmentation of the compression function applied by the gain computer, the copy of the signal entering the side-chain is split into two, where an offset is applied, get its amplitude clipped according to the range of function bounded by parameters such as threshold and knee width.\par
+                Furthermore, the design diverges from the architecture of the feed-forward discussed in section \ref{sect:feed-forward-comp}, by removing the need to feed the input signal after the gain computer. While this was required in the original description of the feed-forward topology to ensure that the control signal that gets fed into the VCA is based on the difference between the result of the gain compute and the input signal, this will no longer be required as the output of the gain compute will clip signal that is below $2(x-T)\leq-W$, which represents an level of input amplitude at which no compression is applied.
 
                 \subsubsection{Precision Clipper}
                     A clipper is a type of electronic circuit that generates an output by eliminating segments of the input that exceed or fall below a specified reference value. This results in the output of a clipper mirroring the input except for the section that has been clipped. Consequently, the peak-to-peak amplitude of a clipper's output will invariably be smaller than that of its input.\par
@@ -935,11 +940,25 @@
 
                 \subsubsection{True RMS Detector}
                     When the first electronic RMS detectors were introduced to the industry, they were designed to strictly adhere to the RMS definition, produced linear, not logarithmic, outputs by squaring the input signal, averaging it over time with a low-pass filter or integrator, and then taking the square root. This analog computation involved the use of costly variable-transconductance analog multipliers. \cite{rms-history}\par
-                    In the modern day, as RMS values can be determined through implementation of digital processing technologies, most analog IC offering of an RMS detector is based on application related to the RF domain, where it remains difficult to perform digital processing due to its extreme high frequency. However, companies such as \href{https://www.thatcorp.com/}{THAT corporation\textsuperscript{\texttrademark}} produces RMS detectors for audio domain applications mainly based on the Blackmer RMS detector, where its architecture relies on nonlinear filters implemented in the log domain.
+                    In the modern day, as RMS values can be determined through implementation of digital processing technologies, most analog IC offering of an RMS detector is based on application related to the RF domain, where it remains difficult to perform digital processing due to its extreme high frequency. However, companies such as \href{https://www.thatcorp.com/}{THAT corporation\textsuperscript{\texttrademark}} produces RMS detectors for audio domain applications developed during 1980~1990s, based on the Blackmer RMS detector, where its architecture relies on nonlinear filters implemented in the log domain.
 
-            \subsection{Voltage Controlled Amplifier}\label{sect:vca}
-                \textcolor{blue}{Here, I will discuss various implementations of gain control methods, such as variable-mu, optical, FET-based, diode-bridge, and VCA.}\cite{analog-comp-types}
+            \subsection{Gain Controller Alternatives}\label{sect:vca}
+                Gain control methods in audio processing are essential for managing the amplitude of audio signals, and they come in various forms, each with its unique characteristics and applications. These methods include variable-mu, optical, FET-based, diode-bridge, and Voltage Controlled Amplifier (VCA) techniques, each offering different sound qualities and technical advantages.
+
+                \paragraph{Variable-mu}
+                    Variable-mu compressors operate on the principle of variable transconductance in vacuum tubes. The "mu" refers to the tube's gain factor, which changes with the input signal level. By altering the bias voltage, these devices adjust the gain dynamically, offering a compression effect that's inherently program-dependent. This results in a compression characteristic that's musically pleasing, providing a smooth leveling effect that's highly sought after for its warmth and ability to "glue" mixes together.
+
+                \paragraph{Optical Compression}
+                    Optical compressors use a light-emitting element and a photoconductive cell to modulate gain. The input signal's amplitude affects the brightness of the light source, which in turn varies the resistance of the photoconductive cell, achieving gain reduction. This opto-electrical approach allows for a smooth, gradual compression response due to the inherent inertia of the light element's intensity changes, making it ideal for applications requiring transparent dynamic control.
+
+                \paragraph{FET}
+                    FET-based compressors leverage Field Effect Transistors to mimic the variable impedance characteristics of tube circuits but with potentially faster response times. The FET's conductivity is directly proportional to the input signal's voltage, allowing for precise control over the gain reduction with a characteristic that can be fine-tuned for aggressiveness or subtlety. This design is favored for its ability to impart a distinct presence and energy to signals, particularly useful for emphasizing transients in percussive and dynamic sources.
                 
+                \paragraph{Diode-Bridge}
+                    Diode-bridge compressors utilize a network of diodes to create a nonlinear resistance path for the audio signal, facilitating compression. This arrangement allows for unique distortion characteristics and a distinct coloration due to the asymmetrical clipping and harmonic generation, often described as aggressive and rich. The diode bridge's response to signal level changes contributes to a compression quality that can significantly enhance the perceived weight and texture of the audio.
+
+                \paragraph{VCA}
+                    Voltage Controlled Amplifiers (VCAs) in compression circuits modulate gain based on a control voltage, which is derived from the input signal level. This design affords precise control over the attack, release, and ratio parameters, enabling a wide range of dynamic effects from subtle volume leveling to aggressive limiting. VCAs are celebrated for their versatility and clarity, capable of providing transparent dynamic control without introducing unwanted coloration or artifacts.  
 
         \section{Physical Hardware}
             This section diverges from the topics discussed in previous sections and focuses more on the technicalities involved in implementing the compressor circuit. Specific challenges associated with audio domain signals will be introduced, as well as certain features seen in commonly used compressor hardware.
@@ -986,14 +1005,10 @@
                     The use of a balanced line driver/receiver are commonly seen in professional audio hardware, and it aids in minimizing noise and interference. The used of balanced line input and output employs differential signaling to effectively cancel out noise and electromagnetic interference picked up along cable runs, which allows  for preserving the dynamic range and subtleties of the audio signal. This setup is particularly advantageous for long cable runs and in environments with high electronic noise, ensuring that analog compressors can accurately control dynamics without the detrimental effects of added noise or signal degradation.\par
 
             \subsection{Component Selection}
-                \textcolor{blue}{Go over components used in the circuit and why that specific part was picked. Discuss how component selection could affect thermal characteristics, linearity, bandwidth etc.}
+                This section provides any recommendation for component selection that are crucial for the implementation of circuits discussed in the previous sections.
                 
-                \paragraph{Op-Amp}
-                \paragraph{VCA}
-                \paragraph{BJT}
-
-            % PCB stackup layer comparison
-            \begin{figure*}[!th]
+                    % PCB stackup layer comparison
+            \begin{figure*}[!t]
 
                 \centering
 
@@ -1184,6 +1199,15 @@
                 \label{fig:pcb-stackup}
             \end{figure*}
 
+                \paragraph{Op-Amp}
+                    For high-precision applications within the audio domain, specifications such as low input offset voltage, input bias current, low input voltage noise density, and a high slew rate is preferable. Furthermore, a package where multiple op-amps are included should be selected for the log/anti-log computation.
+                \paragraph{VCA}
+                    THAT corp offerings of audio specific VCAs are ideal for analog compressors in their product lineup such as the THAT2181 and THAT2180 
+                \paragraph{BJT}
+                    For log/anti-log computation and the tanh function cells, a transistor pair that exhibit a close value of $\beta$ is important so that the current gain characteristics are also matched. Analog Devices offers a line of monolithic dual and quad matched transistor arrays such as the SSM2212 and the MAT14.
+
+            
+
             \subsection{Printed Circuit Board Design}
 
                 \subsubsection{Layer Stackup}
@@ -1199,19 +1223,19 @@
             The discussion around the relevance of analog techniques in a predominantly digital era underscores a significant finding: the unique character and warmth that analog compressors impart to audio signals are irreplaceable and highly valued. This characteristic warmth, a result of complex analog non-linearities, remains a sought-after quality, emphasizing the importance of analog technology in achieving certain sonic aesthetics.\par 
             Looking ahead, the potential for integrating analog and digital methodologies opens new avenues for innovation. The development of hybrid systems that combine the tactile richness of analog with the versatility and precision of digital control points to a future where the boundaries of audio processing are continually expanded. This evolving landscape not only challenges us to rethink our approaches to dynamic range compression but also to consider how these technologies can enhance musical expression and creativity.
 
-        \section*{Attribution}
-            \footnotesize{
-                \textit{\textbf{Figure \ref{fig:comp-trans}:}} \href{https://en.wikipedia.org/wiki/Dynamic_range_compression#/media/File:Audio_Compression_Attack_and_Release-2.svg}{The attack and release phases in a compressor}, Iainf (Own work) via Wikipedia, License: \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC BY-SA 3.0 DEED}\\
-
-                \noindent\textit{\textbf{Figures \ref{fig:htan-circuit}, \ref{fig:FBR}, \ref{fig:TCPLA}, \ref{fig:peak-det-circuit}:} Schematic diagrams are generated using Altium Designer.}\\
-            }
-
         \section*{Resources}
             All resources developed upon the completion of this project including the schematic, simulation, and CAD files are available for download at the following \textbf{\textcolor{github-butterfly-bush}{\href{https://github.com/ShaunG-RU/DRC-Project}{GitHub repository}}}, including...
             
             \begin{itemize}
                 \item \href{https://github.com/ShaunG-RU/DRC-Project/blob/main/Altium/DRC.pdf}{Latest updated schematic} of the implemented analog compressor.
             \end{itemize}
+
+        \section*{Attribution}
+            \footnotesize{
+                \textit{\textbf{Figure \ref{fig:comp-trans}:}} \href{https://en.wikipedia.org/wiki/Dynamic_range_compression#/media/File:Audio_Compression_Attack_and_Release-2.svg}{The attack and release phases in a compressor}, Iainf (Own work) via Wikipedia, License: \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC BY-SA 3.0 DEED}\\
+
+                \noindent\textit{\textbf{Figures \ref{fig:htan-circuit}, \ref{fig:FBR}, \ref{fig:TCPLA}, \ref{fig:peak-det-circuit}:} Schematic diagrams are generated using Altium Designer.}\\
+            }
 
         \printbibliography
 
