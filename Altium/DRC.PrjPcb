@@ -120,23 +120,6 @@ GenerateClassCluster=0
 DocumentUniqueId=OLNEZPVM
 
 [Document5]
-DocumentPath=Comp Clipper.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=9
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=UNZGVVXP
-
-[Document6]
 DocumentPath=Knee Comp Clipper.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -152,6 +135,23 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WKACDIAJ
+
+[Document6]
+DocumentPath=Comp Clipper.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=9
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=UNZGVVXP
 
 [Document7]
 DocumentPath=Log and Anti-Log.SchDoc
