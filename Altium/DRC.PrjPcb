@@ -69,6 +69,23 @@ GenerateClassCluster=0
 DocumentUniqueId=XQHQXUBJ
 
 [Document2]
+DocumentPath=MCU.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=UDBVQZYJ
+
+[Document3]
 DocumentPath=Balanced Line Receiver.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -85,7 +102,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HXFIYSBK
 
-[Document3]
+[Document4]
 DocumentPath=Precision FBR & dB Converter.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -102,7 +119,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=YSUMLLEL
 
-[Document4]
+[Document5]
 DocumentPath=Offset Compensator.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -119,7 +136,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=OLNEZPVM
 
-[Document5]
+[Document6]
 DocumentPath=Knee Comp Clipper.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -136,7 +153,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=WKACDIAJ
 
-[Document6]
+[Document7]
 DocumentPath=Comp Clipper.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -153,7 +170,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=UNZGVVXP
 
-[Document7]
+[Document8]
 DocumentPath=Log and Anti-Log.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -170,41 +187,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NBODMSBG
 
-[Document8]
-DocumentPath=Log and Anti-Log Converters 1.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=AZHTZDXP
-
 [Document9]
-DocumentPath=Log and Anti-Log Converters 2.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=10
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=EVZTXJFX
-
-[Document10]
 DocumentPath=DRC.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -221,7 +204,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=QQWFOPFT
 
-[Document11]
+[Document10]
 DocumentPath=DRC.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -238,24 +221,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=BYLNZXCD
 
-[Document12]
-DocumentPath=VCA.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=11
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=0
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=PYLMTLYQ
-
-[Document13]
+[Document11]
 DocumentPath=Level Detector.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -272,7 +238,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KLHXWUBC
 
-[Document14]
+[Document12]
 DocumentPath=Gain Control.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -289,7 +255,24 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=HADLSIVX
 
-[Document15]
+[Document13]
+DocumentPath=VCA.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=11
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=PYLMTLYQ
+
+[Document14]
 DocumentPath=Misc. Connections.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -306,7 +289,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GNHFDEAR
 
-[Document16]
+[Document15]
 DocumentPath=tanh function cell.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -323,7 +306,41 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NWJTFKAW
 
+[Document16]
+DocumentPath=Log and Anti-Log Converters 1.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=AZHTZDXP
+
 [Document17]
+DocumentPath=Log and Anti-Log Converters 2.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=10
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=EVZTXJFX
+
+[Document18]
 DocumentPath=DRC.OutJob
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -340,7 +357,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document18]
+[Document19]
 DocumentPath=PCB.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -1453,8 +1470,6 @@ ComparisonOptions2=Kind=Component Class|MinPercent=75|MinMatch=3|ShowMatch=0|Use
 ComparisonOptions3=Kind=Rule|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0
 ComparisonOptions4=Kind=Differential Pair|MinPercent=50|MinMatch=1|ShowMatch=0|UseName=0|InclAllRules=0
 ComparisonOptions5=Kind=Structure Class|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0
-ComparisonOptions6=Kind=xSignal|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0
-ComparisonOptions7=Kind=xSignal Class|MinPercent=75|MinMatch=3|ShowMatch=0|UseName=-1|InclAllRules=0
 
 [SmartPDF]
 PageOptions=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=1|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=Letter|PaperIndex=1
